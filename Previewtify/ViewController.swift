@@ -13,7 +13,6 @@ import CryptoKit //for SHA256
 class ViewController: UIViewController {
     
     var codeVerifier: String = ""
-    
     var responseTypeCode: String? {
         didSet {
             fetchSpotifyToken { (dictionary, error) in
@@ -29,14 +28,12 @@ class ViewController: UIViewController {
             }
         }
     }
-    
     lazy var appRemote: SPTAppRemote = {
         let appRemote = SPTAppRemote(configuration: configuration, logLevel: .debug)
         appRemote.connectionParameters.accessToken = self.accessToken
         appRemote.delegate = self
         return appRemote
     }()
-
     var accessToken = UserDefaults.standard.string(forKey: accessTokenKey) {
         didSet {
             let defaults = UserDefaults.standard
@@ -60,7 +57,6 @@ class ViewController: UIViewController {
         let manager = SPTSessionManager(configuration: configuration, delegate: self)
         return manager
     }()
-
     private var lastPlayerState: SPTAppRemotePlayerState?
 
     // MARK: - Subviews
@@ -73,7 +69,6 @@ class ViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     private lazy var connectButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor(red:(29.0 / 255.0), green:(185.0 / 255.0), blue:(84.0 / 255.0), alpha:1.0)
@@ -82,6 +77,8 @@ class ViewController: UIViewController {
         button.layer.cornerRadius = 20.0
         button.setTitle("Continue with Spotify", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.sizeToFit()
+        button.addTarget(self, action: #selector(didTapConnect(_:)), for: .touchUpInside)
         return button
     }()
     private lazy var disconnectButton: UIButton = {
@@ -92,23 +89,23 @@ class ViewController: UIViewController {
         button.layer.cornerRadius = 20.0
         button.setTitle("Sign out", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.sizeToFit()
+        button.addTarget(self, action: #selector(didTapDisconnect(_:)), for: .touchUpInside)
         return button
     }()
-
     private lazy var pauseAndPlayButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapPauseOrPlay), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.sizeToFit()
         return button
     }()
-
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-
     private lazy var trackLabel: UILabel = {
         let trackLabel = UILabel()
         trackLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -119,6 +116,7 @@ class ViewController: UIViewController {
     }()
 
     //MARK: App Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -132,45 +130,29 @@ class ViewController: UIViewController {
     //MARK: Methods
     func setupViews() {
         view.backgroundColor = UIColor.white
-
         view.addSubview(connectLabel)
         view.addSubview(connectButton)
         view.addSubview(disconnectButton)
         view.addSubview(imageView)
         view.addSubview(trackLabel)
         view.addSubview(pauseAndPlayButton)
-
         let constant: CGFloat = 16.0
-
         connectButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         connectButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-
         disconnectButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         disconnectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50).isActive = true
-
         connectLabel.centerXAnchor.constraint(equalTo: connectButton.centerXAnchor).isActive = true
         connectLabel.bottomAnchor.constraint(equalTo: connectButton.topAnchor, constant: -constant).isActive = true
-
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 64).isActive = true
         imageView.bottomAnchor.constraint(equalTo: trackLabel.topAnchor, constant: -constant).isActive = true
-
         trackLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         trackLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: constant).isActive = true
         trackLabel.bottomAnchor.constraint(equalTo: connectLabel.topAnchor, constant: -constant).isActive = true
-
         pauseAndPlayButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         pauseAndPlayButton.topAnchor.constraint(equalTo: trackLabel.bottomAnchor, constant: constant).isActive = true
         pauseAndPlayButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         pauseAndPlayButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        pauseAndPlayButton.sizeToFit()
-
-        connectButton.sizeToFit()
-        disconnectButton.sizeToFit()
-
-        connectButton.addTarget(self, action: #selector(didTapConnect(_:)), for: .touchUpInside)
-        disconnectButton.addTarget(self, action: #selector(didTapDisconnect(_:)), for: .touchUpInside)
-
         updateViewBasedOnConnected()
     }
     
@@ -243,14 +225,12 @@ class ViewController: UIViewController {
 
     @objc func didTapConnect(_ button: UIButton) {
         guard let sessionManager = sessionManager else { return }
-        
-
         if #available(iOS 11, *) {
             // Use this on iOS 11 and above to take advantage of SFAuthenticationSession
-            sessionManager.initiateSession(with: scope, options: .clientOnly)
+            sessionManager.initiateSession(with: scopes, options: .clientOnly)
         } else {
             // Use this on iOS versions < 11 to use SFSafariViewController
-            sessionManager.initiateSession(with: scope, options: .clientOnly, presenting: self)
+            sessionManager.initiateSession(with: scopes, options: .clientOnly, presenting: self)
         }
     }
 
@@ -324,25 +304,22 @@ class ViewController: UIViewController {
     func fetchSpotifyToken(completion: @escaping ([String: Any]?, Error?) -> Void) {
         let url = URL(string: "https://accounts.spotify.com/api/token")!
         var request = URLRequest(url: url)
-        print("Request URL=", request.url!.absoluteString)
         request.httpMethod = "POST"
-        let clientId = spotifyClientId
-        let secretKey = spotifyClientSecretKey
-        let spotifyAuthKey = "Basic \((clientId + ":" + secretKey).data(using: .utf8)!.base64EncodedString())"
+        let spotifyAuthKey = "Basic \((spotifyClientId + ":" + spotifyClientSecretKey).data(using: .utf8)!.base64EncodedString())"
         request.allHTTPHeaderFields = ["Authorization": spotifyAuthKey,
                                        "Content-Type": "application/x-www-form-urlencoded"]
         do {
             var requestBodyComponents = URLComponents()
+            let scopeAsString = stringScopes.joined(separator: " ") //put array to string separated by whitespace
             requestBodyComponents.queryItems = [
-                URLQueryItem(name: "client_id", value: clientId),
+                URLQueryItem(name: "client_id", value: spotifyClientId),
                 URLQueryItem(name: "grant_type", value: "authorization_code"),
                 URLQueryItem(name: "code", value: responseTypeCode!),
                 URLQueryItem(name: "redirect_uri", value: redirectUri.absoluteString),
                 URLQueryItem(name: "code_verifier", value: codeVerifier),
-                URLQueryItem(name: "scope", value: "user-read-private user-read-email"),
+                URLQueryItem(name: "scope", value: scopeAsString),
             ]
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let data = data,                            // is there data
                     let response = response as? HTTPURLResponse,  // is there HTTP response
@@ -352,13 +329,13 @@ class ViewController: UIViewController {
                         completion(nil, error)
                         return
                 }
-                //            guard let result = try? JSONDecoder().decode(ArticleList.self, from: data) else {}
+                //            guard let result = try? JSONDecoder().decode(SpotifyAuth.self, from: data) else {}
                 let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
                 print("RESPONSE OBJECT=", responseObject)
                 completion(responseObject, nil)
             }
             task.resume()
-        } catch {
+        } catch (let error) {
             print("Error JSONing")
         }
     }
