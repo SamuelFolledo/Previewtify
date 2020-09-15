@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		331E8A8125101265000C32F5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E8A8025101265000C32F5 /* Constants.swift */; };
 		33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6625099BD9007FA062 /* AppDelegate.swift */; };
 		33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6825099BD9007FA062 /* SceneDelegate.swift */; };
 		33D05B6B25099BD9007FA062 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6A25099BD9007FA062 /* ViewController.swift */; };
@@ -14,6 +15,8 @@
 		33D05B7025099BDB007FA062 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33D05B6F25099BDB007FA062 /* Assets.xcassets */; };
 		33D05B7325099BDB007FA062 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33D05B7125099BDB007FA062 /* LaunchScreen.storyboard */; };
 		33D05B7E25099BDB007FA062 /* PreviewtifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B7D25099BDB007FA062 /* PreviewtifyTests.swift */; };
+		33D05B892509A148007FA062 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 33D05B882509A148007FA062 /* GoogleService-Info.plist */; };
+		33D05B8B2509A5F6007FA062 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D05B8A2509A5F6007FA062 /* SpotifyiOS.framework */; };
 		588CF25F606E0FCC97FED62E /* Pods_Previewtify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9846D5B25154EC58CA4E3BFF /* Pods_Previewtify.framework */; };
 		B9ECF19A7621077DC307F4DA /* Pods_PreviewtifyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AECEEA4DBA73C630E900CB74 /* Pods_PreviewtifyTests.framework */; };
 /* End PBXBuildFile section */
@@ -29,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		331E8A8025101265000C32F5 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		33D05B6325099BD9007FA062 /* Previewtify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Previewtify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33D05B6625099BD9007FA062 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33D05B6825099BD9007FA062 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +44,9 @@
 		33D05B7925099BDB007FA062 /* PreviewtifyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PreviewtifyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33D05B7D25099BDB007FA062 /* PreviewtifyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewtifyTests.swift; sourceTree = "<group>"; };
 		33D05B7F25099BDB007FA062 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33D05B882509A148007FA062 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		33D05B8A2509A5F6007FA062 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
+		33D05B8C2509AB30007FA062 /* Previewtify-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Previewtify-Bridging-Header.h"; sourceTree = "<group>"; };
 		54713D3FD771E07D32FC0BDC /* Pods-PreviewtifyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PreviewtifyTests.release.xcconfig"; path = "Target Support Files/Pods-PreviewtifyTests/Pods-PreviewtifyTests.release.xcconfig"; sourceTree = "<group>"; };
 		7A059A56F2518DDA44B690FA /* Pods-Previewtify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Previewtify.release.xcconfig"; path = "Target Support Files/Pods-Previewtify/Pods-Previewtify.release.xcconfig"; sourceTree = "<group>"; };
 		9846D5B25154EC58CA4E3BFF /* Pods_Previewtify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Previewtify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				588CF25F606E0FCC97FED62E /* Pods_Previewtify.framework in Frameworks */,
+				33D05B8B2509A5F6007FA062 /* SpotifyiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +79,7 @@
 		33D05B5A25099BD9007FA062 = {
 			isa = PBXGroup;
 			children = (
+				33D05B8C2509AB30007FA062 /* Previewtify-Bridging-Header.h */,
 				33D05B6525099BD9007FA062 /* Previewtify */,
 				33D05B7C25099BDB007FA062 /* PreviewtifyTests */,
 				33D05B6425099BD9007FA062 /* Products */,
@@ -98,6 +107,9 @@
 				33D05B6F25099BDB007FA062 /* Assets.xcassets */,
 				33D05B7125099BDB007FA062 /* LaunchScreen.storyboard */,
 				33D05B7425099BDB007FA062 /* Info.plist */,
+				33D05B882509A148007FA062 /* GoogleService-Info.plist */,
+				33D05B8A2509A5F6007FA062 /* SpotifyiOS.framework */,
+				331E8A8025101265000C32F5 /* Constants.swift */,
 			);
 			path = Previewtify;
 			sourceTree = "<group>";
@@ -119,7 +131,6 @@
 				E89D75F222DB547884246541 /* Pods-PreviewtifyTests.debug.xcconfig */,
 				54713D3FD771E07D32FC0BDC /* Pods-PreviewtifyTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -219,6 +230,7 @@
 				33D05B7325099BDB007FA062 /* LaunchScreen.storyboard in Resources */,
 				33D05B7025099BDB007FA062 /* Assets.xcassets in Resources */,
 				33D05B6E25099BD9007FA062 /* Main.storyboard in Resources */,
+				33D05B892509A148007FA062 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +315,7 @@
 				33D05B6B25099BD9007FA062 /* ViewController.swift in Sources */,
 				33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */,
 				33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */,
+				331E8A8125101265000C32F5 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,13 +478,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9NY68F4K3P;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Previewtify",
+				);
 				INFOPLIST_FILE = Previewtify/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = SamuelFolledo.Previewtify;
+				PRODUCT_BUNDLE_IDENTIFIER = com.SamuelFolledo.Previewtify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Previewtify-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -484,13 +502,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9NY68F4K3P;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Previewtify",
+				);
 				INFOPLIST_FILE = Previewtify/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = SamuelFolledo.Previewtify;
+				PRODUCT_BUNDLE_IDENTIFIER = com.SamuelFolledo.Previewtify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Previewtify-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
