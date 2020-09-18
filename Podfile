@@ -5,8 +5,10 @@ target 'Previewtify' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+
   # Pods for Previewtify
 
+  # Essential pods
   pod 'SnapKit', '~> 5.0.1'
   pod 'SwiftLint'
 
@@ -15,12 +17,6 @@ target 'Previewtify' do
 
   # For caching downloaded images
   pod 'Kingfisher', '~> 5.0'
-
-  # Firebase
-  pod 'Firebase/Auth'
-  pod 'Firebase/Core'
-  pod 'Firebase/Analytics'
-  pod 'Firebase/Firestore'
 
 
   target 'PreviewtifyTests' do
