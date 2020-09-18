@@ -15,15 +15,17 @@ class ViewController: UIViewController {
     var codeVerifier: String = ""
     var responseTypeCode: String? {
         didSet {
-            fetchSpotifyToken { (dictionary, error) in
-                if let error = error {
-                    print("Fetching token request error \(error)")
-                    return
-                }
-                let accessToken = dictionary!["access_token"] as! String
+            fetchSpotifyToken { result in
                 DispatchQueue.main.async {
-                    self.appRemote.connectionParameters.accessToken = accessToken
-                    self.appRemote.connect()
+                    switch result {
+                    case .failure(let error):
+                        print("Error fetching access token \(error.localizedDescription)")
+                    case .success(let spotifyAuth):
+                        self.accessToken = spotifyAuth.accessToken
+                        self.appRemote.connectionParameters.accessToken = spotifyAuth.accessToken
+                        self.appRemote.connect()
+                        self.appRemote.playerAPI?.pause(nil)
+                    }
                 }
             }
         }
@@ -304,7 +306,7 @@ class ViewController: UIViewController {
 //        task.resume()
 //    }
     
-    func fetchSpotifyToken(completion: @escaping ([String: Any]?, Error?) -> Void) {
+    func fetchSpotifyToken(completion: @escaping (Result<SpotifyAuth, Error>) -> Void) {
         let url = URL(string: "https://accounts.spotify.com/api/token")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -328,14 +330,14 @@ class ViewController: UIViewController {
                     let response = response as? HTTPURLResponse,  // is there HTTP response
                     (200 ..< 300) ~= response.statusCode,         // is statusCode 2XX
                     error == nil else {                           // was there no error, otherwise ...
-                        print("FAILED!!")
-                        completion(nil, error)
-                        return
+                        return completion(.failure(EndPointError.noData(message: "No data found")))
                 }
-                //            guard let result = try? JSONDecoder().decode(SpotifyAuth.self, from: data) else {}
-                let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
-//                print("RESPONSE OBJECT=", responseObject)
-                completion(responseObject, nil)
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase //convert keys from snake case to camel case
+                if let spotifyAuth = try? decoder.decode(SpotifyAuth.self, from: data) {
+                    return completion(.success(spotifyAuth))
+                }
+                completion(.failure(EndPointError.couldNotParse(message: "Failed to decode data")))
             }
             task.resume()
         }
