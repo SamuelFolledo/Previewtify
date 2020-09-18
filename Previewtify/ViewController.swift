@@ -120,6 +120,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        setCodeVerifier()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -154,6 +155,15 @@ class ViewController: UIViewController {
         pauseAndPlayButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         pauseAndPlayButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         updateViewBasedOnConnected()
+    }
+    
+    ///create a code verifier that meets Spotify's requirement in order to fetch code and access token
+    func setCodeVerifier() {
+        guard let data = "SecretPassword".data(using: .utf8) else { return }
+        let digest = SHA256.hash(data: data)
+        let digestString = digest.map { String(format: "%02X", $0) }.joined()
+        let codeChallengeMethod = Data(digestString.utf8).base64EncodedString()
+        codeVerifier = codeChallengeMethod
     }
     
     func update(playerState: SPTAppRemotePlayerState) {
@@ -249,13 +259,6 @@ class ViewController: UIViewController {
     
     ///get the code from spotify to be used to get user's token
 //    func authorizeWithSpotify(completion: @escaping ([String: Any]?, Error?) -> Void) {
-//        guard let data = "SecretPassword".data(using: .utf8) else { return }
-//        let digest = SHA256.hash(data: data)
-//        let digestString = digest.map { String(format: "%02X", $0) }.joined()
-//        let codeChallengeMethod = Data(digestString.utf8).base64EncodedString()
-//        codeVerifier = codeChallengeMethod
-//        print("CODE VERIFIER = \(codeVerifier.count) \t \(codeVerifier)")
-//
 //        var components = URLComponents(string: "https://accounts.spotify.com/authorize")!
 //        let parameters = [
 //            "client_id" : SpotifyClientID,
@@ -331,62 +334,12 @@ class ViewController: UIViewController {
                 }
                 //            guard let result = try? JSONDecoder().decode(SpotifyAuth.self, from: data) else {}
                 let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
-                print("RESPONSE OBJECT=", responseObject)
+//                print("RESPONSE OBJECT=", responseObject)
                 completion(responseObject, nil)
             }
             task.resume()
-        } catch (let error) {
-            print("Error JSONing")
         }
     }
-    
-//    func sendPostRequest1(completion: @escaping ([String: Any]?, Error?) -> Void) {
-//        guard let data = "SecretPassword".data(using: .utf8) else { return }
-//        let digest = SHA256.hash(data: data)
-//        let digestString = digest.map { String(format: "%02X", $0) }.joined()
-//        let codeChallengeMethod = Data(digestString.utf8).base64EncodedString()
-//        codeVerifier = codeChallengeMethod
-//        print("CODE CHALLENGE count = \(codeChallengeMethod.count) \t \(codeChallengeMethod)")
-//        let url = "https://accounts.spotify.com/authorize"
-//        //            let rootUrl = "https://accounts.spotify.com/api/token"
-//        let clientId = SceneDelegate.spotifyClientId
-//        let redirectUri = SceneDelegate.redirectUri
-//        let parameters: [String: String] = [
-//            "client_id": clientId,
-//            "response_type": "code",
-//            "redirect_uri": redirectUri.absoluteString,
-//            "code_challenge_method": codeChallengeMethod,
-//            "code_challenge": "S256",
-////            "scope": "user-read-private user-read-email",
-//            "scope": "user-read-private user-read-email",
-//            //                "state": "34fFs29kd09",
-//        ]
-//
-//        var components = URLComponents(string: url)!
-//        components.queryItems = parameters.map { (key, value) in
-//            URLQueryItem(name: key, value: value)
-//        }
-//        components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
-//        var request = URLRequest(url: components.url!)
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        print("Request URL=", request.url!.absoluteString)
-//
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            guard let data = data,                            // is there data
-//                let response = response as? HTTPURLResponse,  // is there HTTP response
-//                (200 ..< 300) ~= response.statusCode,         // is statusCode 2XX
-//                error == nil else {                           // was there no error, otherwise ...
-//                    print("FAILED!!")
-//                    completion(nil, error)
-//                    return
-//            }
-////            guard let result = try? JSONDecoder().decode(ArticleList.self, from: data) else {}
-//            let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
-//            print("RESPONSE OBJECT=", responseObject)
-//            completion(responseObject, nil)
-//        }
-//        task.resume()
-//    }
 }
 
 // MARK: - SPTAppRemoteDelegate
