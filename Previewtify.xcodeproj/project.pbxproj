@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		331E8A8125101265000C32F5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E8A8025101265000C32F5 /* Constants.swift */; };
+		333A14B72515519900C934C9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14B62515519900C934C9 /* NetworkManager.swift */; };
+		333A14BE2515526700C934C9 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14BD2515526700C934C9 /* Endpoint.swift */; };
+		333A14C2251553D800C934C9 /* SpotifyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14C1251553D800C934C9 /* SpotifyAuth.swift */; };
 		33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6625099BD9007FA062 /* AppDelegate.swift */; };
 		33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6825099BD9007FA062 /* SceneDelegate.swift */; };
 		33D05B6B25099BD9007FA062 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6A25099BD9007FA062 /* ViewController.swift */; };
@@ -33,6 +36,9 @@
 
 /* Begin PBXFileReference section */
 		331E8A8025101265000C32F5 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		333A14B62515519900C934C9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		333A14BD2515526700C934C9 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		333A14C1251553D800C934C9 /* SpotifyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuth.swift; sourceTree = "<group>"; };
 		33D05B6325099BD9007FA062 /* Previewtify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Previewtify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33D05B6625099BD9007FA062 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33D05B6825099BD9007FA062 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +82,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		333A14BA251551B800C934C9 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				333A14B62515519900C934C9 /* NetworkManager.swift */,
+				333A14BD2515526700C934C9 /* Endpoint.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		333A14C5251557E400C934C9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				33D05B6A25099BD9007FA062 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		33D05B5A25099BD9007FA062 = {
 			isa = PBXGroup;
 			children = (
@@ -102,7 +125,9 @@
 			children = (
 				33D05B6625099BD9007FA062 /* AppDelegate.swift */,
 				33D05B6825099BD9007FA062 /* SceneDelegate.swift */,
-				33D05B6A25099BD9007FA062 /* ViewController.swift */,
+				333A14C5251557E400C934C9 /* Controllers */,
+				333A14C1251553D800C934C9 /* SpotifyAuth.swift */,
+				333A14BA251551B800C934C9 /* Network */,
 				33D05B6C25099BD9007FA062 /* Main.storyboard */,
 				33D05B6F25099BDB007FA062 /* Assets.xcassets */,
 				33D05B7125099BDB007FA062 /* LaunchScreen.storyboard */,
@@ -314,7 +339,10 @@
 			files = (
 				33D05B6B25099BD9007FA062 /* ViewController.swift in Sources */,
 				33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */,
+				333A14B72515519900C934C9 /* NetworkManager.swift in Sources */,
 				33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */,
+				333A14BE2515526700C934C9 /* Endpoint.swift in Sources */,
+				333A14C2251553D800C934C9 /* SpotifyAuth.swift in Sources */,
 				331E8A8125101265000C32F5 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
