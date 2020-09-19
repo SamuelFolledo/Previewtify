@@ -87,6 +87,34 @@ class NetworkManager {
         }
         task.resume()
     }
+    
+    static func refreshAcessToken(completion: @escaping (Result<SpotifyAuth, Error>) -> Void) {
+        guard let refreshToken = refreshToken else { return completion(.failure(EndPointError.missing(message: "No refresh token found."))) }
+        let url = URL(string: "\(baseURL)api/token")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let spotifyAuthKey = "Basic \((clientId + ":" + clientSecretKey).data(using: .utf8)!.base64EncodedString())"
+        request.allHTTPHeaderFields = ["Authorization": spotifyAuthKey,
+                                       "Content-Type": "application/x-www-form-urlencoded"]
+        var requestBodyComponents = URLComponents()
+        requestBodyComponents.queryItems = [
+            URLQueryItem(name: "grant_type", value: "refresh_token"),
+            URLQueryItem(name: "refresh_token", value: refreshToken),
+            URLQueryItem(name: "client_id", value: clientId),
+        ]
+        request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data,                              // is there data
+                  let response = response as? HTTPURLResponse,  // is there HTTP response
+                  (200 ..< 300) ~= response.statusCode,         // is statusCode 2XX
+                  error == nil else {                           // was there no error, otherwise ...
+                return completion(.failure(EndPointError.noData(message: "No data found")))
+            }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase  //convert keys from snake case to camel case
+            do {
+//                let jsonResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any]
+//                print(jsonResult)
                 if let spotifyAuth = try? decoder.decode(SpotifyAuth.self, from: data) {
                     self.accessToken = spotifyAuth.accessToken
                     Spartan.authorizationToken = spotifyAuth.accessToken
@@ -94,10 +122,11 @@ class NetworkManager {
                 }
                 completion(.failure(EndPointError.couldNotParse(message: "Failed to decode data")))
             }
-            task.resume()
         }
+        task.resume()
     }
     
+    ///fetch user with an unexpired access token
     static func fetchUser(accessToken: String, completion: @escaping (Result<User, Error>) -> Void) {
         Spartan.authorizationToken = accessToken
         _ = Spartan.getMe(success: { (user) in

@@ -18,6 +18,14 @@ class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        NetworkManager.refreshAcessToken { (result) in
+            switch result {
+            case .failure(let error):
+                print("Error refreshing token \(error.localizedDescription)")
+            case .success(let spotifyAuth):
+                print("REFRESHED ACCESS TOKEN \(spotifyAuth.accessToken)\nrefresh token= \(spotifyAuth.refreshToken)")
+            }
+        }
     }
     
     //MARK: Private Methods

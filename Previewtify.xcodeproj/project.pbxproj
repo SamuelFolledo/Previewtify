@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		331E8A8125101265000C32F5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E8A8025101265000C32F5 /* Constants.swift */; };
 		333A14B72515519900C934C9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14B62515519900C934C9 /* NetworkManager.swift */; };
-		333A14BE2515526700C934C9 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14BD2515526700C934C9 /* Endpoint.swift */; };
+		333A14BE2515526700C934C9 /* EndpointError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14BD2515526700C934C9 /* EndpointError.swift */; };
 		333A14C2251553D800C934C9 /* SpotifyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14C1251553D800C934C9 /* SpotifyAuth.swift */; };
 		333A14EF25157AFC00C934C9 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14DF25157AFC00C934C9 /* UIViewController+Extensions.swift */; };
 		333A14F025157AFC00C934C9 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E025157AFC00C934C9 /* UIView+Extensions.swift */; };
@@ -52,7 +52,7 @@
 /* Begin PBXFileReference section */
 		331E8A8025101265000C32F5 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		333A14B62515519900C934C9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		333A14BD2515526700C934C9 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		333A14BD2515526700C934C9 /* EndpointError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointError.swift; sourceTree = "<group>"; };
 		333A14C1251553D800C934C9 /* SpotifyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuth.swift; sourceTree = "<group>"; };
 		333A14DF25157AFC00C934C9 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		333A14E025157AFC00C934C9 /* UIView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
@@ -116,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				333A14B62515519900C934C9 /* NetworkManager.swift */,
-				333A14BD2515526700C934C9 /* Endpoint.swift */,
+				333A14BD2515526700C934C9 /* EndpointError.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -133,6 +133,7 @@
 		333A14DB25157AFC00C934C9 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				331E8A8025101265000C32F5 /* Constants.swift */,
 				333A14EA25157AFC00C934C9 /* Defaults.swift */,
 				333A14DE25157AFC00C934C9 /* Extensions */,
 				333A14EB25157AFC00C934C9 /* Keys */,
@@ -213,7 +214,6 @@
 				33D05B6625099BD9007FA062 /* AppDelegate.swift */,
 				33D05B6825099BD9007FA062 /* SceneDelegate.swift */,
 				333A151F2515D19200C934C9 /* Models */,
-				331E8A8025101265000C32F5 /* Constants.swift */,
 				333A14C5251557E400C934C9 /* Controllers */,
 				333A14BA251551B800C934C9 /* Network */,
 				333A14DB25157AFC00C934C9 /* Helpers */,
@@ -431,7 +431,7 @@
 				33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */,
 				333A14EF25157AFC00C934C9 /* UIViewController+Extensions.swift in Sources */,
 				333A14F625157AFC00C934C9 /* UIStackView+Extensions.swift in Sources */,
-				333A14BE2515526700C934C9 /* Endpoint.swift in Sources */,
+				333A14BE2515526700C934C9 /* EndpointError.swift in Sources */,
 				333A15232515D19D00C934C9 /* User.swift in Sources */,
 				333A14F725157AFC00C934C9 /* UserDefaults+Extensions.swift in Sources */,
 				333A14F525157AFC00C934C9 /* UINavigationController+Extensions.swift in Sources */,
