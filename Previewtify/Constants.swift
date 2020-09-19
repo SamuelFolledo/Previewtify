@@ -6,12 +6,13 @@
 //  Copyright © 2020 SamuelFolledo. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import NVActivityIndicatorView
 
-let accessTokenKey = "access-token-key"
-let redirectUri = URL(string:"previewtify://")!
-let spotifyClientId = "e9d953c9eff4433cb30acf3e4866a68d"
-let spotifyClientSecretKey = "e891fd17090d4841afaf88c5730419a9"
+
+//let redirectUri = URL(string:"previewtify://")!
+//let spotifyClientId = "e9d953c9eff4433cb30acf3e4866a68d"
+//let spotifyClientSecretKey = "e891fd17090d4841afaf88c5730419a9"
 
 /*
 Scopes let you specify exactly what types of data your application wants to
@@ -37,3 +38,15 @@ let stringScopes = [
                         "user-top-read", "user-read-playback-position", "user-read-recently-played",
                         "user-follow-read", "user-follow-modify",
                     ]
+
+struct Constants {
+    
+    static let currentUser = "currentUser"
+    static let accessTokenKey = "accessTokenKey"
+    static let authorizationCodeKey = "authorizationCodeKey"
+    
+    struct Views {
+        //https://github.com/ninjaprox/NVActivityIndicatorView
+        static var indicatorView: NVActivityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40), type: .ballSpinFadeLoader, color: .label, padding: 0.0)
+    }
+}
