@@ -14,7 +14,6 @@ struct UsersKeys {
     struct Collection {
         static let Users: String = "Users"
         static let UserType: String = "UserType"
-        static let ThroatScan: String = "ThroatScan"
     }
     
     ///keys for all User properties
@@ -24,13 +23,11 @@ struct UsersKeys {
         static let lastName: String = "lastName"
         static let userId: String = "userId"
         static let userType: String = "userType"
-        static let throatScans: String = "throatScans"
         static let photoUrl: String = "photoUrl"
     }
     
     ///keys for all UserType
     struct UserType {
-        static let Patient: String = "Patient"
-        static let Doctor: String = "Doctor"
+        
     }
 }
