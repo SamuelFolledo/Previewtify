@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     
-    static let strepScanYellow = UIColor(r: 250, g: 227, b: 15, a: 1)
+    static let previewtifyGreen = UIColor(r: 29, g: 185, b: 84, a: 1)
     
     convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
         self.init(red: r/255, green: g/255, blue: b/255, alpha: a)
