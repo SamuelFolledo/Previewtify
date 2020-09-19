@@ -25,11 +25,14 @@ class NetworkManager {
     static var totalCount: Int = Int.max
     static var codeVerifier: String = ""
 
-    static var accessToken = UserDefaults.standard.string(forKey: Constants.accessTokenKey) {
-        didSet { NetworkManager.defaults.set(accessToken, forKey: Constants.accessTokenKey) }
+    static var accessToken = defaults.string(forKey: Constants.accessTokenKey) {
+        didSet { defaults.set(accessToken, forKey: Constants.accessTokenKey) }
     }
-    static var authorizationCode = UserDefaults.standard.string(forKey: Constants.authorizationCodeKey) {
-        didSet { NetworkManager.defaults.set(authorizationCode, forKey: Constants.authorizationCodeKey) }
+    static var authorizationCode = defaults.string(forKey: Constants.authorizationCodeKey) {
+        didSet { defaults.set(authorizationCode, forKey: Constants.authorizationCodeKey) }
+    }
+    static var refreshToken = defaults.string(forKey: Constants.refreshTokenKey) {
+        didSet { defaults.set(refreshToken, forKey: Constants.refreshTokenKey) }
     }
 
     static let configuration: SPTConfiguration = {
