@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseAuth
 
 struct Defaults {
     private enum Keys {
@@ -36,31 +35,10 @@ struct Defaults {
     
     ///use after logging out 
     static func _removeUser(_ removeFromUserDefaults: Bool = false) {
-        guard let userType = Defaults.valueOfUserType() else { return }
         if removeFromUserDefaults {
-            switch userType {
-            case .Patient:
-                UserDefaults.standard.removeObject(forKey: Constants.patientUser)
-            case .Doctor:
-                UserDefaults.standard.removeObject(forKey: Constants.doctorUser)
-            }
+            UserDefaults.standard.removeObject(forKey: Constants.currentUser)
             //clear everything in UserDefaults
             UserDefaults.standard.deleteAllKeys(exemptedKeys: ["onboard"])
         }
-    }
-    
-    ///save user type into UserDefaults
-    static func setUserType(_ accountType: UserType, writeToUserDefaults: Bool = false) {
-        if writeToUserDefaults {
-            UserDefaults.standard.set(accountType.rawValue, forKey: Constants.userType)
-            UserDefaults.standard.synchronize()
-        }
-    }
-    
-    ///get value of user type from UserDefaults
-    static func valueOfUserType() -> UserType? {
-        guard let userTypeString = UserDefaults.standard.string(forKey: Constants.userType) else { return nil }
-        guard let userType = UserType(rawValue: userTypeString) else { return nil }
-        return userType
     }
 }
