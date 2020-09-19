@@ -7,15 +7,8 @@
 //
 
 import UIKit
-import SwipeableTabBarController
 
 extension UINavigationController {
-    func initRootVC(tabBar: SwipeableTabBarController, fromRight: Bool = true, duration: CFTimeInterval = 0.3) {
-        self.addPushTransition(fromRight: fromRight, duration: duration)
-        self.viewControllers.removeAll()
-        self.pushViewController(tabBar, animated: false)
-        self.popToRootViewController(animated: false)
-    }
 /// reset rootVC with left or right push transition
     func initRootVC(vc: UIViewController, fromRight: Bool = true, duration: CFTimeInterval = 0.3) {
         self.addPushTransition(fromRight: fromRight, duration: duration)
