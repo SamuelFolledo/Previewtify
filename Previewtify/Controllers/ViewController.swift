@@ -243,9 +243,11 @@ class ViewController: UIViewController {
 
     // MARK: - Private Helpers
     
+    ///fetch access token and fetch user
     func fetchSpotifyAccessToken() {
         guard let _ = NetworkManager.authorizationCode else { return } //makes sure we have authorization code
         startActivityIndicator()
+        //fetch access token
         NetworkManager.fetchAccessToken { (result) in
             switch result {
             case .failure(let error):
