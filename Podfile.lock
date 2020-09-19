@@ -1,32 +1,52 @@
 PODS:
+  - Alamofire (4.9.1)
+  - AlamofireObjectMapper (5.2.1):
+    - Alamofire (~> 4.7)
+    - ObjectMapper (~> 3.4)
+  - AlamoRecord (1.2.2):
+    - AlamofireObjectMapper (~> 5.1)
   - Kingfisher (5.15.1):
     - Kingfisher/Core (= 5.15.1)
   - Kingfisher/Core (5.15.1)
   - NVActivityIndicatorView (5.0.1):
     - NVActivityIndicatorView/Base (= 5.0.1)
   - NVActivityIndicatorView/Base (5.0.1)
+  - ObjectMapper (3.5.3)
   - SnapKit (5.0.1)
+  - Spartan (1.2.1):
+    - AlamoRecord (~> 1.2.0)
   - SwiftLint (0.40.2)
 
 DEPENDENCIES:
   - Kingfisher (~> 5.0)
   - NVActivityIndicatorView
   - SnapKit (~> 5.0.1)
+  - Spartan
   - SwiftLint
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - AlamofireObjectMapper
+    - AlamoRecord
     - Kingfisher
     - NVActivityIndicatorView
+    - ObjectMapper
     - SnapKit
+    - Spartan
     - SwiftLint
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
+  AlamoRecord: 5850c563a811fdca40cd361b1b27622004bccef3
   Kingfisher: 3260a05e78a17fdbeb2f14dd8e66ffc768491231
   NVActivityIndicatorView: 738e843cb8924e9e4fc3e559d0728031624bf860
+  ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Spartan: 2fb99ad25f2b0e8182799f251c800091977f0a40
   SwiftLint: 1216c910d27c2633ade33b4f071bb6b930982e62
 
-PODFILE CHECKSUM: e8b44a5400c13e5124dda61f3bdfcec79f841856
+PODFILE CHECKSUM: 146326124634238c12081f846e632342dac057cb
 
 COCOAPODS: 1.9.3

@@ -17,6 +17,9 @@ target 'Previewtify' do
 
   # For caching downloaded images
   pod 'Kingfisher', '~> 5.0'
+  
+  # For Spotify calls
+  pod 'Spartan'
 
 
   target 'PreviewtifyTests' do
