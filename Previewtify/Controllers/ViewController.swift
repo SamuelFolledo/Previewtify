@@ -15,48 +15,42 @@ class ViewController: UIViewController {
     var codeVerifier: String = ""
     var responseTypeCode: String? {
         didSet {
-            fetchSpotifyToken { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .failure(let error):
-                        print("Error fetching access token \(error.localizedDescription)")
-                    case .success(let spotifyAuth):
-                        self.accessToken = spotifyAuth.accessToken
-                        self.appRemote.connectionParameters.accessToken = spotifyAuth.accessToken
-                        self.appRemote.connect()
-                        self.appRemote.playerAPI?.pause(nil)
-                    }
-                }
-            }
+//            fetchSpotifyToken { result in
+//                DispatchQueue.main.async {
+//                    switch result {
+//                    case .failure(let error):
+//                        print("Error fetching access token \(error.localizedDescription)")
+//                    case .success(let spotifyAuth):
+//                        self.accessToken = spotifyAuth.accessToken
+//                        self.appRemote.connectionParameters.accessToken = spotifyAuth.accessToken
+//                        self.appRemote.connect()
+//                        self.appRemote.playerAPI?.pause(nil)
+//                    }
+//                }
+//            }
         }
     }
     lazy var appRemote: SPTAppRemote = {
-        let appRemote = SPTAppRemote(configuration: configuration, logLevel: .debug)
-        appRemote.connectionParameters.accessToken = self.accessToken
+        let appRemote = SPTAppRemote(configuration: NetworkManager.configuration, logLevel: .debug)
+        appRemote.connectionParameters.accessToken = NetworkManager.accessToken
         appRemote.delegate = self
         return appRemote
     }()
-    var accessToken = UserDefaults.standard.string(forKey: accessTokenKey) {
-        didSet {
-            let defaults = UserDefaults.standard
-            defaults.set(accessToken, forKey: accessTokenKey)
-        }
-    }
 
-    lazy var configuration: SPTConfiguration = {
-        let configuration = SPTConfiguration(clientID: spotifyClientId, redirectURL: redirectUri)
-        // Set the playURI to a non-nil value so that Spotify plays music after authenticating and App Remote can connect
-        // otherwise another app switch will be required
-        configuration.playURI = ""
-        // Set these url's to your backend which contains the secret to exchange for an access token
-        // You can use the provided ruby script spotify_token_swap.rb for testing purposes
-        configuration.tokenSwapURL = URL(string: "http://localhost:1234/swap")
-        configuration.tokenRefreshURL = URL(string: "http://localhost:1234/refresh")
-        return configuration
-    }()
+//    lazy var configuration: SPTConfiguration = {
+//        let configuration = SPTConfiguration(clientID: spotifyClientId, redirectURL: redirectUri)
+//        // Set the playURI to a non-nil value so that Spotify plays music after authenticating and App Remote can connect
+//        // otherwise another app switch will be required
+//        configuration.playURI = ""
+//        // Set these url's to your backend which contains the secret to exchange for an access token
+//        // You can use the provided ruby script spotify_token_swap.rb for testing purposes
+//        configuration.tokenSwapURL = URL(string: "http://localhost:1234/swap")
+//        configuration.tokenRefreshURL = URL(string: "http://localhost:1234/refresh")
+//        return configuration
+//    }()
     
     lazy var sessionManager: SPTSessionManager? = {
-        let manager = SPTSessionManager(configuration: configuration, delegate: self)
+        let manager = SPTSessionManager(configuration: NetworkManager.configuration, delegate: self)
         return manager
     }()
     private var lastPlayerState: SPTAppRemotePlayerState?
@@ -67,13 +61,13 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.text = "Connect your Spotify account"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.textColor = UIColor(red:(29.0 / 255.0), green:(185.0 / 255.0), blue:(84.0 / 255.0), alpha:1.0)
+        label.textColor = .previewtifyGreen
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     private lazy var connectButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor(red:(29.0 / 255.0), green:(185.0 / 255.0), blue:(84.0 / 255.0), alpha:1.0)
+        button.backgroundColor = .previewtifyGreen
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentEdgeInsets = UIEdgeInsets(top: 11.75, left: 32.0, bottom: 11.75, right: 32.0)
         button.layer.cornerRadius = 20.0
@@ -85,7 +79,7 @@ class ViewController: UIViewController {
     }()
     private lazy var disconnectButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor(red:(29.0 / 255.0), green:(185.0 / 255.0), blue:(84.0 / 255.0), alpha:1.0)
+        button.backgroundColor = .previewtifyGreen
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentEdgeInsets = UIEdgeInsets(top: 11.75, left: 32.0, bottom: 11.75, right: 32.0)
         button.layer.cornerRadius = 20.0
@@ -122,6 +116,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        transparentNavigationBar()
         setCodeVerifier()
     }
     
@@ -132,7 +127,7 @@ class ViewController: UIViewController {
     
     //MARK: Methods
     func setupViews() {
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.systemBackground
         view.addSubview(connectLabel)
         view.addSubview(connectButton)
         view.addSubview(disconnectButton)
@@ -247,99 +242,33 @@ class ViewController: UIViewController {
     }
 
     // MARK: - Private Helpers
-
-    private func presentAlertController(title: String, message: String, buttonTitle: String) {
-        DispatchQueue.main.async {
-            let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let action = UIAlertAction(title: buttonTitle, style: .default, handler: nil)
-            controller.addAction(action)
-            self.present(controller, animated: true)
-        }
-    }
     
-    //MARK: POST Request
-    
-    ///get the code from spotify to be used to get user's token
-//    func authorizeWithSpotify(completion: @escaping ([String: Any]?, Error?) -> Void) {
-//        var components = URLComponents(string: "https://accounts.spotify.com/authorize")!
-//        let parameters = [
-//            "client_id" : SpotifyClientID,
-//            "response_type": "code",
-//            "redirect_uri": SpotifyRedirectURI.absoluteString,
-//            "code_challenge_method": "S256",
-//            "code_challenge": codeVerifier,
-////            "scope": "user-read-private user-read-email",
-////            "state": "e21392da45dbf4",
-//        ]
-//        components.queryItems = parameters.map { (key, value) in
-//            URLQueryItem(name: key, value: value)
-//        }
-//        components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
-//
-//        var request = URLRequest(url: components.url!)
-//        print("Request Authorize URL=", request.url!.absoluteString)
-//        request.httpMethod = "GET"
-//
-////        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-////        request.allHTTPHeaderFields = [//"Authorization": SpotifyAuthKey,
-////                                        "Content-Type": "application/x-www-form-urlencoded"
-////                                    ]
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            guard let data = data,                            // is there data
-//                let response = response as? HTTPURLResponse,  // is there HTTP response
-//                (200 ..< 300) ~= response.statusCode,         // is statusCode 2XX
-//                error == nil else {                           // was there no error, otherwise ...
-//                    print("FAILED!!")
-//                    completion(nil, error)
-//                    return
-//            }
-////            let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
-////            print("RESPONSE OBJECT=", responseObject)
-//            if let returnData = String(data: data, encoding: .utf8) {
-//                print("RESULT \(returnData)")
-//            } else {
-//                print("Nada")
-////              completion("")
-//            }
-////            completion(responseObject, nil)
-//        }
-//        task.resume()
-//    }
-    
-    func fetchSpotifyToken(completion: @escaping (Result<SpotifyAuth, Error>) -> Void) {
-        let url = URL(string: "https://accounts.spotify.com/api/token")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        let spotifyAuthKey = "Basic \((spotifyClientId + ":" + spotifyClientSecretKey).data(using: .utf8)!.base64EncodedString())"
-        request.allHTTPHeaderFields = ["Authorization": spotifyAuthKey,
-                                       "Content-Type": "application/x-www-form-urlencoded"]
-        do {
-            var requestBodyComponents = URLComponents()
-            let scopeAsString = stringScopes.joined(separator: " ") //put array to string separated by whitespace
-            requestBodyComponents.queryItems = [
-                URLQueryItem(name: "client_id", value: spotifyClientId),
-                URLQueryItem(name: "grant_type", value: "authorization_code"),
-                URLQueryItem(name: "code", value: responseTypeCode!),
-                URLQueryItem(name: "redirect_uri", value: redirectUri.absoluteString),
-                URLQueryItem(name: "code_verifier", value: codeVerifier),
-                URLQueryItem(name: "scope", value: scopeAsString),
-            ]
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data,                            // is there data
-                    let response = response as? HTTPURLResponse,  // is there HTTP response
-                    (200 ..< 300) ~= response.statusCode,         // is statusCode 2XX
-                    error == nil else {                           // was there no error, otherwise ...
-                        return completion(.failure(EndPointError.noData(message: "No data found")))
+    func fetchSpotifyAccessToken() {
+        guard let _ = NetworkManager.authorizationCode else { return } //makes sure we have authorization code
+        startActivityIndicator()
+        NetworkManager.fetchAccessToken { (result) in
+            switch result {
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.stopActivityIndicator()
+                    self.presentAlert(title: "Error fetching token", message: error.localizedDescription)
                 }
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase //convert keys from snake case to camel case
-                if let spotifyAuth = try? decoder.decode(SpotifyAuth.self, from: data) {
-                    return completion(.success(spotifyAuth))
+            case .success(let spotifyAuth):
+                print("We got Access token \(spotifyAuth.accessToken)")
+                NetworkManager.fetchUser(accessToken: spotifyAuth.accessToken) { (result) in
+                    DispatchQueue.main.async {
+                        self.stopActivityIndicator()
+                        switch result {
+                        case .failure(let error):
+                            self.presentAlert(title: "Error fetching user", message: error.localizedDescription)
+                        case .success(let user):
+                            print("Got user \(user.name)")
+                            let vc = HomeController()
+                            self.navigationController?.initRootVC(vc: vc)
+                        }
+                    }
                 }
-                completion(.failure(EndPointError.couldNotParse(message: "Failed to decode data")))
             }
-            task.resume()
         }
     }
 }
@@ -382,12 +311,12 @@ extension ViewController: SPTSessionManagerDelegate {
         if error.localizedDescription == "The operation couldn’t be completed. (com.spotify.sdk.login error 1.)" {
             print("AUTHENTICATE with WEBAPI")
         } else {
-            presentAlertController(title: "Authorization Failed", message: error.localizedDescription, buttonTitle: "Bummer")
+            presentAlert(title: "Authorization Failed", message: error.localizedDescription)
         }
     }
 
     func sessionManager(manager: SPTSessionManager, didRenew session: SPTSession) {
-        presentAlertController(title: "Session Renewed", message: session.description, buttonTitle: "Sweet")
+        presentAlert(title: "Session Renewed", message: session.description)
     }
 
     func sessionManager(manager: SPTSessionManager, didInitiate session: SPTSession) {

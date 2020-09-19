@@ -11,6 +11,21 @@
 		333A14B72515519900C934C9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14B62515519900C934C9 /* NetworkManager.swift */; };
 		333A14BE2515526700C934C9 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14BD2515526700C934C9 /* Endpoint.swift */; };
 		333A14C2251553D800C934C9 /* SpotifyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14C1251553D800C934C9 /* SpotifyAuth.swift */; };
+		333A14EF25157AFC00C934C9 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14DF25157AFC00C934C9 /* UIViewController+Extensions.swift */; };
+		333A14F025157AFC00C934C9 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E025157AFC00C934C9 /* UIView+Extensions.swift */; };
+		333A14F125157AFC00C934C9 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E125157AFC00C934C9 /* String+Extensions.swift */; };
+		333A14F225157AFC00C934C9 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E225157AFC00C934C9 /* UIFont+Extensions.swift */; };
+		333A14F325157AFC00C934C9 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E325157AFC00C934C9 /* UIColor+Extensions.swift */; };
+		333A14F425157AFC00C934C9 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E425157AFC00C934C9 /* UIImage+Extensions.swift */; };
+		333A14F525157AFC00C934C9 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E525157AFC00C934C9 /* UINavigationController+Extensions.swift */; };
+		333A14F625157AFC00C934C9 /* UIStackView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E625157AFC00C934C9 /* UIStackView+Extensions.swift */; };
+		333A14F725157AFC00C934C9 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E725157AFC00C934C9 /* UserDefaults+Extensions.swift */; };
+		333A14F825157AFC00C934C9 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E825157AFC00C934C9 /* Date+Extensions.swift */; };
+		333A14F925157AFC00C934C9 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14E925157AFC00C934C9 /* UITextField+Extensions.swift */; };
+		333A14FA25157AFC00C934C9 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14EA25157AFC00C934C9 /* Defaults.swift */; };
+		333A14FB25157AFC00C934C9 /* UserKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14EC25157AFC00C934C9 /* UserKeys.swift */; };
+		333A150D2515842700C934C9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A150C2515842700C934C9 /* HomeController.swift */; };
+		333A15232515D19D00C934C9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A15222515D19D00C934C9 /* User.swift */; };
 		33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6625099BD9007FA062 /* AppDelegate.swift */; };
 		33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6825099BD9007FA062 /* SceneDelegate.swift */; };
 		33D05B6B25099BD9007FA062 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6A25099BD9007FA062 /* ViewController.swift */; };
@@ -39,6 +54,21 @@
 		333A14B62515519900C934C9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		333A14BD2515526700C934C9 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		333A14C1251553D800C934C9 /* SpotifyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuth.swift; sourceTree = "<group>"; };
+		333A14DF25157AFC00C934C9 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E025157AFC00C934C9 /* UIView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E125157AFC00C934C9 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E225157AFC00C934C9 /* UIFont+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E325157AFC00C934C9 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E425157AFC00C934C9 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E525157AFC00C934C9 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E625157AFC00C934C9 /* UIStackView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E725157AFC00C934C9 /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E825157AFC00C934C9 /* Date+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		333A14E925157AFC00C934C9 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
+		333A14EA25157AFC00C934C9 /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		333A14EC25157AFC00C934C9 /* UserKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserKeys.swift; sourceTree = "<group>"; };
+		333A150C2515842700C934C9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		333A15222515D19D00C934C9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		33D05B6325099BD9007FA062 /* Previewtify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Previewtify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33D05B6625099BD9007FA062 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33D05B6825099BD9007FA062 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,8 +125,54 @@
 			isa = PBXGroup;
 			children = (
 				33D05B6A25099BD9007FA062 /* ViewController.swift */,
+				333A150C2515842700C934C9 /* HomeController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		333A14DB25157AFC00C934C9 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				333A14EA25157AFC00C934C9 /* Defaults.swift */,
+				333A14DE25157AFC00C934C9 /* Extensions */,
+				333A14EB25157AFC00C934C9 /* Keys */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		333A14DE25157AFC00C934C9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				333A14DF25157AFC00C934C9 /* UIViewController+Extensions.swift */,
+				333A14E025157AFC00C934C9 /* UIView+Extensions.swift */,
+				333A14E125157AFC00C934C9 /* String+Extensions.swift */,
+				333A14E225157AFC00C934C9 /* UIFont+Extensions.swift */,
+				333A14E325157AFC00C934C9 /* UIColor+Extensions.swift */,
+				333A14E425157AFC00C934C9 /* UIImage+Extensions.swift */,
+				333A14E525157AFC00C934C9 /* UINavigationController+Extensions.swift */,
+				333A14E625157AFC00C934C9 /* UIStackView+Extensions.swift */,
+				333A14E725157AFC00C934C9 /* UserDefaults+Extensions.swift */,
+				333A14E825157AFC00C934C9 /* Date+Extensions.swift */,
+				333A14E925157AFC00C934C9 /* UITextField+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		333A14EB25157AFC00C934C9 /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				333A14EC25157AFC00C934C9 /* UserKeys.swift */,
+			);
+			path = Keys;
+			sourceTree = "<group>";
+		};
+		333A151F2515D19200C934C9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				333A14C1251553D800C934C9 /* SpotifyAuth.swift */,
+				333A15222515D19D00C934C9 /* User.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		33D05B5A25099BD9007FA062 = {
@@ -125,16 +201,17 @@
 			children = (
 				33D05B6625099BD9007FA062 /* AppDelegate.swift */,
 				33D05B6825099BD9007FA062 /* SceneDelegate.swift */,
-				333A14C5251557E400C934C9 /* Controllers */,
-				333A14C1251553D800C934C9 /* SpotifyAuth.swift */,
-				333A14BA251551B800C934C9 /* Network */,
+				333A151F2515D19200C934C9 /* Models */,
+				331E8A8025101265000C32F5 /* Constants.swift */,
 				33D05B6C25099BD9007FA062 /* Main.storyboard */,
+				333A14C5251557E400C934C9 /* Controllers */,
+				333A14BA251551B800C934C9 /* Network */,
+				333A14DB25157AFC00C934C9 /* Helpers */,
 				33D05B6F25099BDB007FA062 /* Assets.xcassets */,
 				33D05B7125099BDB007FA062 /* LaunchScreen.storyboard */,
 				33D05B7425099BDB007FA062 /* Info.plist */,
 				33D05B882509A148007FA062 /* GoogleService-Info.plist */,
 				33D05B8A2509A5F6007FA062 /* SpotifyiOS.framework */,
-				331E8A8025101265000C32F5 /* Constants.swift */,
 			);
 			path = Previewtify;
 			sourceTree = "<group>";
@@ -338,12 +415,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				33D05B6B25099BD9007FA062 /* ViewController.swift in Sources */,
+				333A14FA25157AFC00C934C9 /* Defaults.swift in Sources */,
 				33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */,
 				333A14B72515519900C934C9 /* NetworkManager.swift in Sources */,
+				333A14F825157AFC00C934C9 /* Date+Extensions.swift in Sources */,
+				333A14F325157AFC00C934C9 /* UIColor+Extensions.swift in Sources */,
 				33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */,
+				333A14EF25157AFC00C934C9 /* UIViewController+Extensions.swift in Sources */,
+				333A14F625157AFC00C934C9 /* UIStackView+Extensions.swift in Sources */,
 				333A14BE2515526700C934C9 /* Endpoint.swift in Sources */,
+				333A15232515D19D00C934C9 /* User.swift in Sources */,
+				333A14F725157AFC00C934C9 /* UserDefaults+Extensions.swift in Sources */,
+				333A14F525157AFC00C934C9 /* UINavigationController+Extensions.swift in Sources */,
+				333A150D2515842700C934C9 /* HomeController.swift in Sources */,
+				333A14F025157AFC00C934C9 /* UIView+Extensions.swift in Sources */,
+				333A14F125157AFC00C934C9 /* String+Extensions.swift in Sources */,
+				333A14F425157AFC00C934C9 /* UIImage+Extensions.swift in Sources */,
 				333A14C2251553D800C934C9 /* SpotifyAuth.swift in Sources */,
 				331E8A8125101265000C32F5 /* Constants.swift in Sources */,
+				333A14FB25157AFC00C934C9 /* UserKeys.swift in Sources */,
+				333A14F925157AFC00C934C9 /* UITextField+Extensions.swift in Sources */,
+				333A14F225157AFC00C934C9 /* UIFont+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
