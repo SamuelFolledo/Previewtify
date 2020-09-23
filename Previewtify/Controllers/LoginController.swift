@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LoginController.swift
 //  Previewtify
 //
 //  Created by Samuel Folledo on 9/9/20.
@@ -10,7 +10,7 @@ import UIKit
 import CryptoKit //for SHA256
 //import AuthenticationServices
 
-class ViewController: UIViewController {
+class LoginController: UIViewController {
     
     var codeVerifier: String = ""
     var responseTypeCode: String? {
@@ -264,6 +264,7 @@ class ViewController: UIViewController {
                         case .failure(let error):
                             self.presentAlert(title: "Error fetching user", message: error.localizedDescription)
                         case .success(let user):
+                            self.appRemote.playerAPI?.pause(nil) //pause spotify song
                             print("Got user \(user.name)")
                             let vc = HomeController()
                             self.navigationController?.initRootVC(vc: vc)
@@ -276,7 +277,7 @@ class ViewController: UIViewController {
 }
 
 // MARK: - SPTAppRemoteDelegate
-extension ViewController: SPTAppRemoteDelegate {
+extension LoginController: SPTAppRemoteDelegate {
     func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
         updateViewBasedOnConnected()
         appRemote.playerAPI?.delegate = self
@@ -300,7 +301,7 @@ extension ViewController: SPTAppRemoteDelegate {
 }
 
 // MARK: - SPTAppRemotePlayerAPIDelegate
-extension ViewController: SPTAppRemotePlayerStateDelegate {
+extension LoginController: SPTAppRemotePlayerStateDelegate {
     func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
         debugPrint("Spotify Track name: %@", playerState.track.name)
         update(playerState: playerState)
@@ -308,7 +309,7 @@ extension ViewController: SPTAppRemotePlayerStateDelegate {
 }
 
 // MARK: - SPTSessionManagerDelegate
-extension ViewController: SPTSessionManagerDelegate {
+extension LoginController: SPTSessionManagerDelegate {
     func sessionManager(manager: SPTSessionManager, didFailWith error: Error) {
         if error.localizedDescription == "The operation couldn’t be completed. (com.spotify.sdk.login error 1.)" {
             print("AUTHENTICATE with WEBAPI")

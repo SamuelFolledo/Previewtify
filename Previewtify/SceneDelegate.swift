@@ -11,7 +11,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    lazy var rootViewController = ViewController()
+    lazy var loginController = LoginController()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -24,17 +24,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         //go to log in
-        let nav = UINavigationController(rootViewController: rootViewController)
+        let nav = UINavigationController(rootViewController: loginController)
         window!.rootViewController = nav
     }
     
     //for spotify authorization and authentication flow
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }
-        let parameters = rootViewController.appRemote.authorizationParameters(from: url)
+        let parameters = loginController.appRemote.authorizationParameters(from: url)
         if let code = parameters?["code"] {
             NetworkManager.authorizationCode = code
-            rootViewController.fetchSpotifyAccessToken()
+            loginController.fetchSpotifyAccessToken()
         } else if let access_token = parameters?[SPTAppRemoteAccessTokenKey] {
             NetworkManager.accessToken = access_token
         } else if let error_description = parameters?[SPTAppRemoteErrorDescriptionKey] {
@@ -43,12 +43,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        if let _ = rootViewController.appRemote.connectionParameters.accessToken {
-//            rootViewController.appRemote.connectionParameters.accessToken = accessToken
-//            rootViewController.appRemote.connect()
+        if let _ = loginController.appRemote.connectionParameters.accessToken {
+//            loginController.appRemote.connectionParameters.accessToken = accessToken
+//            loginController.appRemote.connect()
         } else if let _ = NetworkManager.accessToken {
-//            rootViewController.appRemote.connectionParameters.accessToken = accessToken
-//            rootViewController.appRemote.connect()
+//            loginController.appRemote.connectionParameters.accessToken = accessToken
+//            loginController.appRemote.connect()
         }
     }
 
@@ -56,8 +56,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let _ = User.current {
             
         } else {
-            if rootViewController.appRemote.isConnected {
-                rootViewController.appRemote.disconnect()
+            if loginController.appRemote.isConnected {
+                loginController.appRemote.disconnect()
             }
         }
     }
