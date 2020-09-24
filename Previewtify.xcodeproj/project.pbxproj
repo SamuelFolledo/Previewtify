@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		331AC249251C2CEE00282D2C /* ArtistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331AC248251C2CEE00282D2C /* ArtistCell.swift */; };
 		331E8A8125101265000C32F5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E8A8025101265000C32F5 /* Constants.swift */; };
 		333A14B72515519900C934C9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14B62515519900C934C9 /* NetworkManager.swift */; };
 		333A14BE2515526700C934C9 /* EndpointError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14BD2515526700C934C9 /* EndpointError.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		331AC248251C2CEE00282D2C /* ArtistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistCell.swift; sourceTree = "<group>"; };
 		331E8A8025101265000C32F5 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		333A14B62515519900C934C9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		333A14BD2515526700C934C9 /* EndpointError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointError.swift; sourceTree = "<group>"; };
@@ -112,6 +114,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		331AC245251C2CD800282D2C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				333A150C2515842700C934C9 /* HomeController.swift */,
+				331AC24C251C2CF300282D2C /* Views */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		331AC24C251C2CF300282D2C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				331AC248251C2CEE00282D2C /* ArtistCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		333A14BA251551B800C934C9 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,7 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				33D05B6A25099BD9007FA062 /* LoginController.swift */,
-				333A150C2515842700C934C9 /* HomeController.swift */,
+				331AC245251C2CD800282D2C /* Home */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -437,6 +456,7 @@
 				333A14F525157AFC00C934C9 /* UINavigationController+Extensions.swift in Sources */,
 				333A150D2515842700C934C9 /* HomeController.swift in Sources */,
 				333A14F025157AFC00C934C9 /* UIView+Extensions.swift in Sources */,
+				331AC249251C2CEE00282D2C /* ArtistCell.swift in Sources */,
 				333A14F125157AFC00C934C9 /* String+Extensions.swift in Sources */,
 				333A14F425157AFC00C934C9 /* UIImage+Extensions.swift in Sources */,
 				333A14C2251553D800C934C9 /* SpotifyAuth.swift in Sources */,

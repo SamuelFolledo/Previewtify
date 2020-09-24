@@ -116,6 +116,7 @@ class NetworkManager {
 //                let jsonResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any]
 //                print(jsonResult)
                 if let spotifyAuth = try? decoder.decode(SpotifyAuth.self, from: data) {
+                    //update access token
                     self.accessToken = spotifyAuth.accessToken
                     Spartan.authorizationToken = spotifyAuth.accessToken
                     return completion(.success(spotifyAuth))
