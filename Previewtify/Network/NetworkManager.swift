@@ -127,12 +127,10 @@ class NetworkManager {
     }
     
     ///fetch user with an unexpired access token
-    static func fetchUser(accessToken: String, completion: @escaping (Result<User, Error>) -> Void) {
+    static func fetchUser(accessToken: String, completion: @escaping (Result<PrivateUser, Error>) -> Void) {
         Spartan.authorizationToken = accessToken
         _ = Spartan.getMe(success: { (user) in
             // Do something with the user object
-            let user = User(user: user)
-            User.setCurrent(user, writeToUserDefaults: true)
             completion(.success(user))
         }, failure: { (error) in
             if error.errorType == .unauthorized {
