@@ -9,46 +9,17 @@
 import UIKit
 import CryptoKit //for SHA256
 //import AuthenticationServices
+import SnapKit
 
 class LoginController: UIViewController {
     
     var codeVerifier: String = ""
-    var responseTypeCode: String? {
-        didSet {
-//            fetchSpotifyToken { result in
-//                DispatchQueue.main.async {
-//                    switch result {
-//                    case .failure(let error):
-//                        print("Error fetching access token \(error.localizedDescription)")
-//                    case .success(let spotifyAuth):
-//                        self.accessToken = spotifyAuth.accessToken
-//                        self.appRemote.connectionParameters.accessToken = spotifyAuth.accessToken
-//                        self.appRemote.connect()
-//                        self.appRemote.playerAPI?.pause(nil)
-//                    }
-//                }
-//            }
-        }
-    }
     lazy var appRemote: SPTAppRemote = {
         let appRemote = SPTAppRemote(configuration: NetworkManager.configuration, logLevel: .debug)
         appRemote.connectionParameters.accessToken = NetworkManager.accessToken
         appRemote.delegate = self
         return appRemote
     }()
-
-//    lazy var configuration: SPTConfiguration = {
-//        let configuration = SPTConfiguration(clientID: spotifyClientId, redirectURL: redirectUri)
-//        // Set the playURI to a non-nil value so that Spotify plays music after authenticating and App Remote can connect
-//        // otherwise another app switch will be required
-//        configuration.playURI = ""
-//        // Set these url's to your backend which contains the secret to exchange for an access token
-//        // You can use the provided ruby script spotify_token_swap.rb for testing purposes
-//        configuration.tokenSwapURL = URL(string: "http://localhost:1234/swap")
-//        configuration.tokenRefreshURL = URL(string: "http://localhost:1234/refresh")
-//        return configuration
-//    }()
-    
     lazy var sessionManager: SPTSessionManager? = {
         let manager = SPTSessionManager(configuration: NetworkManager.configuration, delegate: self)
         return manager
@@ -135,10 +106,22 @@ class LoginController: UIViewController {
         view.addSubview(trackLabel)
         view.addSubview(pauseAndPlayButton)
         let constant: CGFloat = 16.0
-        connectButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        connectButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        disconnectButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        disconnectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50).isActive = true
+//        connectButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        connectButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        connectButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().multipliedBy(1.4)
+            $0.width.equalToSuperview().multipliedBy(0.8)
+            $0.height.equalTo(50)
+        }
+//        disconnectButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        disconnectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50).isActive = true
+        disconnectButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().multipliedBy(1.4)
+            $0.width.equalToSuperview().multipliedBy(0.8)
+            $0.height.equalTo(50)
+        }
         connectLabel.centerXAnchor.constraint(equalTo: connectButton.centerXAnchor).isActive = true
         connectLabel.bottomAnchor.constraint(equalTo: connectButton.topAnchor, constant: -constant).isActive = true
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -247,6 +230,7 @@ class LoginController: UIViewController {
     func fetchSpotifyAccessToken() {
         guard let _ = NetworkManager.authorizationCode else { return } //makes sure we have authorization code
         startActivityIndicator()
+        appRemote.connect() //connect appRemote to pause Spotify
         //fetch access token
         NetworkManager.fetchAccessToken { (result) in
             switch result {
@@ -264,7 +248,8 @@ class LoginController: UIViewController {
                         case .failure(let error):
                             self.presentAlert(title: "Error fetching user", message: error.localizedDescription)
                         case .success(let user):
-                            self.appRemote.playerAPI?.pause(nil) //pause spotify song
+                            let user = User(user: user)
+//                            User.setCurrent(user, writeToUserDefaults: true)
                             print("Got user \(user.name)")
                             let vc = HomeController()
                             self.navigationController?.initRootVC(vc: vc)
@@ -279,14 +264,16 @@ class LoginController: UIViewController {
 // MARK: - SPTAppRemoteDelegate
 extension LoginController: SPTAppRemoteDelegate {
     func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
-        updateViewBasedOnConnected()
-        appRemote.playerAPI?.delegate = self
-        appRemote.playerAPI?.subscribe(toPlayerState: { (success, error) in
-            if let error = error {
-                print("Error subscribing to player state:" + error.localizedDescription)
-            }
-        })
-        fetchPlayerState()
+        self.appRemote.playerAPI?.pause(nil)
+        self.appRemote.disconnect()
+//        updateViewBasedOnConnected()
+//        appRemote.playerAPI?.delegate = self
+//        appRemote.playerAPI?.subscribe(toPlayerState: { (success, error) in
+//            if let error = error {
+//                print("Error subscribing to player state:" + error.localizedDescription)
+//            }
+//        })
+//        fetchPlayerState()
     }
 
     func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
