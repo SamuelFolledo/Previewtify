@@ -33,12 +33,19 @@ struct Defaults {
     
     //MARK: Methods
     
-    ///use after logging out 
+    ///use after logging out
     static func _removeUser(_ removeFromUserDefaults: Bool = false) {
         if removeFromUserDefaults {
             UserDefaults.standard.removeObject(forKey: Constants.currentUser)
             //clear everything in UserDefaults
             UserDefaults.standard.deleteAllKeys(exemptedKeys: ["onboard"])
+        }
+    }
+    
+    ///use after logging out
+    static func _removeSpotifyAuth(_ removeFromUserDefaults: Bool = false) {
+        if removeFromUserDefaults {
+            UserDefaults.standard.removeObject(forKey: Constants.spotifyAuthKey)
         }
     }
 }
