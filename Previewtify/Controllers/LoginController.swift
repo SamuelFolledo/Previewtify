@@ -249,7 +249,7 @@ class LoginController: UIViewController {
                             self.presentAlert(title: "Error fetching user", message: error.localizedDescription)
                         case .success(let user):
                             let user = User(user: user)
-//                            User.setCurrent(user, writeToUserDefaults: true)
+                            User.setCurrent(user, writeToUserDefaults: true)
                             print("Got user \(user.name)")
                             let vc = HomeController()
                             self.navigationController?.initRootVC(vc: vc)
