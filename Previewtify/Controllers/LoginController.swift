@@ -16,7 +16,7 @@ class LoginController: UIViewController {
     var codeVerifier: String = ""
     lazy var appRemote: SPTAppRemote = {
         let appRemote = SPTAppRemote(configuration: NetworkManager.configuration, logLevel: .debug)
-        appRemote.connectionParameters.accessToken = NetworkManager.accessToken
+        appRemote.connectionParameters.accessToken = SpotifyAuth.current?.accessToken
         appRemote.delegate = self
         return appRemote
     }()

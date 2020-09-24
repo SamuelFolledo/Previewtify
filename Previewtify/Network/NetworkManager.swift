@@ -25,15 +25,15 @@ class NetworkManager {
     static var totalCount: Int = Int.max
     static var codeVerifier: String = ""
 
-    static var accessToken = defaults.string(forKey: Constants.accessTokenKey) {
-        didSet { defaults.set(accessToken, forKey: Constants.accessTokenKey) }
-    }
+//    static var spotifyAuth: SpotifyAuth? = defaults.object(forKey: Constants.spotifyAuthKey) as? SpotifyAuth {
+//        didSet { defaults.set(spotifyAuth, forKey: Constants.spotifyAuthKey) }
+//    }
     static var authorizationCode = defaults.string(forKey: Constants.authorizationCodeKey) {
         didSet { defaults.set(authorizationCode, forKey: Constants.authorizationCodeKey) }
     }
-    static var refreshToken = defaults.string(forKey: Constants.refreshTokenKey) {
-        didSet { defaults.set(refreshToken, forKey: Constants.refreshTokenKey) }
-    }
+//    static var refreshToken = defaults.string(forKey: Constants.refreshTokenKey) {
+//        didSet { defaults.set(refreshToken, forKey: Constants.refreshTokenKey) }
+//    }
 
     static let configuration: SPTConfiguration = {
         let configuration = SPTConfiguration(clientID: NetworkManager.clientId, redirectURL: NetworkManager.redirectUri)
@@ -51,8 +51,8 @@ class NetworkManager {
         let url = URL(string: "\(baseURL)api/token")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        let spotifyAuthKey = "Basic \((clientId + ":" + clientSecretKey).data(using: .utf8)!.base64EncodedString())"
-        request.allHTTPHeaderFields = ["Authorization": spotifyAuthKey,
+        let authorizationValue = "Basic \((clientId + ":" + clientSecretKey).data(using: .utf8)!.base64EncodedString())"
+        request.allHTTPHeaderFields = ["Authorization": authorizationValue,
                                        "Content-Type": "application/x-www-form-urlencoded"]
         var requestBodyComponents = URLComponents()
         let scopeAsString = stringScopes.joined(separator: " ") //put array to string separated by whitespace
@@ -76,9 +76,11 @@ class NetworkManager {
             decoder.keyDecodingStrategy = .convertFromSnakeCase  //convert keys from snake case to camel case
             do {
                 if let spotifyAuth = try? decoder.decode(SpotifyAuth.self, from: data) {
-                    self.accessToken = spotifyAuth.accessToken
+//                    self.accessToken = spotifyAuth.accessToken
+//                    self.spotifyAuth = spotifyAuth
+                    SpotifyAuth.setCurrent(spotifyAuth, writeToUserDefaults: true)
                     self.authorizationCode = nil
-                    self.refreshToken = spotifyAuth.refreshToken
+//                    self.refreshToken = spotifyAuth.refreshToken
                     Spartan.authorizationToken = spotifyAuth.accessToken
                     return completion(.success(spotifyAuth))
                 }
@@ -89,7 +91,7 @@ class NetworkManager {
     }
     
     static func refreshAcessToken(completion: @escaping (Result<SpotifyAuth, Error>) -> Void) {
-        guard let refreshToken = refreshToken else { return completion(.failure(EndPointError.missing(message: "No refresh token found."))) }
+        guard let refreshToken = SpotifyAuth.current?.refreshToken else { return completion(.failure(EndPointError.missing(message: "No refresh token found."))) }
         let url = URL(string: "\(baseURL)api/token")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -117,7 +119,13 @@ class NetworkManager {
 //                print(jsonResult)
                 if let spotifyAuth = try? decoder.decode(SpotifyAuth.self, from: data) {
                     //update access token
-                    self.accessToken = spotifyAuth.accessToken
+//                    self.accessToken = spotifyAuth.accessToken
+//                    self.spotifyAuth?.accessToken = spotifyAuth.accessToken
+                    guard var spotifyAuthToUpdate = SpotifyAuth.current else { return }
+                    spotifyAuthToUpdate.accessToken = spotifyAuth.accessToken
+                    spotifyAuthToUpdate.expiresIn = spotifyAuth.expiresIn
+                    spotifyAuthToUpdate.scope = spotifyAuth.scope
+                    SpotifyAuth.setCurrent(spotifyAuthToUpdate, writeToUserDefaults: true)
                     Spartan.authorizationToken = spotifyAuth.accessToken
                     return completion(.success(spotifyAuth))
                 }

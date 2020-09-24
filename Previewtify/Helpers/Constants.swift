@@ -45,6 +45,7 @@ struct Constants {
     static let accessTokenKey = "accessTokenKey"
     static let authorizationCodeKey = "authorizationCodeKey"
     static let refreshTokenKey = "refreshTokenKey"
+    static let spotifyAuthKey = "spotifyAuthKey"
     
     struct Views {
         //https://github.com/ninjaprox/NVActivityIndicatorView

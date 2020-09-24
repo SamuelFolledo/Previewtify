@@ -65,7 +65,6 @@ class HomeController: UIViewController {
                     // Get the artists via pagingObject.items
                     guard let fetchedArtists = pagingObject.items else { return }
                     for artist in fetchedArtists {
-                        print("Adding \(artist.name)")
                         self.artists.append(artist)
                     }
                 }, failure: { (error) in
