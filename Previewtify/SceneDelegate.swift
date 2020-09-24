@@ -35,8 +35,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let code = parameters?["code"] {
             NetworkManager.authorizationCode = code
             loginController.fetchSpotifyAccessToken()
-        } else if let access_token = parameters?[SPTAppRemoteAccessTokenKey] {
-            NetworkManager.accessToken = access_token
+        } else if let _ = parameters?[SPTAppRemoteAccessTokenKey] {
+//            NetworkManager.accessToken = access_token
+//            NetworkManager.spotifyAuth?.accessToken = access_token
         } else if let error_description = parameters?[SPTAppRemoteErrorDescriptionKey] {
             print("No access token error =", error_description)
         }
@@ -46,7 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let _ = loginController.appRemote.connectionParameters.accessToken {
 //            loginController.appRemote.connectionParameters.accessToken = accessToken
 //            loginController.appRemote.connect()
-        } else if let _ = NetworkManager.accessToken {
+        } else if let _ = SpotifyAuth.current?.accessToken {
 //            loginController.appRemote.connectionParameters.accessToken = accessToken
 //            loginController.appRemote.connect()
         }
