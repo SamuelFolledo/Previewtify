@@ -79,7 +79,15 @@ class HomeController: UIViewController {
 
 //MARK: Extensions
 
-extension HomeController: UITableViewDelegate {}
+extension HomeController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let cell = collectionView.cellForItem(at: indexPath) as! ArtistCell
+        let artist = artists[indexPath.row]
+        let vc = ArtistTrackController()
+        vc.artist = artist
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
 
 extension HomeController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

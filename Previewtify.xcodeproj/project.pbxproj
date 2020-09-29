@@ -27,6 +27,10 @@
 		333A14FB25157AFC00C934C9 /* UserKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14EC25157AFC00C934C9 /* UserKeys.swift */; };
 		333A150D2515842700C934C9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A150C2515842700C934C9 /* HomeController.swift */; };
 		333A15232515D19D00C934C9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A15222515D19D00C934C9 /* User.swift */; };
+		33CA2A9F252312320040F118 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2A9E252312320040F118 /* TrackCell.swift */; };
+		33CA2AA32523123D0040F118 /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AA22523123D0040F118 /* SongCell.swift */; };
+		33CA2AA72523128F0040F118 /* ArtistTrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AA62523128F0040F118 /* ArtistTrackController.swift */; };
+		33CA2AAB2523129F0040F118 /* FavoriteSongController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AAA2523129F0040F118 /* FavoriteSongController.swift */; };
 		33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6625099BD9007FA062 /* AppDelegate.swift */; };
 		33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6825099BD9007FA062 /* SceneDelegate.swift */; };
 		33D05B6B25099BD9007FA062 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6A25099BD9007FA062 /* LoginController.swift */; };
@@ -71,6 +75,10 @@
 		333A14EC25157AFC00C934C9 /* UserKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserKeys.swift; sourceTree = "<group>"; };
 		333A150C2515842700C934C9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		333A15222515D19D00C934C9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		33CA2A9E252312320040F118 /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
+		33CA2AA22523123D0040F118 /* SongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
+		33CA2AA62523128F0040F118 /* ArtistTrackController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTrackController.swift; sourceTree = "<group>"; };
+		33CA2AAA2523129F0040F118 /* FavoriteSongController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongController.swift; sourceTree = "<group>"; };
 		33D05B6325099BD9007FA062 /* Previewtify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Previewtify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33D05B6625099BD9007FA062 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33D05B6825099BD9007FA062 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,8 +151,10 @@
 		333A14C5251557E400C934C9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				33D05B6A25099BD9007FA062 /* LoginController.swift */,
+				33CA2AB0252312D50040F118 /* Login */,
 				331AC245251C2CD800282D2C /* Home */,
+				33CA2AAF252312AE0040F118 /* ArtistTrack */,
+				33CA2AAE252312A40040F118 /* FavoriteSongs */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -204,6 +214,32 @@
 				33D05B6C25099BD9007FA062 /* Main.storyboard */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		33CA2AAE252312A40040F118 /* FavoriteSongs */ = {
+			isa = PBXGroup;
+			children = (
+				33CA2AAA2523129F0040F118 /* FavoriteSongController.swift */,
+				33CA2AA22523123D0040F118 /* SongCell.swift */,
+			);
+			path = FavoriteSongs;
+			sourceTree = "<group>";
+		};
+		33CA2AAF252312AE0040F118 /* ArtistTrack */ = {
+			isa = PBXGroup;
+			children = (
+				33CA2AA62523128F0040F118 /* ArtistTrackController.swift */,
+				33CA2A9E252312320040F118 /* TrackCell.swift */,
+			);
+			name = ArtistTrack;
+			sourceTree = "<group>";
+		};
+		33CA2AB0252312D50040F118 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				33D05B6A25099BD9007FA062 /* LoginController.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		33D05B5A25099BD9007FA062 = {
@@ -449,13 +485,16 @@
 				333A14F325157AFC00C934C9 /* UIColor+Extensions.swift in Sources */,
 				33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */,
 				333A14EF25157AFC00C934C9 /* UIViewController+Extensions.swift in Sources */,
+				33CA2AA32523123D0040F118 /* SongCell.swift in Sources */,
 				333A14F625157AFC00C934C9 /* UIStackView+Extensions.swift in Sources */,
 				333A14BE2515526700C934C9 /* EndpointError.swift in Sources */,
 				333A15232515D19D00C934C9 /* User.swift in Sources */,
 				333A14F725157AFC00C934C9 /* UserDefaults+Extensions.swift in Sources */,
+				33CA2AAB2523129F0040F118 /* FavoriteSongController.swift in Sources */,
 				333A14F525157AFC00C934C9 /* UINavigationController+Extensions.swift in Sources */,
 				333A150D2515842700C934C9 /* HomeController.swift in Sources */,
 				333A14F025157AFC00C934C9 /* UIView+Extensions.swift in Sources */,
+				33CA2AA72523128F0040F118 /* ArtistTrackController.swift in Sources */,
 				331AC249251C2CEE00282D2C /* ArtistCell.swift in Sources */,
 				333A14F125157AFC00C934C9 /* String+Extensions.swift in Sources */,
 				333A14F425157AFC00C934C9 /* UIImage+Extensions.swift in Sources */,
@@ -464,6 +503,7 @@
 				333A14FB25157AFC00C934C9 /* UserKeys.swift in Sources */,
 				333A14F925157AFC00C934C9 /* UITextField+Extensions.swift in Sources */,
 				333A14F225157AFC00C934C9 /* UIFont+Extensions.swift in Sources */,
+				33CA2A9F252312320040F118 /* TrackCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
