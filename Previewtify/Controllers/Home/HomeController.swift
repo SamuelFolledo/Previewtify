@@ -61,7 +61,7 @@ class HomeController: UIViewController {
                 self.presentAlert(title: "Error Refreshing token", message: error.localizedDescription)
             case .success(let spotifyAuth):
                 print(spotifyAuth.accessToken)
-                _ = Spartan.getMyTopArtists(limit: 50, offset: 0, timeRange: .mediumTerm, success: { (pagingObject) in
+                _ = Spartan.getMyTopArtists(limit: 50, offset: 0, timeRange: .longTerm, success: { (pagingObject) in
                     // Get the artists via pagingObject.items
                     guard let fetchedArtists = pagingObject.items else { return }
                     for artist in fetchedArtists {
@@ -88,8 +88,13 @@ extension HomeController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: ArtistCell = tableView.dequeueReusableCell(withIdentifier: String(describing: ArtistCell.self), for: indexPath) as! ArtistCell
-        let artist = artists[indexPath.row]
-        cell.artist = artist
+        DispatchQueue.global(qos: .userInteractive).async {
+            let artist = self.artists[indexPath.row]
+            DispatchQueue.main.async {
+                cell.artist = artist
+                cell.layoutSubviews()
+            }
+        }
         return cell
     }
 }
