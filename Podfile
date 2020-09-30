@@ -20,6 +20,9 @@ target 'Previewtify' do
   
   # For Spotify calls
   pod 'Spartan'
+  
+  # Swipeable Tab Bar
+  pod 'SwipeableTabBarController'
 
 
   target 'PreviewtifyTests' do
