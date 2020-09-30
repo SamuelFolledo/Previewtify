@@ -18,14 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window!.makeKeyAndVisible()
         window!.windowScene = windowScene
-        if let _ = User.current { //if we have a user, then go to home
-            let nav = UINavigationController(rootViewController: HomeController())
-            window!.rootViewController = nav
-            return
-        }
-        //go to log in
-        let nav = UINavigationController(rootViewController: loginController)
-        window!.rootViewController = nav
+        configureRootViewController()
     }
     
     //for spotify authorization and authentication flow
@@ -61,5 +54,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 loginController.appRemote.disconnect()
             }
         }
+    }
+}
+
+extension SceneDelegate {
+    func configureRootViewController() {
+        if let _ = User.current { //if we have a user, then go to home
+            window!.rootViewController = TabBarController()
+            return
+        }
+        //go to log in
+        let nav = UINavigationController(rootViewController: loginController)
+        window!.rootViewController = nav
     }
 }
