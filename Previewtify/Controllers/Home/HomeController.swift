@@ -40,6 +40,7 @@ class HomeController: UIViewController {
     //MARK: Private Methods
     
     fileprivate func setupViews() {
+        navigationItem.backButtonTitle = "Artists"
         view.addSubview(tableView)
         tableView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
