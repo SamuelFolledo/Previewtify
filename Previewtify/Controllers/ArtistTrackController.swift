@@ -57,7 +57,7 @@ class ArtistTrackController: UIViewController {
     
     fileprivate func setupBackground() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Top 50 Artists"
+        title = "\(artist.name)'s Top Tracks"
         view.backgroundColor = .systemBackground
     }
     
@@ -79,9 +79,10 @@ extension ArtistTrackController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //        let cell = collectionView.cellForItem(at: indexPath) as! ArtistCell
         let track = tracks[indexPath.row]
-        let vc = ArtistTrackController()
+        print(track.name)
+//        let vc = ArtistTrackController()
 //        vc.artist = artist
-        navigationController?.pushViewController(vc, animated: true)
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
