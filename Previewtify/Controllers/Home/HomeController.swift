@@ -35,6 +35,7 @@ class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        fetchTopArtists()
     }
     
     //MARK: Private Methods
@@ -46,7 +47,6 @@ class HomeController: UIViewController {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         setupBackground()
-        fetchTopArtists()
     }
     
     fileprivate func setupBackground() {

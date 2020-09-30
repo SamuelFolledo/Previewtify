@@ -16,6 +16,7 @@ PODS:
   - Spartan (1.2.1):
     - AlamoRecord (~> 1.2.0)
   - SwiftLint (0.40.2)
+  - SwipeableTabBarController (3.2.1)
 
 DEPENDENCIES:
   - Kingfisher (~> 5.0)
@@ -23,6 +24,7 @@ DEPENDENCIES:
   - SnapKit (~> 5.0.1)
   - Spartan
   - SwiftLint
+  - SwipeableTabBarController
 
 SPEC REPOS:
   trunk:
@@ -35,6 +37,7 @@ SPEC REPOS:
     - SnapKit
     - Spartan
     - SwiftLint
+    - SwipeableTabBarController
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
@@ -46,7 +49,8 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Spartan: 2fb99ad25f2b0e8182799f251c800091977f0a40
   SwiftLint: 1216c910d27c2633ade33b4f071bb6b930982e62
+  SwipeableTabBarController: 8f001d3a67dc052542a9f65721cb5b0451b11df2
 
-PODFILE CHECKSUM: 146326124634238c12081f846e632342dac057cb
+PODFILE CHECKSUM: f6a4881b9252dcecb4b841207f152ad8a13185dd
 
 COCOAPODS: 1.9.3

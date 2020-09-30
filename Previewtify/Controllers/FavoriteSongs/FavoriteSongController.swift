@@ -62,12 +62,12 @@ class FavoriteSongController: UIViewController {
     }
     
     func fetchTracks() {
-        guard let artistId = artist.id as? String else { return }
-        Spartan.getArtistsTopTracks(artistId: artistId, country: .us) { (tracks) in
-            self.tracks = tracks
-        } failure: { (error) in
-            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
-        }
+//        guard let artistId = artist.id as? String else { return }
+//        Spartan.getArtistsTopTracks(artistId: artistId, country: .us) { (tracks) in
+//            self.tracks = tracks
+//        } failure: { (error) in
+//            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
+//        }
     }
     
     //MARK: Helpers
@@ -78,10 +78,10 @@ class FavoriteSongController: UIViewController {
 extension FavoriteSongController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //        let cell = collectionView.cellForItem(at: indexPath) as! ArtistCell
-        let track = tracks[indexPath.row]
-        let vc = ArtistTrackController()
+//        let track = tracks[indexPath.row]
+//        let vc = ArtistTrackController()
 //        vc.artist = artist
-        navigationController?.pushViewController(vc, animated: true)
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

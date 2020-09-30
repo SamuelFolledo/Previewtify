@@ -37,12 +37,6 @@ class ArtistTrackController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-//        guard let artistId = artist.id as? String else { return }
-//        Spartan.getArtistsTopTracks(artistId: artistId, country: .us) { (tracks) in
-//            self.tracks = tracks
-//        } failure: { (error) in
-//            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
-//        }
         fetchTracks()
     }
     //MARK: Private Methods
@@ -57,8 +51,9 @@ class ArtistTrackController: UIViewController {
     
     fileprivate func setupBackground() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "\(artist.name)'s Top Tracks"
         view.backgroundColor = .systemBackground
+        guard let artistName = artist.name else { return }
+        title = "\(artistName)'s Top Tracks"
     }
     
     func fetchTracks() {
