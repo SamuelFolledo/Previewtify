@@ -240,7 +240,6 @@ class LoginController: UIViewController {
                     self.presentAlert(title: "Error fetching token", message: error.localizedDescription)
                 }
             case .success(let spotifyAuth):
-                print("We got Access token \(spotifyAuth.accessToken)")
                 NetworkManager.fetchUser(accessToken: spotifyAuth.accessToken) { (result) in
                     DispatchQueue.main.async {
                         self.stopActivityIndicator()
@@ -251,8 +250,8 @@ class LoginController: UIViewController {
                             let user = User(user: user)
                             User.setCurrent(user, writeToUserDefaults: true)
                             print("Got user \(user.name)")
-                            let vc = HomeController()
-                            self.navigationController?.initRootVC(vc: vc)
+                            self.view.window?.rootViewController = TabBarController()
+                            self.view.window?.makeKeyAndVisible()
                         }
                     }
                 }
