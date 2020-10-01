@@ -37,14 +37,13 @@ class FavoriteSongController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-//        guard let artistId = artist.id as? String else { return }
-//        Spartan.getArtistsTopTracks(artistId: artistId, country: .us) { (tracks) in
-//            self.tracks = tracks
-//        } failure: { (error) in
-//            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
-//        }
-        fetchTracks()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchFavoriteSongs()
+    }
+    
     //MARK: Private Methods
     
     fileprivate func setupViews() {
@@ -61,13 +60,15 @@ class FavoriteSongController: UIViewController {
         view.backgroundColor = .systemBackground
     }
     
-    func fetchTracks() {
-//        guard let artistId = artist.id as? String else { return }
-//        Spartan.getArtistsTopTracks(artistId: artistId, country: .us) { (tracks) in
-//            self.tracks = tracks
-//        } failure: { (error) in
-//            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
-//        }
+    func fetchFavoriteSongs() {
+        Spartan.getMyTopTracks(limit: 20, offset: 0, timeRange: .longTerm) { (pagingObject) in
+            self.tracks = pagingObject.items
+            for track in pagingObject.items {
+                print(track.name)
+            }
+        } failure: { (error) in
+            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
+        }
     }
     
     //MARK: Helpers
