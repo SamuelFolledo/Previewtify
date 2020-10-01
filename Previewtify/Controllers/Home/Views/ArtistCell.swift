@@ -43,17 +43,17 @@ class ArtistCell: UITableViewCell {
         imageView.layer.cornerRadius = 5
         return imageView
     }()
-//    lazy var verticalStackView: UIStackView = { //will contain the nameLabel, detailLabel, and pendingTaskLabel
-//        let stackView: UIStackView = UIStackView()
-//        stackView.axis = .vertical
-//        stackView.alignment = .leading
-//        stackView.distribution = .fill
-//        stackView.spacing = 5
-//        return stackView
-//    }()
+    lazy var verticalStackView: UIStackView = { //will contain the nameLabel, detailLabel, and pendingTaskLabel
+        let stackView: UIStackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 5
+        return stackView
+    }()
     lazy var nameLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = .font(size: 20, weight: .bold, design: .default)
+        label.font = .font(size: 18, weight: .semibold, design: .default)
         label.textColor = .label
         label.numberOfLines = 2
         label.textAlignment = .left
@@ -61,7 +61,7 @@ class ArtistCell: UITableViewCell {
     }()
     lazy var detailLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = .font(size: 14, weight: .medium, design: .rounded)
+        label.font = .font(size: 14, weight: .regular, design: .rounded)
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         label.textAlignment = .left
@@ -114,9 +114,13 @@ class ArtistCell: UITableViewCell {
         artistImageView.snp.makeConstraints {
             $0.height.width.equalTo(containerView.snp.height).multipliedBy(0.8)
         }
-        mainStackView.addArrangedSubview(nameLabel)
+        mainStackView.addArrangedSubview(verticalStackView)
+        verticalStackView.snp.makeConstraints {
+            $0.height.equalToSuperview()
+        }
+        verticalStackView.addArrangedSubview(nameLabel)
         nameLabel.snp.makeConstraints {
-            $0.height.equalTo(30)
+            $0.height.equalTo(50)
         }
 //        mainStackView.addArrangedSubview(colorView)
 //        colorView.snp.makeConstraints { (make) in
@@ -133,10 +137,10 @@ class ArtistCell: UITableViewCell {
 //        nameLabel.snp.makeConstraints { (make) in
 //            $0.width.equalToSuperview()
 //        }
-//        verticalStackView.addArrangedSubview(detailLabel)
-//        detailLabel.snp.makeConstraints { (make) in
-//            $0.width.equalToSuperview()
-//        }
+        verticalStackView.addArrangedSubview(detailLabel)
+        detailLabel.snp.makeConstraints {
+            $0.width.equalToSuperview()
+        }
 //        verticalStackView.addArrangedSubview(pendingTaskLabel)
 //        pendingTaskLabel.snp.makeConstraints { (make) in
 //            $0.width.equalToSuperview()
