@@ -12,9 +12,7 @@ import Spartan
 class HomeController: UIViewController {
     
     //MARK: Properties
-    var artists: [Artist] = [] {
-        didSet { tableView.reloadData() }
-    }
+    var artists: [Artist] = []
     
     //MARK: Views
     lazy var tableView: UITableView = {
@@ -51,7 +49,7 @@ class HomeController: UIViewController {
     
     fileprivate func setupBackground() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Top 50 Artists"
+        navigationController?.navigationBar.topItem?.title = "Top 50 Artists"
         view.backgroundColor = .systemBackground
     }
     
@@ -68,6 +66,7 @@ class HomeController: UIViewController {
                     for artist in fetchedArtists {
                         self.artists.append(artist)
                     }
+                    self.tableView.reloadData()
                 }, failure: { (error) in
                     print(error)
                 })

@@ -136,6 +136,7 @@ class TrackCell: UITableViewCell {
         artistImageView.snp.makeConstraints {
             $0.height.width.equalTo(containerView.snp.height).multipliedBy(0.8)
         }
+        //vertical stack view
         mainStackView.addArrangedSubview(verticalStackView)
         verticalStackView.snp.makeConstraints {
             $0.height.equalToSuperview()
@@ -144,31 +145,12 @@ class TrackCell: UITableViewCell {
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(50)
         }
-//        mainStackView.addArrangedSubview(colorView)
-//        colorView.snp.makeConstraints { (make) in
-//            $0.height.equalTo(40)
-//            $0.width.equalTo(40)
-//            $0.centerY.equalToSuperview()
-//        }
-//        mainStackView.addArrangedSubview(verticalStackView)
-//        verticalStackView.snp.makeConstraints { (make) in
-//            $0.height.equalToSuperview()
-//            $0.width.lessThanOrEqualToSuperview()
-//        }
-//        verticalStackView.addArrangedSubview(nameLabel)
-//        nameLabel.snp.makeConstraints { (make) in
-//            $0.width.equalToSuperview()
-//        }
         verticalStackView.addArrangedSubview(detailLabel)
         detailLabel.snp.makeConstraints {
             $0.height.equalTo(25)
             $0.width.equalToSuperview()
         }
-//        verticalStackView.addArrangedSubview(pendingTaskLabel)
-//        pendingTaskLabel.snp.makeConstraints { (make) in
-//            $0.width.equalToSuperview()
-//        }
-        
+        //buttons
         [playButton, favoriteButton].forEach {
             mainStackView.addArrangedSubview($0)
             $0.snp.makeConstraints {
@@ -198,7 +180,7 @@ class TrackCell: UITableViewCell {
     }
     
     @objc func handlePlay() {
-        print("Play \(track.name)")
+        print("Play \(track.name!)")
         if playButton.currentImage == Constants.Images.play {
             playButton.setImage(Constants.Images.pause, for: .normal)
         } else {
@@ -207,7 +189,7 @@ class TrackCell: UITableViewCell {
     }
     
     @objc func handleFavorite() {
-        print("Favorite \(track.name)")
+        print("Favorite \(track.name!)")
         if favoriteButton.currentImage == Constants.Images.heart {
             favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
         } else {
