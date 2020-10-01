@@ -13,9 +13,7 @@ class ArtistTrackController: UIViewController {
     
     //MARK: Properties
     var artist: Artist!
-    var tracks: [Track] = [] {
-        didSet { tableView.reloadData() }
-    }
+    var tracks: [Track] = []
     
     //MARK: Views
     //MARK: Views
@@ -37,8 +35,13 @@ class ArtistTrackController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchTracks()
     }
+    
     //MARK: Private Methods
     
     fileprivate func setupViews() {
@@ -60,6 +63,7 @@ class ArtistTrackController: UIViewController {
         guard let artistId = artist.id as? String else { return }
         Spartan.getArtistsTopTracks(artistId: artistId, country: .us) { (tracks) in
             self.tracks = tracks
+            self.tableView.reloadData()
         } failure: { (error) in
             self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
         }

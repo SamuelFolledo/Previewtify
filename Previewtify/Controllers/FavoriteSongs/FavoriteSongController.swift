@@ -13,9 +13,7 @@ class FavoriteSongController: UIViewController {
     
     //MARK: Properties
     var artist: Artist!
-    var tracks: [Track] = [] {
-        didSet { tableView.reloadData() }
-    }
+    var tracks: [Track] = []
     
     //MARK: Views
     //MARK: Views
@@ -38,9 +36,9 @@ class FavoriteSongController: UIViewController {
         super.viewDidLoad()
         setupViews()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchFavoriteSongs()
     }
     
@@ -56,16 +54,14 @@ class FavoriteSongController: UIViewController {
     
     fileprivate func setupBackground() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Top 50 Artists"
+        navigationController?.navigationBar.topItem?.title = "Favorite Songs"
         view.backgroundColor = .systemBackground
     }
     
     func fetchFavoriteSongs() {
         Spartan.getMyTopTracks(limit: 20, offset: 0, timeRange: .longTerm) { (pagingObject) in
             self.tracks = pagingObject.items
-            for track in pagingObject.items {
-                print(track.name)
-            }
+            self.tableView.reloadData()
         } failure: { (error) in
             self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
         }
