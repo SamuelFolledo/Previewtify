@@ -153,9 +153,9 @@ class LoginController: UIViewController {
         lastPlayerState = playerState
         trackLabel.text = playerState.track.name
         if playerState.isPaused {
-            pauseAndPlayButton.setImage(UIImage(named: "play"), for: .normal)
+            pauseAndPlayButton.setImage(UIImage(named: "playButton"), for: .normal)
         } else {
-            pauseAndPlayButton.setImage(UIImage(named: "pause"), for: .normal)
+            pauseAndPlayButton.setImage(UIImage(named: "pauseButton"), for: .normal)
         }
     }
 
