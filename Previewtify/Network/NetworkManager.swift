@@ -21,19 +21,11 @@ class NetworkManager {
     static let clientSecretKey = "e891fd17090d4841afaf88c5730419a9"
     static let redirectUri = URL(string:"previewtify://")!
     static private let defaults = UserDefaults.standard
-    
-    static var totalCount: Int = Int.max
     static var codeVerifier: String = ""
 
-//    static var spotifyAuth: SpotifyAuth? = defaults.object(forKey: Constants.spotifyAuthKey) as? SpotifyAuth {
-//        didSet { defaults.set(spotifyAuth, forKey: Constants.spotifyAuthKey) }
-//    }
     static var authorizationCode = defaults.string(forKey: Constants.authorizationCodeKey) {
         didSet { defaults.set(authorizationCode, forKey: Constants.authorizationCodeKey) }
     }
-//    static var refreshToken = defaults.string(forKey: Constants.refreshTokenKey) {
-//        didSet { defaults.set(refreshToken, forKey: Constants.refreshTokenKey) }
-//    }
 
     static let configuration: SPTConfiguration = {
         let configuration = SPTConfiguration(clientID: NetworkManager.clientId, redirectURL: NetworkManager.redirectUri)
