@@ -42,17 +42,17 @@ class TrackCell: UITableViewCell {
         imageView.layer.cornerRadius = 5
         return imageView
     }()
-//    lazy var verticalStackView: UIStackView = { //will contain the nameLabel, detailLabel, and pendingTaskLabel
-//        let stackView: UIStackView = UIStackView()
-//        stackView.axis = .vertical
-//        stackView.alignment = .leading
-//        stackView.distribution = .fill
-//        stackView.spacing = 5
-//        return stackView
-//    }()
+    lazy var verticalStackView: UIStackView = { //will contain the nameLabel, detailLabel, and pendingTaskLabel
+        let stackView: UIStackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 5
+        return stackView
+    }()
     lazy var nameLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = .font(size: 20, weight: .bold, design: .default)
+        label.font = .font(size: 18, weight: .semibold, design: .default)
         label.textColor = .label
         label.numberOfLines = 2
         label.textAlignment = .left
@@ -60,14 +60,37 @@ class TrackCell: UITableViewCell {
     }()
     lazy var detailLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = .font(size: 14, weight: .medium, design: .rounded)
+        label.font = .font(size: 14, weight: .regular, design: .rounded)
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         label.textAlignment = .left
         label.isHidden = true
         return label
     }()
-
+    
+    lazy var playButton: UIButton = {
+        let button = UIButton()
+        button.setImage(Constants.Images.play, for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        button.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 30
+        button.layer.masksToBounds = false
+        button.addTarget(self, action: #selector(handlePlay), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var favoriteButton: UIButton = {
+        let button = UIButton()
+        button.setImage(Constants.Images.heart, for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        button.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 30
+        button.layer.masksToBounds = false
+        button.addTarget(self, action: #selector(handleFavorite), for: .touchUpInside)
+        return button
+    }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -113,9 +136,13 @@ class TrackCell: UITableViewCell {
         artistImageView.snp.makeConstraints {
             $0.height.width.equalTo(containerView.snp.height).multipliedBy(0.8)
         }
-        mainStackView.addArrangedSubview(nameLabel)
+        mainStackView.addArrangedSubview(verticalStackView)
+        verticalStackView.snp.makeConstraints {
+            $0.height.equalToSuperview()
+        }
+        verticalStackView.addArrangedSubview(nameLabel)
         nameLabel.snp.makeConstraints {
-            $0.height.equalTo(30)
+            $0.height.equalTo(50)
         }
 //        mainStackView.addArrangedSubview(colorView)
 //        colorView.snp.makeConstraints { (make) in
@@ -132,18 +159,27 @@ class TrackCell: UITableViewCell {
 //        nameLabel.snp.makeConstraints { (make) in
 //            $0.width.equalToSuperview()
 //        }
-//        verticalStackView.addArrangedSubview(detailLabel)
-//        detailLabel.snp.makeConstraints { (make) in
-//            $0.width.equalToSuperview()
-//        }
+        verticalStackView.addArrangedSubview(detailLabel)
+        detailLabel.snp.makeConstraints {
+            $0.height.equalTo(25)
+            $0.width.equalToSuperview()
+        }
 //        verticalStackView.addArrangedSubview(pendingTaskLabel)
 //        pendingTaskLabel.snp.makeConstraints { (make) in
 //            $0.width.equalToSuperview()
 //        }
+        
+        [playButton, favoriteButton].forEach {
+            mainStackView.addArrangedSubview($0)
+            $0.snp.makeConstraints {
+                $0.width.height.equalTo(35)
+            }
+        }
     }
     
     fileprivate func populateViews() {
         nameLabel.text = track.name
+        detailLabel.text = track.album.name
         guard let urlString = track.album.images.first?.url,
               let imageUrl = URL(string: urlString)
         else { return }
@@ -158,6 +194,24 @@ class TrackCell: UITableViewCell {
                     print("Done downloading image")
                 }
             }
+        }
+    }
+    
+    @objc func handlePlay() {
+        print("Play \(track.name)")
+        if playButton.currentImage == Constants.Images.play {
+            playButton.setImage(Constants.Images.pause, for: .normal)
+        } else {
+            playButton.setImage(Constants.Images.play, for: .normal)
+        }
+    }
+    
+    @objc func handleFavorite() {
+        print("Favorite \(track.name)")
+        if favoriteButton.currentImage == Constants.Images.heart {
+            favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
+        } else {
+            favoriteButton.setImage(Constants.Images.heart, for: .normal)
         }
     }
 }
