@@ -47,8 +47,15 @@ struct Constants {
     static let refreshTokenKey = "refreshTokenKey"
     static let spotifyAuthKey = "spotifyAuthKey"
     
-    struct Views {
+    enum Views {
         //https://github.com/ninjaprox/NVActivityIndicatorView
         static var indicatorView: NVActivityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40), type: .ballSpinFadeLoader, color: .label, padding: 0.0)
+    }
+    
+    enum Images {
+        static let heart = UIImage(named: "heart")!
+        static let heartFilled = UIImage(named: "heartFilled")!
+        static let play = UIImage(named: "play")!
+        static let pause = UIImage(named: "pause")!
     }
 }
