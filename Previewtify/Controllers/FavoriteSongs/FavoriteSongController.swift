@@ -65,11 +65,19 @@ class FavoriteSongController: UIViewController {
     }
     
     func fetchFavoriteSongs() {
-        Spartan.getMyTopTracks(limit: 20, offset: 0, timeRange: .longTerm) { (pagingObject) in
-            self.tracks = pagingObject.items
-            self.tableView.reloadData()
-        } failure: { (error) in
-            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
+        NetworkManager.refreshAcessToken { (result) in
+            switch result {
+            case .failure(let error):
+                self.presentAlert(title: "Error Refreshing token", message: error.localizedDescription)
+            case .success(_):
+                Spartan.getMyTopTracks(limit: 50, offset: self.offset, timeRange: .longTerm) { (pagingObject) in
+                    self.tracks = pagingObject.items
+                    self.offset = self.tracks.count - 1
+                    self.tableView.reloadData()
+                } failure: { (error) in
+                    self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
+                }
+            }
         }
     }
     
