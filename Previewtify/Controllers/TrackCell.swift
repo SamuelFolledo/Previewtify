@@ -12,9 +12,7 @@ import Spartan
 class TrackCell: UITableViewCell {
     
     //MARK: Properties
-    var track: Track! {
-        didSet { populateViews() }
-    }
+    var track: Track!
     
     //MARK: View Properties
     lazy var containerView: UIView = {
@@ -64,10 +62,16 @@ class TrackCell: UITableViewCell {
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         label.textAlignment = .left
-        label.isHidden = true
         return label
     }()
-    
+    lazy var rankLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = .font(size: 18, weight: .regular, design: .rounded)
+        label.textColor = .label
+        label.numberOfLines = 1
+        label.textAlignment = .left
+        return label
+    }()
     lazy var playButton: UIButton = {
         let button = UIButton()
         button.setImage(Constants.Images.play, for: .normal)
@@ -104,7 +108,7 @@ class TrackCell: UITableViewCell {
         super.prepareForReuse()
         nameLabel.text = ""
         detailLabel.text = ""
-        detailLabel.isHidden = true
+        rankLabel.text = ""
         artistImageView.image = nil
     }
     
@@ -119,18 +123,22 @@ class TrackCell: UITableViewCell {
         contentView.backgroundColor = .clear
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(5)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-5)
         }
         //setup mainStackView
         containerView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
-            $0.bottom.equalToSuperview().offset(-10)
+            $0.top.equalToSuperview().offset(5)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-5)
+        }
+        mainStackView.addArrangedSubview(rankLabel)
+        rankLabel.snp.makeConstraints {
+            $0.width.height.equalTo(25)
         }
         mainStackView.addArrangedSubview(artistImageView)
         artistImageView.snp.makeConstraints {
@@ -144,10 +152,11 @@ class TrackCell: UITableViewCell {
         verticalStackView.addArrangedSubview(nameLabel)
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(50)
+            $0.width.equalToSuperview()
         }
         verticalStackView.addArrangedSubview(detailLabel)
         detailLabel.snp.makeConstraints {
-            $0.height.equalTo(25)
+//            $0.height.equalTo(20)
             $0.width.equalToSuperview()
         }
         //buttons
@@ -159,7 +168,9 @@ class TrackCell: UITableViewCell {
         }
     }
     
-    fileprivate func populateViews() {
+    func populateViews(track: Track, rank: Int) {
+        self.track = track
+        rankLabel.text = "\(rank)"
         nameLabel.text = track.name
         detailLabel.text = track.album.name
         guard let urlString = track.album.images.first?.url,
