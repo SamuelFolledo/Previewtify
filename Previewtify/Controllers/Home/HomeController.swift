@@ -104,7 +104,7 @@ extension HomeController: UITableViewDataSource {
         DispatchQueue.global(qos: .userInteractive).async {
             let artist = self.artists[indexPath.row]
             DispatchQueue.main.async {
-                cell.artist = artist
+                cell.populateViews(artist: artist, rank: indexPath.row + 1)
                 cell.layoutSubviews()
             }
         }

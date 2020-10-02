@@ -13,9 +13,7 @@ import Kingfisher
 class ArtistCell: UITableViewCell {
     
     //MARK: Properties
-    var artist: Artist! {
-        didSet { populateViews() }
-    }
+    var artist: Artist!
     
     //MARK: View Properties
     lazy var containerView: UIView = {
@@ -35,6 +33,14 @@ class ArtistCell: UITableViewCell {
         stackView.distribution = .fillProportionally
         stackView.spacing = 10
         return stackView
+    }()
+    lazy var rankLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = .font(size: 18, weight: .regular, design: .rounded)
+        label.textColor = .label
+        label.numberOfLines = 1
+        label.textAlignment = .left
+        return label
     }()
     lazy var artistImageView: UIImageView = {
         let imageView = UIImageView()
@@ -65,7 +71,6 @@ class ArtistCell: UITableViewCell {
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         label.textAlignment = .left
-        label.isHidden = true
         return label
     }()
 
@@ -82,7 +87,7 @@ class ArtistCell: UITableViewCell {
         super.prepareForReuse()
         nameLabel.text = ""
         detailLabel.text = ""
-        detailLabel.isHidden = true
+        rankLabel.text = ""
         artistImageView.image = nil
     }
     
@@ -92,23 +97,27 @@ class ArtistCell: UITableViewCell {
     }
     
     //MARK: Private Methods
-    func setupViews() {
+    fileprivate func setupViews() {
         selectionStyle = .none
         contentView.backgroundColor = .clear
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(5)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-5)
         }
         //setup mainStackView
         containerView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
-            $0.bottom.equalToSuperview().offset(-10)
+            $0.top.equalToSuperview().offset(5)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-5)
+        }
+        mainStackView.addArrangedSubview(rankLabel)
+        rankLabel.snp.makeConstraints {
+            $0.width.height.equalTo(25)
         }
         mainStackView.addArrangedSubview(artistImageView)
         artistImageView.snp.makeConstraints {
@@ -117,9 +126,11 @@ class ArtistCell: UITableViewCell {
         mainStackView.addArrangedSubview(verticalStackView)
         verticalStackView.snp.makeConstraints {
             $0.height.equalToSuperview()
+            $0.width.lessThanOrEqualToSuperview()
         }
         verticalStackView.addArrangedSubview(nameLabel)
         nameLabel.snp.makeConstraints {
+            $0.width.equalToSuperview()
             $0.height.equalTo(50)
         }
 //        mainStackView.addArrangedSubview(colorView)
@@ -141,14 +152,12 @@ class ArtistCell: UITableViewCell {
         detailLabel.snp.makeConstraints {
             $0.width.equalToSuperview()
         }
-//        verticalStackView.addArrangedSubview(pendingTaskLabel)
-//        pendingTaskLabel.snp.makeConstraints { (make) in
-//            $0.width.equalToSuperview()
-//        }
     }
     
-    fileprivate func populateViews() {
+    func populateViews(artist: Artist, rank: Int) {
         nameLabel.text = artist.name
+        rankLabel.text = "\(rank)"
+        detailLabel.text = "\(artist.genres!.joined(separator: ", "))"
         guard let urlString = artist.images.first?.url,
               let imageUrl = URL(string: urlString)
         else { return }
