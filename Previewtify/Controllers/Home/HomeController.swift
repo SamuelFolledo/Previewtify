@@ -13,6 +13,7 @@ class HomeController: UIViewController {
     
     //MARK: Properties
     var artists: [Artist] = []
+    var offset: Int = 0
     
     //MARK: Views
     lazy var tableView: UITableView = {
@@ -34,6 +35,11 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         setupViews()
         fetchTopArtists()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        offset = 0
     }
     
     //MARK: Private Methods
@@ -60,12 +66,11 @@ class HomeController: UIViewController {
                 self.presentAlert(title: "Error Refreshing token", message: error.localizedDescription)
             case .success(let spotifyAuth):
                 print(spotifyAuth.accessToken)
-                _ = Spartan.getMyTopArtists(limit: 50, offset: 0, timeRange: .longTerm, success: { (pagingObject) in
+                _ = Spartan.getMyTopArtists(limit: 50, offset: self.offset, timeRange: .longTerm, success: { (pagingObject) in
                     // Get the artists via pagingObject.items
                     guard let fetchedArtists = pagingObject.items else { return }
-                    for artist in fetchedArtists {
-                        self.artists.append(artist)
-                    }
+                    self.artists = fetchedArtists
+                    self.offset = self.artists.count - 1
                     self.tableView.reloadData()
                 }, failure: { (error) in
                     print(error)
