@@ -14,6 +14,7 @@ class FavoriteSongController: UIViewController {
     //MARK: Properties
     var artist: Artist!
     var tracks: [Track] = []
+    var offset: Int = 0
     
     //MARK: Views
     //MARK: Views
@@ -40,6 +41,11 @@ class FavoriteSongController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchFavoriteSongs()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        offset = 0
     }
     
     //MARK: Private Methods
