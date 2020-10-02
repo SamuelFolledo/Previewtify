@@ -106,7 +106,7 @@ extension FavoriteSongController: UITableViewDataSource {
         DispatchQueue.global(qos: .userInteractive).async {
             let track = self.tracks[indexPath.row]
             DispatchQueue.main.async {
-                cell.track = track
+                cell.populateViews(track: track, rank: indexPath.row + 1)
                 cell.layoutSubviews()
             }
         }
