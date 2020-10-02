@@ -18,7 +18,6 @@ class ArtistCell: UITableViewCell {
     //MARK: View Properties
     lazy var containerView: UIView = {
         let view: UIView = UIView(frame: .zero)
-//        view.backgroundColor = .systemGray6
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.clear.cgColor
@@ -73,7 +72,9 @@ class ArtistCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-
+    
+    //MARK: Initializers
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -82,6 +83,8 @@ class ArtistCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: Override
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -97,6 +100,7 @@ class ArtistCell: UITableViewCell {
     }
     
     //MARK: Private Methods
+    
     fileprivate func setupViews() {
         selectionStyle = .none
         contentView.backgroundColor = .clear
@@ -123,6 +127,7 @@ class ArtistCell: UITableViewCell {
         artistImageView.snp.makeConstraints {
             $0.height.width.equalTo(containerView.snp.height).multipliedBy(0.8)
         }
+        //labels
         mainStackView.addArrangedSubview(verticalStackView)
         verticalStackView.snp.makeConstraints {
             $0.height.equalToSuperview()
@@ -133,21 +138,6 @@ class ArtistCell: UITableViewCell {
             $0.width.equalToSuperview()
             $0.height.equalTo(50)
         }
-//        mainStackView.addArrangedSubview(colorView)
-//        colorView.snp.makeConstraints { (make) in
-//            $0.height.equalTo(40)
-//            $0.width.equalTo(40)
-//            $0.centerY.equalToSuperview()
-//        }
-//        mainStackView.addArrangedSubview(verticalStackView)
-//        verticalStackView.snp.makeConstraints { (make) in
-//            $0.height.equalToSuperview()
-//            $0.width.lessThanOrEqualToSuperview()
-//        }
-//        verticalStackView.addArrangedSubview(nameLabel)
-//        nameLabel.snp.makeConstraints { (make) in
-//            $0.width.equalToSuperview()
-//        }
         verticalStackView.addArrangedSubview(detailLabel)
         detailLabel.snp.makeConstraints {
             $0.width.equalToSuperview()

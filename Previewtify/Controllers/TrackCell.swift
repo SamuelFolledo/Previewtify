@@ -17,7 +17,6 @@ class TrackCell: UITableViewCell {
     //MARK: View Properties
     lazy var containerView: UIView = {
         let view: UIView = UIView(frame: .zero)
-//        view.backgroundColor = .systemGray6
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.clear.cgColor
@@ -95,6 +94,9 @@ class TrackCell: UITableViewCell {
         button.addTarget(self, action: #selector(handleFavorite), for: .touchUpInside)
         return button
     }()
+    
+    //MARK: Initializers
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -103,6 +105,8 @@ class TrackCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: Override
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -118,6 +122,7 @@ class TrackCell: UITableViewCell {
     }
     
     //MARK: Private Methods
+    
     func setupViews() {
         selectionStyle = .none
         contentView.backgroundColor = .clear
@@ -156,7 +161,6 @@ class TrackCell: UITableViewCell {
         }
         verticalStackView.addArrangedSubview(detailLabel)
         detailLabel.snp.makeConstraints {
-//            $0.height.equalTo(20)
             $0.width.equalToSuperview()
         }
         //buttons
@@ -189,6 +193,8 @@ class TrackCell: UITableViewCell {
             }
         }
     }
+    
+    //MARK: Helpers
     
     @objc func handlePlay() {
         print("Play \(track.name!)")
