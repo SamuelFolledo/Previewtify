@@ -203,18 +203,16 @@ class TrackCell: UITableViewCell {
     //MARK: Helpers
     
     @objc func handlePlay() {
-        print("Play \(track.name!)")
         if playButton.currentImage == Constants.Images.play {
             playButton.setImage(Constants.Images.pause, for: .normal)
-            playerDelegate?.playTrack(track: track, shouldPlay: false)
+            playerDelegate?.playTrack(track: track, shouldPlay: true)
         } else {
             playButton.setImage(Constants.Images.play, for: .normal)
-            playerDelegate?.playTrack(track: track, shouldPlay: true)
+            playerDelegate?.playTrack(track: track, shouldPlay: false)
         }
     }
     
     @objc func handleFavorite() {
-        print("Favorite \(track.name!)")
         if favoriteButton.currentImage == Constants.Images.heart {
             favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
             playerDelegate?.favoriteTrack(track: track, shouldFavorite: true)
