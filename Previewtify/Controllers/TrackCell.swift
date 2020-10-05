@@ -9,10 +9,16 @@
 import UIKit
 import Spartan
 
+protocol SpotifyPlayerProtocol {
+    func playTrack(track: Track, shouldPlay: Bool)
+    func favoriteTrack(track: Track, shouldFavorite: Bool)
+}
+
 class TrackCell: UITableViewCell {
     
     //MARK: Properties
     var track: Track!
+    var playerDelegate: SpotifyPlayerProtocol?
     
     //MARK: View Properties
     lazy var containerView: UIView = {
