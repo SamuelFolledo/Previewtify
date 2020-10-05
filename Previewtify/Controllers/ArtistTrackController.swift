@@ -92,6 +92,7 @@ extension ArtistTrackController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TrackCell.self), for: indexPath) as! TrackCell
+        cell.playerDelegate = self
         DispatchQueue.global(qos: .userInteractive).async {
             let track = self.tracks[indexPath.row]
             DispatchQueue.main.async {
@@ -100,5 +101,15 @@ extension ArtistTrackController: UITableViewDataSource {
             }
         }
         return cell
+    }
+}
+
+extension ArtistTrackController: SpotifyPlayerProtocol {
+    func playTrack(track: Track, shouldPlay: Bool) {
+        print("Track \(track.name) will play \(shouldPlay)")
+    }
+    
+    func favoriteTrack(track: Track, shouldFavorite: Bool) {
+        print("Track \(track.name) will favorite \(shouldFavorite)")
     }
 }
