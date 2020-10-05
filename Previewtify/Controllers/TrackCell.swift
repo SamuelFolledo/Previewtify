@@ -206,8 +206,10 @@ class TrackCell: UITableViewCell {
         print("Play \(track.name!)")
         if playButton.currentImage == Constants.Images.play {
             playButton.setImage(Constants.Images.pause, for: .normal)
+            playerDelegate?.playTrack(track: track, shouldPlay: false)
         } else {
             playButton.setImage(Constants.Images.play, for: .normal)
+            playerDelegate?.playTrack(track: track, shouldPlay: true)
         }
     }
     
@@ -215,8 +217,10 @@ class TrackCell: UITableViewCell {
         print("Favorite \(track.name!)")
         if favoriteButton.currentImage == Constants.Images.heart {
             favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
+            playerDelegate?.favoriteTrack(track: track, shouldFavorite: true)
         } else {
             favoriteButton.setImage(Constants.Images.heart, for: .normal)
+            playerDelegate?.favoriteTrack(track: track, shouldFavorite: false)
         }
     }
 }
