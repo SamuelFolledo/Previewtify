@@ -18,10 +18,12 @@ class PlayerView: UIView {
     //MARK: Views
     
     @IBOutlet var contentView: UIView!
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet var trackNameLabel: UILabel!
     @IBOutlet var artistNameLabel: UILabel!
     @IBOutlet var currentTimeLabel: UILabel!
     @IBOutlet var endTimeLabel: UILabel!
+    @IBOutlet weak var timerSlider: UISlider!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
@@ -34,8 +36,8 @@ class PlayerView: UIView {
         super.init(frame: .zero)
         commonInit()
         setupViews()
-        trackNameLabel.text = "\(track?.name ?? "")"
-        artistNameLabel.text = "\(track?.artists.first?.name ?? "")"
+        trackNameLabel.text = "\(track?.name ?? "No Track Name")"
+        artistNameLabel.text = "\(track?.artists.first?.name ?? "No Artist")"
     }
     
     required init?(coder: NSCoder) {
@@ -52,7 +54,8 @@ class PlayerView: UIView {
     }
     
     fileprivate func setupViews() {
-        contentView.backgroundColor = .label
+        containerView.backgroundColor = .secondaryLabel
+        timerSlider.tintColor = .previewtifyGreen
         [trackNameLabel, artistNameLabel, currentTimeLabel, endTimeLabel].forEach {
             $0?.textColor = .systemBackground
         }
