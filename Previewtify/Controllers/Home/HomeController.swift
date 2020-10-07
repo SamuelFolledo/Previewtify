@@ -33,6 +33,7 @@ class HomeController: UIViewController {
     //MARK: App Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserDefaults.standard.set(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
         setupViews()
         fetchTopArtists()
     }
