@@ -16,6 +16,7 @@ class PlayerView: UIView {
     var track: Track?
     
     //MARK: Views
+    
     @IBOutlet var contentView: UIView!
     @IBOutlet var trackNameLabel: UILabel!
     @IBOutlet var artistNameLabel: UILabel!
@@ -26,94 +27,15 @@ class PlayerView: UIView {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
     
-    //MARK: View Properties
-//    lazy var containerView: UIView = {
-//        let view: UIView = UIView(frame: .zero)
-//        view.layer.masksToBounds = true
-//        view.layer.cornerRadius = 10
-//        view.layer.borderColor = UIColor.clear.cgColor
-//        view.layer.borderWidth = 2
-//        return view
-//    }()
-//
-//    lazy var mainStackView: UIStackView = { //will contain colorView and verticalStackView
-//        let stackView: UIStackView = UIStackView()
-//        stackView.axis = .horizontal
-//        stackView.alignment = .center
-//        stackView.distribution = .fillProportionally
-//        stackView.spacing = 10
-//        return stackView
-//    }()
-//    lazy var artistImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.clipsToBounds = false
-//        imageView.contentMode = .scaleAspectFill
-//        imageView.layer.cornerRadius = 5
-//        return imageView
-//    }()
-//    lazy var verticalStackView: UIStackView = { //will contain the nameLabel, detailLabel, and pendingTaskLabel
-//        let stackView: UIStackView = UIStackView()
-//        stackView.axis = .vertical
-//        stackView.alignment = .leading
-//        stackView.distribution = .fillProportionally
-//        stackView.spacing = 5
-//        return stackView
-//    }()
-//    lazy var nameLabel: UILabel = {
-//        let label: UILabel = UILabel()
-//        label.font = .font(size: 18, weight: .semibold, design: .default)
-//        label.textColor = .label
-//        label.numberOfLines = 2
-//        label.textAlignment = .left
-//        return label
-//    }()
-//    lazy var detailLabel: UILabel = {
-//        let label: UILabel = UILabel()
-//        label.font = .font(size: 14, weight: .regular, design: .rounded)
-//        label.textColor = .secondaryLabel
-//        label.numberOfLines = 1
-//        label.textAlignment = .left
-//        return label
-//    }()
-//    lazy var rankLabel: UILabel = {
-//        let label: UILabel = UILabel()
-//        label.font = .font(size: 18, weight: .regular, design: .rounded)
-//        label.textColor = .label
-//        label.numberOfLines = 1
-//        label.textAlignment = .left
-//        return label
-//    }()
-//    lazy var playButton: UIButton = {
-//        let button = UIButton()
-//        button.setImage(Constants.Images.play, for: .normal)
-//        button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-//        button.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
-//        button.clipsToBounds = true
-//        button.layer.cornerRadius = 30
-//        button.layer.masksToBounds = false
-////        button.addTarget(self, action: #selector(handlePlay), for: .touchUpInside)
-//        return button
-//    }()
-//
-//    lazy var favoriteButton: UIButton = {
-//        let button = UIButton()
-//        button.setImage(Constants.Images.heart, for: .normal)
-//        button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-//        button.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
-//        button.clipsToBounds = true
-//        button.layer.cornerRadius = 30
-//        button.layer.masksToBounds = false
-////        button.addTarget(self, action: #selector(handleFavorite), for: .touchUpInside)
-//        return button
-//    }()
-    
     //MARK: Initializers
+    
     required init(track: Track?) {
-        trackNameLabel.text = "\(track?.name ?? "")"
-        artistNameLabel.text = "\(track?.artists.first?.name ?? "")"
         self.track = track
         super.init(frame: .zero)
         commonInit()
+        setupViews()
+        trackNameLabel.text = "\(track?.name ?? "")"
+        artistNameLabel.text = "\(track?.artists.first?.name ?? "")"
     }
     
     required init?(coder: NSCoder) {
@@ -127,5 +49,52 @@ class PlayerView: UIView {
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    }
+    
+    fileprivate func setupViews() {
+        contentView.backgroundColor = .label
+        [trackNameLabel, artistNameLabel, currentTimeLabel, endTimeLabel].forEach {
+            $0?.textColor = .systemBackground
+        }
+        
+        let heartImage = Constants.Images.heart.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(heartImage, for: .normal)
+        let heartFilledImage = Constants.Images.heartFilled.withRenderingMode(.alwaysOriginal)
+        favoriteButton.setImage(heartFilledImage, for: .selected)
+        favoriteButton.tintColor = .systemBackground
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+        
+        let playImage = Constants.Images.play.withRenderingMode(.alwaysTemplate)
+        playButton.setImage(playImage, for: .normal)
+        let pauseImage = Constants.Images.pause.withRenderingMode(.alwaysTemplate)
+        playButton.setImage(pauseImage, for: .selected)
+        playButton.tintColor = .systemBackground
+        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        
+        let backwardImage = Constants.Images.skipBack15.withRenderingMode(.alwaysTemplate)
+        backButton.setImage(backwardImage, for: .normal)
+        backButton.tintColor = .systemBackground
+        backButton.addTarget(self, action: #selector(skipBackwardButtonTapped), for: .touchUpInside)
+        
+        let forwardImage = Constants.Images.skipForward15.withRenderingMode(.alwaysTemplate)
+        forwardButton.setImage(forwardImage, for: .normal)
+        forwardButton.tintColor = .systemBackground
+        forwardButton.addTarget(self, action: #selector(skipForwardButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func playButtonTapped() {
+        playButton.isSelected = !playButton.isSelected
+    }
+    
+    @objc func favoriteButtonTapped() {
+        favoriteButton.isSelected = !favoriteButton.isSelected
+    }
+    
+    @objc func skipForwardButtonTapped() {
+        print("Go Forward 15 seconds")
+    }
+    
+    @objc func skipBackwardButtonTapped() {
+        print("Go back 15 seconds")
     }
 }

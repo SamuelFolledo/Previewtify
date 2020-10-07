@@ -13,7 +13,7 @@
             <connections>
                 <outlet property="artistNameLabel" destination="3og-cv-aWP" id="cQR-Vb-pBp"/>
                 <outlet property="backButton" destination="bhS-B1-3zd" id="iwk-mw-OaQ"/>
-                <outlet property="contentView" destination="k3N-DN-zYf" id="A8l-jz-s42"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="ee7-Ug-J9x"/>
                 <outlet property="currentTimeLabel" destination="LKU-LY-dk6" id="flN-fM-WDR"/>
                 <outlet property="endTimeLabel" destination="7PZ-Tt-4ZS" id="Qnn-1k-Hgt"/>
                 <outlet property="favoriteButton" destination="M38-Fl-qvf" id="xrO-N6-MqP"/>
@@ -72,22 +72,22 @@
                                     </constraints>
                                 </stackView>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="h5L-6c-igA" userLabel="timerStackView">
-                                    <rect key="frame" x="8" y="66.666666666666671" width="388.33333333333331" height="63.333333333333329"/>
+                                    <rect key="frame" x="0.0" y="66.666666666666671" width="404" height="63.333333333333329"/>
                                     <subviews>
                                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JNy-Ma-m0i" userLabel="time Slider">
-                                            <rect key="frame" x="36.333333333333343" y="0.0" width="354" height="47.333333333333336"/>
+                                            <rect key="frame" x="-2" y="0.0" width="408" height="47.333333333333336"/>
                                         </slider>
-                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="328" translatesAutoresizingMaskIntoConstraints="NO" id="wYH-xi-t8F" userLabel="timeLabelStackView">
-                                            <rect key="frame" x="0.0" y="46.333333333333329" width="388.33333333333331" height="17"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="100" translatesAutoresizingMaskIntoConstraints="NO" id="wYH-xi-t8F" userLabel="timeLabelStackView">
+                                            <rect key="frame" x="0.0" y="46.333333333333329" width="404" height="17"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LKU-LY-dk6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="30.333333333333332" height="17"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="152" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" systemColor="systemBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7PZ-Tt-4ZS">
-                                                    <rect key="frame" x="358.33333333333331" y="0.0" width="30" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="3:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7PZ-Tt-4ZS">
+                                                    <rect key="frame" x="252" y="0.0" width="152" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" systemColor="systemBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
@@ -95,6 +95,10 @@
                                             </subviews>
                                         </stackView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="wYH-xi-t8F" firstAttribute="width" secondItem="JNy-Ma-m0i" secondAttribute="width" id="FQR-ku-mzA"/>
+                                        <constraint firstItem="JNy-Ma-m0i" firstAttribute="width" secondItem="h5L-6c-igA" secondAttribute="width" id="XaU-Ey-LfL"/>
+                                    </constraints>
                                 </stackView>
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qgF-An-Oe1" userLabel="buttons StackViiew">
                                     <rect key="frame" x="107" y="140" width="190" height="50"/>
@@ -135,10 +139,11 @@
                             <constraints>
                                 <constraint firstItem="4We-Xn-jO1" firstAttribute="width" secondItem="35M-zA-Hbb" secondAttribute="width" id="JXq-kV-TeW"/>
                                 <constraint firstItem="4We-Xn-jO1" firstAttribute="height" secondItem="35M-zA-Hbb" secondAttribute="height" multiplier="0.35" constant="-10" id="MnF-ff-7bU"/>
+                                <constraint firstItem="h5L-6c-igA" firstAttribute="width" secondItem="35M-zA-Hbb" secondAttribute="width" id="mki-nQ-caT"/>
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="35M-zA-Hbb" secondAttribute="bottom" constant="5" id="ISo-Qb-3sz"/>
                         <constraint firstItem="35M-zA-Hbb" firstAttribute="leading" secondItem="k3N-DN-zYf" secondAttribute="leading" constant="5" id="e1V-L4-Amp"/>
@@ -148,7 +153,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" systemColor="systemGray2Color"/>
             <constraints>
                 <constraint firstItem="k3N-DN-zYf" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="2m8-Ob-Jzq"/>
                 <constraint firstItem="k3N-DN-zYf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Eiq-vd-HBB"/>
@@ -166,6 +171,9 @@
         <image name="skipforward15" width="29" height="25"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
