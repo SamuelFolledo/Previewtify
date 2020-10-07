@@ -25,12 +25,14 @@ class TabBarController: SwipeableTabBarController {
         super.viewDidLoad()
         setUpTabBar()
         addViewControllers()
-//        constraintPlayerView()
+        constraintPlayerView()
     }
     
     //MARK: Methods
     func setUpTabBar() {
-        tabBar.tintColor = .systemBlue
+        tabBar.isTranslucent = false
+        tabBar.barTintColor = .secondaryLabel
+        tabBar.tintColor = .previewtifyGreen
         /// Set the animation type for swipe
         swipeAnimatedTransitioning?.animationType = SwipeAnimationType.sideBySide
         /// Set the animation type for tap
@@ -63,8 +65,8 @@ class TabBarController: SwipeableTabBarController {
         view.addSubview(playerView)
         playerView.snp.makeConstraints {
             $0.width.centerX.equalToSuperview()
-            $0.height.equalTo(300)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            $0.height.equalTo(200)
+            $0.bottom.equalTo(tabBar.snp.top).offset(0)
         }
     }
 }
