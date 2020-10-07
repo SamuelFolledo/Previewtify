@@ -123,7 +123,7 @@ class PlayerView: UIView {
     //MARK: Methods
     
     fileprivate func commonInit() {
-        Bundle.main.loadNibNamed("NavigationBarView", owner: self, options: nil)
+        Bundle.main.loadNibNamed("PlayerView", owner: self, options: nil)
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
