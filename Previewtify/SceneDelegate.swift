@@ -12,6 +12,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     lazy var loginController = LoginController()
+    lazy var artistTrackController = ArtistTrackController()
+    lazy var favoriteSongController = FavoriteSongController()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -38,11 +40,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         if let _ = loginController.appRemote.connectionParameters.accessToken {
-//            loginController.appRemote.connectionParameters.accessToken = accessToken
-//            loginController.appRemote.connect()
+            //            loginController.appRemote.connectionParameters.accessToken = accessToken
+            //            loginController.appRemote.connect()
+        } else if let _ = artistTrackController.appRemote.connectionParameters.accessToken {
+                        artistTrackController.appRemote.connect()
+//        } else if let _ = favoriteSongController.appRemote.connectionParameters.accessToken {
+            //            loginController.appRemote.connectionParameters.accessToken = accessToken
+            //            loginController.appRemote.connect()
         } else if let _ = SpotifyAuth.current?.accessToken {
-//            loginController.appRemote.connectionParameters.accessToken = accessToken
-//            loginController.appRemote.connect()
+            //            loginController.appRemote.connectionParameters.accessToken = accessToken
+            //            loginController.appRemote.connect()
         }
     }
 
