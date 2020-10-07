@@ -49,7 +49,7 @@ class TrackCell: UITableViewCell {
         let stackView: UIStackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.distribution = .fill
+        stackView.distribution = .fillProportionally
         stackView.spacing = 5
         return stackView
     }()
@@ -147,16 +147,16 @@ class TrackCell: UITableViewCell {
             $0.trailing.equalToSuperview().offset(-16)
             $0.bottom.equalToSuperview().offset(-5)
         }
-        mainStackView.addArrangedSubview(rankLabel)
+        [rankLabel, artistImageView, verticalStackView, playButton, favoriteButton].forEach {
+            mainStackView.addArrangedSubview($0)
+        }
         rankLabel.snp.makeConstraints {
             $0.width.height.equalTo(25)
         }
-        mainStackView.addArrangedSubview(artistImageView)
         artistImageView.snp.makeConstraints {
             $0.height.width.equalTo(containerView.snp.height).multipliedBy(0.8)
         }
         //vertical stack view
-        mainStackView.addArrangedSubview(verticalStackView)
         verticalStackView.snp.makeConstraints {
             $0.height.equalToSuperview()
         }
@@ -171,7 +171,6 @@ class TrackCell: UITableViewCell {
         }
         //buttons
         [playButton, favoriteButton].forEach {
-            mainStackView.addArrangedSubview($0)
             $0.snp.makeConstraints {
                 $0.width.height.equalTo(35)
             }
