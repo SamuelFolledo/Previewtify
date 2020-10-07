@@ -8,21 +8,26 @@
 
 import UIKit
 import Spartan
+import AVFoundation
 
 class PlayerView: UIView {
     
     //MARK: Properties
     
     var track: Track?
+    var timer: Timer?
     
-    //MARK: Views
+    //MARK: Player
+    var player: AVAudioPlayer?
+    
+    //MARK: IBOutlet Views
     
     @IBOutlet var contentView: UIView!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet var trackNameLabel: UILabel!
     @IBOutlet var artistNameLabel: UILabel!
-    @IBOutlet var currentTimeLabel: UILabel!
-    @IBOutlet var endTimeLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet weak var timerSlider: UISlider!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
@@ -36,8 +41,7 @@ class PlayerView: UIView {
         super.init(frame: .zero)
         commonInit()
         setupViews()
-        trackNameLabel.text = "\(track?.name ?? "No Track Name")"
-        artistNameLabel.text = "\(track?.artists.first?.name ?? "No Artist")"
+        populateViews()
     }
     
     required init?(coder: NSCoder) {
@@ -55,11 +59,14 @@ class PlayerView: UIView {
     
     fileprivate func setupViews() {
         containerView.backgroundColor = .secondaryLabel
+        //slider
         timerSlider.tintColor = .previewtifyGreen
-        [trackNameLabel, artistNameLabel, currentTimeLabel, endTimeLabel].forEach {
+        timerSlider.addTarget(self, action: #selector(self.updateTimerSlider), for: .valueChanged)
+        //Labels
+        [trackNameLabel, artistNameLabel, timeLabel, timeLeftLabel].forEach {
             $0?.textColor = .systemBackground
         }
-        
+        //Buttons
         let heartImage = Constants.Images.heart.withRenderingMode(.alwaysTemplate)
         favoriteButton.setImage(heartImage, for: .normal)
         let heartFilledImage = Constants.Images.heartFilled.withRenderingMode(.alwaysOriginal)
@@ -83,10 +90,72 @@ class PlayerView: UIView {
         forwardButton.setImage(forwardImage, for: .normal)
         forwardButton.tintColor = .systemBackground
         forwardButton.addTarget(self, action: #selector(skipForwardButtonTapped), for: .touchUpInside)
+        
+    }
+    
+    func playTrackFrom(urlString: String) {
+//        guard  let url = URL(string: urlString) else { return }
+//        let downloadTask = URLSession.shared.downloadTask(with: url) { (url, response, error) in
+//            if let error = error {
+//                print("Error downloading tasks \(error.localizedDescription)")
+//                return
+//            }
+//            do {
+//                self.player = try AVAudioPlayer(contentsOf: url!)
+//                self.player?.prepareToPlay()
+//                self.player?.volume = 1
+////                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+////                try AVAudioSession.sharedInstance().setActive(true)
+////                player = try AVPlayer(url: url as URL)
+////                guard let player = player else { return }
+//                self.player?.play()
+//            } catch let error {
+//                print(error.localizedDescription)
+//            }
+//        }
+//        downloadTask.resume()
+    }
+    
+    func setupTimerSlider() {
+        guard let player = player else { return }
+        timerSlider.value = 0.0
+        timerSlider.maximumValue = Float(player.duration)
+        player.play()
+        timer = Timer.scheduledTimer(timeInterval: 0.0001, target: self, selector: #selector(self.updateTrackTime), userInfo: nil, repeats: true)
+    }
+    
+    func populateViews() {
+        trackNameLabel.text = "\(track?.name ?? "No Track Name")"
+        artistNameLabel.text = "\(track?.artists.first?.name ?? "No Artist")"
+    }
+    
+    //MARK: Timer
+    
+    @objc func updateTrackTime() {
+        guard let player = player else { return }
+        timerSlider.value = Float(player.currentTime)
+        //Update time labels
+        timeLabel.text = "\(player.currentTime.asFormattedString())"
+        let remainingTimeInSeconds = player.duration - player.currentTime
+        timeLeftLabel.text = "\(remainingTimeInSeconds.asFormattedString())"
+    }
+    
+    //MARK: Target Methods
+    
+    @objc func updateTimerSlider() {
+        guard let player = player else { return }
+        player.currentTime = Float64(timerSlider.value)
     }
     
     @objc func playButtonTapped() {
-        playButton.isSelected = !playButton.isSelected
+        guard let player = player else { return }
+        if playButton.isSelected { //if playing
+            playButton.isSelected = false
+            player.pause()
+        } else { //if paused
+            playButton.isSelected = true
+            player.play()
+        }
     }
     
     @objc func favoriteButtonTapped() {

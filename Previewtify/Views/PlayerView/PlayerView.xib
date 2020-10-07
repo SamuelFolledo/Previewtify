@@ -15,11 +15,11 @@
                 <outlet property="backButton" destination="bhS-B1-3zd" id="iwk-mw-OaQ"/>
                 <outlet property="containerView" destination="k3N-DN-zYf" id="Vk4-Yd-I3C"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="ee7-Ug-J9x"/>
-                <outlet property="currentTimeLabel" destination="LKU-LY-dk6" id="flN-fM-WDR"/>
-                <outlet property="endTimeLabel" destination="7PZ-Tt-4ZS" id="Qnn-1k-Hgt"/>
                 <outlet property="favoriteButton" destination="M38-Fl-qvf" id="xrO-N6-MqP"/>
                 <outlet property="forwardButton" destination="rQM-x2-p4h" id="8pQ-lG-D9f"/>
                 <outlet property="playButton" destination="eaM-JE-7MA" id="Aay-3f-gmo"/>
+                <outlet property="timeLabel" destination="LKU-LY-dk6" id="RbX-LR-p1d"/>
+                <outlet property="timeLeftLabel" destination="7PZ-Tt-4ZS" id="Wbs-Kx-P76"/>
                 <outlet property="timerSlider" destination="JNy-Ma-m0i" id="dq1-3s-t4S"/>
                 <outlet property="trackNameLabel" destination="70m-sp-GyU" id="2ad-F9-Y5P"/>
             </connections>
