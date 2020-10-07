@@ -6,12 +6,16 @@
 //  Copyright © 2020 SamuelFolledo. All rights reserved.
 //
 
-import UIKit
+import SnapKit
 import SwipeableTabBarController
 
 class TabBarController: SwipeableTabBarController {
     
     //MARK: Properties
+    var playerView: PlayerView = {
+        let playerView = PlayerView(track: nil)
+        return playerView
+    }()
     
     var homeNavigationController: UINavigationController!
     var favoriteSongNavigationController: UINavigationController!
@@ -21,6 +25,7 @@ class TabBarController: SwipeableTabBarController {
         super.viewDidLoad()
         setUpTabBar()
         addViewControllers()
+//        constraintPlayerView()
     }
     
     //MARK: Methods
@@ -52,5 +57,14 @@ class TabBarController: SwipeableTabBarController {
             homeNavigationController,
             favoriteSongNavigationController,
         ]
+    }
+    
+    fileprivate func constraintPlayerView() {
+        view.addSubview(playerView)
+        playerView.snp.makeConstraints {
+            $0.width.centerX.equalToSuperview()
+            $0.height.equalTo(300)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+        }
     }
 }

@@ -28,6 +28,8 @@
 		333A14FB25157AFC00C934C9 /* UserKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A14EC25157AFC00C934C9 /* UserKeys.swift */; };
 		333A150D2515842700C934C9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A150C2515842700C934C9 /* HomeController.swift */; };
 		333A15232515D19D00C934C9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333A15222515D19D00C934C9 /* User.swift */; };
+		337333B3252D835B006BCC1F /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337333B2252D835B006BCC1F /* PlayerView.swift */; };
+		337333C0252D86E5006BCC1F /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 337333BF252D86E5006BCC1F /* PlayerView.xib */; };
 		33CA2A9F252312320040F118 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2A9E252312320040F118 /* TrackCell.swift */; };
 		33CA2AA32523123D0040F118 /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AA22523123D0040F118 /* SongCell.swift */; };
 		33CA2AA72523128F0040F118 /* ArtistTrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AA62523128F0040F118 /* ArtistTrackController.swift */; };
@@ -77,6 +79,8 @@
 		333A14EC25157AFC00C934C9 /* UserKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserKeys.swift; sourceTree = "<group>"; };
 		333A150C2515842700C934C9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		333A15222515D19D00C934C9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		337333B2252D835B006BCC1F /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		337333BF252D86E5006BCC1F /* PlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerView.xib; sourceTree = "<group>"; };
 		33CA2A9E252312320040F118 /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		33CA2AA22523123D0040F118 /* SongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
 		33CA2AA62523128F0040F118 /* ArtistTrackController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTrackController.swift; sourceTree = "<group>"; };
@@ -219,6 +223,15 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		337333B6252D835F006BCC1F /* PlayerView */ = {
+			isa = PBXGroup;
+			children = (
+				337333B2252D835B006BCC1F /* PlayerView.swift */,
+				337333BF252D86E5006BCC1F /* PlayerView.xib */,
+			);
+			path = PlayerView;
+			sourceTree = "<group>";
+		};
 		33CA2AAE252312A40040F118 /* FavoriteSongs */ = {
 			isa = PBXGroup;
 			children = (
@@ -271,6 +284,7 @@
 			children = (
 				33D05B6625099BD9007FA062 /* AppDelegate.swift */,
 				33D05B6825099BD9007FA062 /* SceneDelegate.swift */,
+				337333B6252D835F006BCC1F /* PlayerView */,
 				333A151F2515D19200C934C9 /* Models */,
 				333A14C5251557E400C934C9 /* Controllers */,
 				333A14BA251551B800C934C9 /* Network */,
@@ -399,6 +413,7 @@
 				33D05B7025099BDB007FA062 /* Assets.xcassets in Resources */,
 				33D05B6E25099BD9007FA062 /* Main.storyboard in Resources */,
 				33D05B892509A148007FA062 /* GoogleService-Info.plist in Resources */,
+				337333C0252D86E5006BCC1F /* PlayerView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +504,7 @@
 				33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */,
 				333A14EF25157AFC00C934C9 /* UIViewController+Extensions.swift in Sources */,
 				33CA2AA32523123D0040F118 /* SongCell.swift in Sources */,
+				337333B3252D835B006BCC1F /* PlayerView.swift in Sources */,
 				333A14F625157AFC00C934C9 /* UIStackView+Extensions.swift in Sources */,
 				333A14BE2515526700C934C9 /* EndpointError.swift in Sources */,
 				333A15232515D19D00C934C9 /* User.swift in Sources */,
