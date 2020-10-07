@@ -30,9 +30,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let code = parameters?["code"] {
             NetworkManager.authorizationCode = code
             loginController.fetchSpotifyAccessToken()
-        } else if let _ = parameters?[SPTAppRemoteAccessTokenKey] {
-//            NetworkManager.accessToken = access_token
-//            NetworkManager.spotifyAuth?.accessToken = access_token
+        } else if let accessToken = parameters?[SPTAppRemoteAccessTokenKey] {
+            if var spotifyAuth = SpotifyAuth.current {
+                spotifyAuth.accessToken = accessToken
+                SpotifyAuth.setCurrent(spotifyAuth, writeToUserDefaults: true)
+            } else {
+                let spotifyAuth = SpotifyAuth(tokenType: nil, refreshToken: nil, accessToken: accessToken, expiresIn: nil, scope: nil)
+                SpotifyAuth.setCurrent(spotifyAuth, writeToUserDefaults: true)
+            }
         } else if let error_description = parameters?[SPTAppRemoteErrorDescriptionKey] {
             print("No access token error =", error_description)
         }
@@ -71,7 +76,8 @@ extension SceneDelegate {
             return
         }
         //go to log in
-        let nav = UINavigationController(rootViewController: loginController)
+//        let nav = UINavigationController(rootViewController: loginController)
+        let nav = UINavigationController(rootViewController: TabBarController())
         window!.rootViewController = nav
     }
 }
