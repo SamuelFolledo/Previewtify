@@ -9,11 +9,11 @@
 import Foundation
 
 struct SpotifyAuth {
-    public let tokenType: String //Bearer
+    public let tokenType: String? //Bearer
     public let refreshToken: String?
     public var accessToken: String
-    public var expiresIn: Int
-    public var scope: String
+    public var expiresIn: Int?
+    public var scope: String?
     
     //MARK: Singleton
     private static var _current: SpotifyAuth?
