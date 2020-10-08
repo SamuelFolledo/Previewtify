@@ -120,9 +120,13 @@ extension ArtistTrackController: UITableViewDataSource {
         cell.favoriteDelegate = tabBarController
         DispatchQueue.global(qos: .userInteractive).async {
             let track = self.tracks[indexPath.row]
-            DispatchQueue.main.async {
-                cell.populateViews(track: track, rank: indexPath.row + 1)
-                cell.layoutSubviews()
+            NetworkManager.checkIfFavorite(trackId: track.id as! String) { (isFavorite) in
+                DispatchQueue.main.async {
+                    let image = isFavorite ? Constants.Images.heartFilled : Constants.Images.heart
+                    cell.favoriteButton.setImage(image, for: .normal)
+                    cell.populateViews(track: track, rank: indexPath.row + 1)
+                    cell.layoutSubviews()
+                }
             }
         }
         return cell
