@@ -99,7 +99,134 @@ class TabBarController: SwipeableTabBarController {
         playerView.snp.makeConstraints {
             $0.width.centerX.equalToSuperview()
             $0.height.equalTo(200)
-            $0.bottom.equalTo(tabBar.snp.top).offset(0)
+            $0.bottom.equalTo(tabBar.snp.top).offset(300)
+        }
+    }
+    
+    ///hide or show player view
+    fileprivate func hidePlayerView(_ shouldHide: Bool) {
+        var bottomConstraint: CGFloat
+        if shouldHide { //hide player
+            bottomConstraint = 300
+        } else { //show player
+            bottomConstraint = 0
+        }
+        playerView.snp.updateConstraints {
+            $0.bottom.equalTo(tabBar.snp.top).offset(bottomConstraint)
+        }
+    }
+    
+    // MARK: - AppRemote
+    func appRemoteConnecting() {
+        connectionIndicatorView.state = .connecting
+    }
+
+    func appRemoteConnected() {
+        connectionIndicatorView.state = .connected
+        subscribeToPlayerState()
+        subscribeToCapabilityChanges()
+        getPlayerState()
+        enableInterface(true)
+    }
+
+    func appRemoteDisconnect() {
+        connectionIndicatorView.state = .disconnected
+        self.subscribedToPlayerState = false
+        self.subscribedToCapabilities = false
+        enableInterface(false)
+    }
+
+    // MARK: - Error & Alert
+    func showError(_ errorDescription: String) {
+        let alert = UIAlertController(title: "Error!", message: errorDescription, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    private func displayError(_ error: NSError?) {
+        if let error = error {
+            presentAlert(title: "Error", message: error.description)
+        }
+    }
+    
+    private func subscribeToPlayerState() {
+        guard (!subscribedToPlayerState) else { return }
+        appRemote?.playerAPI!.delegate = self
+        appRemote?.playerAPI?.subscribe { (_, error) -> Void in
+            guard error == nil else { return }
+            self.subscribedToPlayerState = true
+//            self.updatePlayerStateSubscriptionButtonState()
+        }
+    }
+    // MARK: - User API
+    private func fetchUserCapabilities() {
+        appRemote?.userAPI?.fetchCapabilities(callback: { (capabilities, error) in
+            guard error == nil else { return }
+            let capabilities = capabilities as! SPTAppRemoteUserCapabilities
+            print("⭐️⭐️⭐️⭐️⭐️USER fetchCapabilities \(capabilities)")
+//            self.updateViewWithCapabilities(capabilities)
+        })
+    }
+
+    private func subscribeToCapabilityChanges() {
+        guard (!subscribedToCapabilities) else { return }
+        appRemote?.userAPI?.delegate = self
+        appRemote?.userAPI?.subscribe(toCapabilityChanges: { (success, error) in
+            guard error == nil else { return }
+            self.subscribedToCapabilities = true
+//            self.updateCapabilitiesSubscriptionButtonState()
+        })
+    }
+
+    private func unsubscribeFromCapailityChanges() {
+        guard (subscribedToCapabilities) else { return }
+        appRemote?.userAPI?.unsubscribe(toCapabilityChanges: { (success, error) in
+            guard error == nil else { return }
+            self.subscribedToCapabilities = false
+//            self.updateCapabilitiesSubscriptionButtonState()
+        })
+    }
+    
+    private func getPlayerState() {
+        appRemote?.playerAPI?.getPlayerState { (result, error) -> Void in
+            guard error == nil else { return }
+
+            let playerState = result as! SPTAppRemotePlayerState
+            self.updateViewWithPlayerState(playerState)
+        }
+    }
+    
+    private func updateViewWithPlayerState(_ playerState: SPTAppRemotePlayerState) {
+        print("⭐️⭐️⭐️⭐️⭐️implement updateViewWithPlayerState⭐️⭐️⭐️⭐️⭐️")
+//        updatePlayPauseButtonState(playerState.isPaused)
+//        updateRepeatModeLabel(playerState.playbackOptions.repeatMode)
+//        updateShuffleLabel(playerState.playbackOptions.isShuffling)
+//        trackNameLabel.text = playerState.track.name + " - " + playerState.track.artist.name
+//        fetchAlbumArtForTrack(playerState.track) { (image) -> Void in
+//            self.updateAlbumArtWithImage(image)
+//        }
+//        updateViewWithRestrictions(playerState.playbackRestrictions)
+//        updateInterfaceForPodcast(playerState: playerState)
+    }
+    
+//    private func updatePlayPauseButtonState(_ paused: Bool) {
+//        let playPauseButtonImage = paused ? PlaybackButtonGraphics.playButtonImage() : PlaybackButtonGraphics.pauseButtonImage()
+//        playPauseButton.setImage(playPauseButtonImage, for: UIControl.State())
+//        playPauseButton.setImage(playPauseButtonImage, for: .highlighted)
+//    }
+    
+    private func enableInterface(_ enabled: Bool = true) {
+        print("⭐️⭐️⭐️⭐️⭐️Enable Interface⭐️⭐️⭐️⭐️⭐️")
+//        buttons.forEach { (button) -> () in
+//            button.isEnabled = enabled
+//        }
+//        if (!enabled) {
+//            albumArtImageView.image = nil
+//            updatePlayPauseButtonState(true);
+//        }
+    }
+}
+
 //MARK: Spotify Player Protocol
 extension TabBarController: SpotifyPlayerProtocol {
     func playTrack(track: Track, shouldPlay: Bool) {
@@ -140,5 +267,26 @@ extension TabBarController: SpotifyFavoriteTrackProtocol {
         }
     }
 }
+
+extension TabBarController {
+    func playTrack(urlString: String) {
+        playerView.playTrackFrom(urlString: urlString)
+    }
+}
+
+// MARK: - SPTAppRemotePlayerStateDelegate
+extension TabBarController: SPTAppRemotePlayerStateDelegate {
+    func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
+        self.playerState = playerState
+        print("⭐️⭐️⭐️⭐️⭐️playerStateDidChange \(playerState)")
+//           updateViewWithPlayerState(playerState)
+    }
+}
+
+// MARK: - SPTAppRemoteUserAPIDelegate
+extension TabBarController: SPTAppRemoteUserAPIDelegate {
+    func userAPI(_ userAPI: SPTAppRemoteUserAPI, didReceive capabilities: SPTAppRemoteUserCapabilities) {
+        print("⭐️⭐️⭐️⭐️⭐️USER APIII \(capabilities)")
+//        updateViewWithCapabilities(capabilities)
     }
 }

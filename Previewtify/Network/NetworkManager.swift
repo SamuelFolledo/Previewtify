@@ -119,6 +119,7 @@ class NetworkManager {
                     spotifyAuthToUpdate.scope = spotifyAuth.scope
                     SpotifyAuth.setCurrent(spotifyAuthToUpdate, writeToUserDefaults: true)
                     Spartan.authorizationToken = spotifyAuth.accessToken
+                    print("Refreshed Access Token: \(spotifyAuth.accessToken)")
                     return completion(.success(spotifyAuth))
                 }
                 completion(.failure(EndPointError.couldNotParse(message: "Failed to decode data")))
@@ -142,6 +143,14 @@ class NetworkManager {
         })
     }
     
-    
+    static func checkIfFavorite(trackId: String, completion: @escaping (_ savedBools: Bool) -> Void) {
+        Spartan.tracksAreSaved(trackIds: [trackId]) { (savedBools) in
+            guard let isSaved = savedBools.first else { return }
+            completion(isSaved)
+        } failure: { (error) in
+            print("Error check if track is saved")
+        }
+
+    }
     //MARK: Helpers
 }
