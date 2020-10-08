@@ -13,7 +13,6 @@ class FavoriteSongController: UIViewController {
     
     //MARK: Properties
     var artist: Artist!
-    var tracks: [SavedTrack] = []
     var trackIds: [String] = []
     var offset: Int = 0
     var spartanCallbackError: (Error?) -> () {
@@ -25,6 +24,7 @@ class FavoriteSongController: UIViewController {
             }
         }
     }
+    weak var customTabBarController: TabBarController!
     
     //MARK: Views
     lazy var tableView: UITableView = {
@@ -74,20 +74,13 @@ class FavoriteSongController: UIViewController {
     }
     
     func fetchFavoriteSongs() {
-        NetworkManager.refreshAcessToken { (result) in
-            switch result {
-            case .failure(let error):
-                self.presentAlert(title: "Error Refreshing token", message: error.localizedDescription)
-            case .success(_):
-                Spartan.getSavedTracks(limit: 50, offset: self.offset, market: nil, success: { (pagingObject) in
-                    if let tracks = pagingObject.items {
-                        self.tracks = tracks
-                        self.offset = self.tracks.count - 1
-                        self.tableView.reloadData()
-                    }
-                }, failure: self.spartanCallbackError)
+        Spartan.getSavedTracks(limit: 50, offset: self.offset, market: nil, success: { (pagingObject) in
+            if let tracks = pagingObject.items {
+                self.offset = self.customTabBarController.savedTracks.count - 1
+                self.customTabBarController.savedTracks = tracks
+                self.tableView.reloadData()
             }
-        }
+        }, failure: self.spartanCallbackError)
     }
     
     //MARK: Helpers
@@ -107,7 +100,7 @@ extension FavoriteSongController: UITableViewDelegate {
 
 extension FavoriteSongController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tracks.count
+        customTabBarController.savedTracks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -117,7 +110,7 @@ extension FavoriteSongController: UITableViewDataSource {
         cell.favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
         cell.playerDelegate = tabBarController
         cell.favoriteDelegate = self
-        let track = tracks[indexPath.row]
+        let track = customTabBarController.savedTracks[indexPath.row]
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 cell.populateViews(track: track.track, rank: indexPath.row + 1)
@@ -135,9 +128,9 @@ extension FavoriteSongController: SpotifyFavoriteTrackProtocol {
             Spartan.saveTracks(trackIds: [trackId], success: nil, failure: spartanCallbackError)
         } else {
             Spartan.removeSavedTracks(trackIds: [trackId], success: nil, failure: spartanCallbackError)
-            let trackRow = tracks.firstIndex { $0.track.id as? String == trackId }
+            let trackRow = customTabBarController.savedTracks.firstIndex { $0.track.id as? String == trackId }
             if trackRow != nil {
-                tracks.remove(at: trackRow!)
+                customTabBarController.savedTracks.remove(at: trackRow!)
                 let indexPath = IndexPath(row: trackRow!, section: 0)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
