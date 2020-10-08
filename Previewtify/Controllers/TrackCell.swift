@@ -11,6 +11,9 @@ import Spartan
 
 protocol SpotifyPlayerProtocol {
     func playTrack(track: Track, shouldPlay: Bool)
+}
+
+protocol SpotifyFavoriteTrackProtocol {
     func favoriteTrack(track: Track, shouldFavorite: Bool)
 }
 
@@ -18,7 +21,9 @@ class TrackCell: UITableViewCell {
     
     //MARK: Properties
     var track: Track!
+    var trackId: String!
     var playerDelegate: SpotifyPlayerProtocol?
+    var favoriteDelegate: SpotifyFavoriteTrackProtocol?
     
     //MARK: View Properties
     lazy var containerView: UIView = {
@@ -181,8 +186,8 @@ class TrackCell: UITableViewCell {
         self.track = track
         rankLabel.text = "\(rank)"
         nameLabel.text = track.name
-        detailLabel.text = track.album.name
-        guard let urlString = track.album.images.first?.url,
+        detailLabel.text = track.album?.name ?? "No album"
+        guard let urlString = track.album?.images.first?.url,
               let imageUrl = URL(string: urlString)
         else { return }
         artistImageView.kf.setImage(with: imageUrl, placeholder: nil, options: nil) { (receivedSize, totalSize) in
@@ -214,10 +219,10 @@ class TrackCell: UITableViewCell {
     @objc func handleFavorite() {
         if favoriteButton.currentImage == Constants.Images.heart {
             favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
-            playerDelegate?.favoriteTrack(track: track, shouldFavorite: true)
+            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: true)
         } else {
             favoriteButton.setImage(Constants.Images.heart, for: .normal)
-            playerDelegate?.favoriteTrack(track: track, shouldFavorite: false)
+            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: false)
         }
     }
 }

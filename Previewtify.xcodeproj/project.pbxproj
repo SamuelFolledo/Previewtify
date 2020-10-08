@@ -31,7 +31,6 @@
 		337333B3252D835B006BCC1F /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337333B2252D835B006BCC1F /* PlayerView.swift */; };
 		337333C0252D86E5006BCC1F /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 337333BF252D86E5006BCC1F /* PlayerView.xib */; };
 		33CA2A9F252312320040F118 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2A9E252312320040F118 /* TrackCell.swift */; };
-		33CA2AA32523123D0040F118 /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AA22523123D0040F118 /* SongCell.swift */; };
 		33CA2AA72523128F0040F118 /* ArtistTrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AA62523128F0040F118 /* ArtistTrackController.swift */; };
 		33CA2AAB2523129F0040F118 /* FavoriteSongController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CA2AAA2523129F0040F118 /* FavoriteSongController.swift */; };
 		33D05B6725099BD9007FA062 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B6625099BD9007FA062 /* AppDelegate.swift */; };
@@ -43,6 +42,8 @@
 		33D05B7E25099BDB007FA062 /* PreviewtifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D05B7D25099BDB007FA062 /* PreviewtifyTests.swift */; };
 		33D05B892509A148007FA062 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 33D05B882509A148007FA062 /* GoogleService-Info.plist */; };
 		33D05B8B2509A5F6007FA062 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D05B8A2509A5F6007FA062 /* SpotifyiOS.framework */; };
+		33D9A865252E586D00A02B4A /* TimerInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D9A864252E586D00A02B4A /* TimerInterval+Extension.swift */; };
+		33D9A870252E68FB00A02B4A /* ConnectionStatusIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D9A86F252E68FB00A02B4A /* ConnectionStatusIndicatorView.swift */; };
 		588CF25F606E0FCC97FED62E /* Pods_Previewtify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9846D5B25154EC58CA4E3BFF /* Pods_Previewtify.framework */; };
 		B9ECF19A7621077DC307F4DA /* Pods_PreviewtifyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AECEEA4DBA73C630E900CB74 /* Pods_PreviewtifyTests.framework */; };
 /* End PBXBuildFile section */
@@ -82,7 +83,6 @@
 		337333B2252D835B006BCC1F /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		337333BF252D86E5006BCC1F /* PlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerView.xib; sourceTree = "<group>"; };
 		33CA2A9E252312320040F118 /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
-		33CA2AA22523123D0040F118 /* SongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
 		33CA2AA62523128F0040F118 /* ArtistTrackController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTrackController.swift; sourceTree = "<group>"; };
 		33CA2AAA2523129F0040F118 /* FavoriteSongController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongController.swift; sourceTree = "<group>"; };
 		33D05B6325099BD9007FA062 /* Previewtify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Previewtify.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +99,8 @@
 		33D05B882509A148007FA062 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		33D05B8A2509A5F6007FA062 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		33D05B8C2509AB30007FA062 /* Previewtify-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Previewtify-Bridging-Header.h"; sourceTree = "<group>"; };
+		33D9A864252E586D00A02B4A /* TimerInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimerInterval+Extension.swift"; sourceTree = "<group>"; };
+		33D9A86F252E68FB00A02B4A /* ConnectionStatusIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionStatusIndicatorView.swift; sourceTree = "<group>"; };
 		54713D3FD771E07D32FC0BDC /* Pods-PreviewtifyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PreviewtifyTests.release.xcconfig"; path = "Target Support Files/Pods-PreviewtifyTests/Pods-PreviewtifyTests.release.xcconfig"; sourceTree = "<group>"; };
 		7A059A56F2518DDA44B690FA /* Pods-Previewtify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Previewtify.release.xcconfig"; path = "Target Support Files/Pods-Previewtify/Pods-Previewtify.release.xcconfig"; sourceTree = "<group>"; };
 		9846D5B25154EC58CA4E3BFF /* Pods_Previewtify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Previewtify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -191,6 +193,7 @@
 				333A14E725157AFC00C934C9 /* UserDefaults+Extensions.swift */,
 				333A14E825157AFC00C934C9 /* Date+Extensions.swift */,
 				333A14E925157AFC00C934C9 /* UITextField+Extensions.swift */,
+				33D9A864252E586D00A02B4A /* TimerInterval+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -223,20 +226,19 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		337333B6252D835F006BCC1F /* PlayerView */ = {
+		337333B6252D835F006BCC1F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				337333B2252D835B006BCC1F /* PlayerView.swift */,
-				337333BF252D86E5006BCC1F /* PlayerView.xib */,
+				33D9A86F252E68FB00A02B4A /* ConnectionStatusIndicatorView.swift */,
+				33D9A86A252E68DA00A02B4A /* PlayerView */,
 			);
-			path = PlayerView;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		33CA2AAE252312A40040F118 /* FavoriteSongs */ = {
 			isa = PBXGroup;
 			children = (
 				33CA2AAA2523129F0040F118 /* FavoriteSongController.swift */,
-				33CA2AA22523123D0040F118 /* SongCell.swift */,
 			);
 			path = FavoriteSongs;
 			sourceTree = "<group>";
@@ -284,7 +286,7 @@
 			children = (
 				33D05B6625099BD9007FA062 /* AppDelegate.swift */,
 				33D05B6825099BD9007FA062 /* SceneDelegate.swift */,
-				337333B6252D835F006BCC1F /* PlayerView */,
+				337333B6252D835F006BCC1F /* Views */,
 				333A151F2515D19200C934C9 /* Models */,
 				333A14C5251557E400C934C9 /* Controllers */,
 				333A14BA251551B800C934C9 /* Network */,
@@ -303,6 +305,15 @@
 				33D05B7F25099BDB007FA062 /* Info.plist */,
 			);
 			path = PreviewtifyTests;
+			sourceTree = "<group>";
+		};
+		33D9A86A252E68DA00A02B4A /* PlayerView */ = {
+			isa = PBXGroup;
+			children = (
+				337333B2252D835B006BCC1F /* PlayerView.swift */,
+				337333BF252D86E5006BCC1F /* PlayerView.xib */,
+			);
+			path = PlayerView;
 			sourceTree = "<group>";
 		};
 		4BD1D911EE4561209A96D262 /* Pods */ = {
@@ -503,7 +514,6 @@
 				333A14F325157AFC00C934C9 /* UIColor+Extensions.swift in Sources */,
 				33D05B6925099BD9007FA062 /* SceneDelegate.swift in Sources */,
 				333A14EF25157AFC00C934C9 /* UIViewController+Extensions.swift in Sources */,
-				33CA2AA32523123D0040F118 /* SongCell.swift in Sources */,
 				337333B3252D835B006BCC1F /* PlayerView.swift in Sources */,
 				333A14F625157AFC00C934C9 /* UIStackView+Extensions.swift in Sources */,
 				333A14BE2515526700C934C9 /* EndpointError.swift in Sources */,
@@ -511,6 +521,7 @@
 				333A14F725157AFC00C934C9 /* UserDefaults+Extensions.swift in Sources */,
 				33CA2AAB2523129F0040F118 /* FavoriteSongController.swift in Sources */,
 				333A14F525157AFC00C934C9 /* UINavigationController+Extensions.swift in Sources */,
+				33D9A865252E586D00A02B4A /* TimerInterval+Extension.swift in Sources */,
 				333A150D2515842700C934C9 /* HomeController.swift in Sources */,
 				333A14F025157AFC00C934C9 /* UIView+Extensions.swift in Sources */,
 				33CA2AA72523128F0040F118 /* ArtistTrackController.swift in Sources */,
@@ -520,6 +531,7 @@
 				333A14C2251553D800C934C9 /* SpotifyAuth.swift in Sources */,
 				331E8A8125101265000C32F5 /* Constants.swift in Sources */,
 				333A14FB25157AFC00C934C9 /* UserKeys.swift in Sources */,
+				33D9A870252E68FB00A02B4A /* ConnectionStatusIndicatorView.swift in Sources */,
 				333A14F925157AFC00C934C9 /* UITextField+Extensions.swift in Sources */,
 				332F11A02525406F005149CA /* TabBarController.swift in Sources */,
 				333A14F225157AFC00C934C9 /* UIFont+Extensions.swift in Sources */,
