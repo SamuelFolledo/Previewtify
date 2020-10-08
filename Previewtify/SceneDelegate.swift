@@ -15,6 +15,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     lazy var artistTrackController = ArtistTrackController()
     lazy var favoriteSongController = FavoriteSongController()
     
+    //MARK: Spotify Properties
+    
+    var playURI: String = ""
+    var lastPlayerState: SPTAppRemotePlayerState?
+    
+    lazy var appRemote: SPTAppRemote = {
+        let appRemote = SPTAppRemote(configuration: NetworkManager.configuration, logLevel: .debug)
+        appRemote.connectionParameters.accessToken = SpotifyAuth.current?.accessToken
+        appRemote.delegate = self
+        return appRemote
+    }()
+    
+    //MARK: Methods
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -44,27 +57,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        if let _ = loginController.appRemote.connectionParameters.accessToken {
-            //            loginController.appRemote.connectionParameters.accessToken = accessToken
-            //            loginController.appRemote.connect()
-        } else if let _ = artistTrackController.appRemote.connectionParameters.accessToken {
-                        artistTrackController.appRemote.connect()
-//        } else if let _ = favoriteSongController.appRemote.connectionParameters.accessToken {
-            //            loginController.appRemote.connectionParameters.accessToken = accessToken
-            //            loginController.appRemote.connect()
-        } else if let _ = SpotifyAuth.current?.accessToken {
-            //            loginController.appRemote.connectionParameters.accessToken = accessToken
-            //            loginController.appRemote.connect()
+        if let _ = self.appRemote.connectionParameters.accessToken {
+            self.appRemote.connect()
         }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        if let _ = User.current {
-            
-        } else {
-            if loginController.appRemote.isConnected {
-                loginController.appRemote.disconnect()
-            }
+        if self.appRemote.isConnected {
+            self.appRemote.disconnect()
         }
     }
 }
@@ -74,10 +74,41 @@ extension SceneDelegate {
         if let _ = User.current { //if we have a user, then go to home
             window!.rootViewController = TabBarController()
             return
-        }
+        } else {
         //go to log in
-//        let nav = UINavigationController(rootViewController: loginController)
-        let nav = UINavigationController(rootViewController: TabBarController())
+        let nav = UINavigationController(rootViewController: loginController)
         window!.rootViewController = nav
+        }
+    }
+}
+
+//MARK: Spotify Methods
+extension SceneDelegate {
+    func connect() {
+        self.appRemote.authorizeAndPlayURI(self.playURI)
+    }
+}
+
+extension SceneDelegate: SPTAppRemoteDelegate {
+    func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
+        // Connection was successful, you can begin issuing commands
+        self.appRemote.playerAPI?.delegate = self
+        self.appRemote.playerAPI?.subscribe(toPlayerState: { (result, error) in
+            if let error = error {
+                debugPrint(error.localizedDescription)
+            }
+        })
+    }
+    func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
+        print("disconnected")
+    }
+    func appRemote(_ appRemote: SPTAppRemote, didFailConnectionAttemptWithError error: Error?) {
+        print("failed")
+    }
+}
+
+extension SceneDelegate: SPTAppRemotePlayerStateDelegate {
+    func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
+        print("Player changed! \(playerState.track.name)")
     }
 }
