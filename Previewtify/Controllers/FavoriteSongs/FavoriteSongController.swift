@@ -13,10 +13,19 @@ class FavoriteSongController: UIViewController {
     
     //MARK: Properties
     var artist: Artist!
-    var tracks: [Track] = []
+    var tracks: [SavedTrack] = []
+    var trackIds: [String] = []
     var offset: Int = 0
+    var spartanCallbackError: (Error?) -> () {
+        get {
+            return {[weak self] error in
+                if let error = error {
+                    self?.presentAlert(title: "Error", message: error.localizedDescription)
+                }
+            }
+        }
+    }
     
-    //MARK: Views
     //MARK: Views
     lazy var tableView: UITableView = {
         let table = UITableView.init(frame: .zero, style: .grouped)
@@ -70,13 +79,13 @@ class FavoriteSongController: UIViewController {
             case .failure(let error):
                 self.presentAlert(title: "Error Refreshing token", message: error.localizedDescription)
             case .success(_):
-                Spartan.getMyTopTracks(limit: 50, offset: self.offset, timeRange: .longTerm) { (pagingObject) in
-                    self.tracks = pagingObject.items
-                    self.offset = self.tracks.count - 1
-                    self.tableView.reloadData()
-                } failure: { (error) in
-                    self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
-                }
+                Spartan.getSavedTracks(limit: 50, offset: self.offset, market: nil, success: { (pagingObject) in
+                    if let tracks = pagingObject.items {
+                        self.tracks = tracks
+                        self.offset = self.tracks.count - 1
+                        self.tableView.reloadData()
+                    }
+                }, failure: self.spartanCallbackError)
             }
         }
     }
@@ -88,7 +97,7 @@ class FavoriteSongController: UIViewController {
 
 extension FavoriteSongController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        let cell = collectionView.cellForItem(at: indexPath) as! ArtistCell
+//        let cell = collectionView.cellForItem(at: indexPath) as! ArtistCell
 //        let track = tracks[indexPath.row]
 //        let vc = ArtistTrackController()
 //        vc.artist = artist
@@ -102,14 +111,36 @@ extension FavoriteSongController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TrackCell.self), for: indexPath) as! TrackCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TrackCell.self), for: indexPath) as? TrackCell,
+              let tabBarController = self.tabBarController as? TabBarController
+        else { return UITableViewCell() }
+        cell.favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
+        cell.playerDelegate = tabBarController
+        cell.favoriteDelegate = self
+        let track = tracks[indexPath.row]
         DispatchQueue.global(qos: .userInteractive).async {
-            let track = self.tracks[indexPath.row]
             DispatchQueue.main.async {
-                cell.populateViews(track: track, rank: indexPath.row + 1)
+                cell.populateViews(track: track.track, rank: indexPath.row + 1)
                 cell.layoutSubviews()
             }
         }
         return cell
+    }
+}
+
+extension FavoriteSongController: SpotifyFavoriteTrackProtocol {
+    func favoriteTrack(track: Track, shouldFavorite: Bool) {
+        guard let trackId = track.id as? String else { return }
+        if shouldFavorite {
+            Spartan.saveTracks(trackIds: [trackId], success: nil, failure: spartanCallbackError)
+        } else {
+            Spartan.removeSavedTracks(trackIds: [trackId], success: nil, failure: spartanCallbackError)
+            let trackRow = tracks.firstIndex { $0.track.id as? String == trackId }
+            if trackRow != nil {
+                tracks.remove(at: trackRow!)
+                let indexPath = IndexPath(row: trackRow!, section: 0)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+        }
     }
 }
