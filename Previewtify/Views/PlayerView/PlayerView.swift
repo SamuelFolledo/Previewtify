@@ -14,7 +14,9 @@ class PlayerView: UIView {
     
     //MARK: Properties
     
-    var track: Track?
+    var track: Track? {
+        didSet { populateViews() }
+    }
     var timer: Timer?
     
     //MARK: Player
