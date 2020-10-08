@@ -8,8 +8,10 @@
 
 import UIKit.UIImage
 
+extension String {}
+
+//MARK: Regex
 extension String {
-    
     enum ValidityType {
         case email
         case password
@@ -42,7 +44,6 @@ extension String {
         }
         return NSPredicate(format: format, regex).evaluate(with: self)
     }
-    
 }
 
 
