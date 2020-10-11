@@ -59,5 +59,6 @@ struct Constants {
         static let pause = UIImage(named: "pause")!
         static let skipForward15 = UIImage(named: "skipforward15")!
         static let skipBack15 = UIImage(named: "skipback15")!
+        static let spotifyIcon = UIImage(named: "spotify.png")!
     }
 }
