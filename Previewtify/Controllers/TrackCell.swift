@@ -91,6 +91,7 @@ class TrackCell: UITableViewCell {
         button.layer.cornerRadius = 30
         button.layer.masksToBounds = false
         button.addTarget(self, action: #selector(handlePlay), for: .touchUpInside)
+        button.isHidden = true
         return button
     }()
     
@@ -125,6 +126,7 @@ class TrackCell: UITableViewCell {
         detailLabel.text = ""
         rankLabel.text = ""
         artistImageView.image = nil
+        playButton.isHidden = true
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -187,6 +189,9 @@ class TrackCell: UITableViewCell {
         rankLabel.text = "\(rank)"
         nameLabel.text = track.name
         detailLabel.text = track.album?.name ?? "No album"
+        if track.previewUrl != nil {
+            playButton.isHidden = true
+        }
         guard let urlString = track.album?.images.first?.url,
               let imageUrl = URL(string: urlString)
         else { return }
