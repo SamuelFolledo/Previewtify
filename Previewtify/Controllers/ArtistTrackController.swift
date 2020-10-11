@@ -84,11 +84,14 @@ class ArtistTrackController: UIViewController {
     
     func fetchTracks() {
         guard let artistId = artist.id as? String else { return }
-        Spartan.getArtistsTopTracks(artistId: artistId, country: .us) { (tracks) in
-            self.tracks = tracks
-            self.tableView.reloadData()
-        } failure: { (error) in
-            self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
+        NetworkManager.getArtistTopTracks(artistId: artistId) { (result) in
+            switch result {
+            case .failure(let error):
+                self.presentAlert(title: "Error Fetching Tracks", message: error.localizedDescription)
+            case .success(let tracks):
+                self.tracks = tracks
+                self.tableView.reloadData()
+            }
         }
     }
     
