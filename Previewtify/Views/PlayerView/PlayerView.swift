@@ -20,7 +20,7 @@ class PlayerView: UIView {
     var timer: Timer?
     
     //MARK: Player
-    var player: AVAudioPlayer?
+    var player: MusicPlayer?
     
     //MARK: IBOutlet Views
     
@@ -96,6 +96,17 @@ class PlayerView: UIView {
     }
     
     func playTrackFrom(urlString: String) {
+        if let player = player { //if we already have a player
+            player.initPlayer(url: urlString)
+            player.play()
+        } else { //create new player
+            let musicPlayer = MusicPlayer()
+            player = musicPlayer
+            player?.initPlayer(url: urlString)
+            player?.play()
+        }
+//        musicPlayer.playAudioBackground()
+//        MusicPlayer.initPlayer(url: urlString)
 //        guard  let url = URL(string: urlString) else { return }
 //        let downloadTask = URLSession.shared.downloadTask(with: url) { (url, response, error) in
 //            if let error = error {
@@ -121,8 +132,8 @@ class PlayerView: UIView {
     func setupTimerSlider() {
         guard let player = player else { return }
         timerSlider.value = 0.0
-        timerSlider.maximumValue = Float(player.duration)
-        player.play()
+//        timerSlider.maximumValue = Float(player.duration)
+//        player.play()
         timer = Timer.scheduledTimer(timeInterval: 0.0001, target: self, selector: #selector(self.updateTrackTime), userInfo: nil, repeats: true)
     }
     
@@ -135,18 +146,18 @@ class PlayerView: UIView {
     
     @objc func updateTrackTime() {
         guard let player = player else { return }
-        timerSlider.value = Float(player.currentTime)
+//        timerSlider.value = Float(player.currentTime)
         //Update time labels
-        timeLabel.text = "\(player.currentTime.asFormattedString())"
-        let remainingTimeInSeconds = player.duration - player.currentTime
-        timeLeftLabel.text = "\(remainingTimeInSeconds.asFormattedString())"
+//        timeLabel.text = "\(player.currentTime.asFormattedString())"
+//        let remainingTimeInSeconds = player.duration - player.currentTime
+//        timeLeftLabel.text = "\(remainingTimeInSeconds.asFormattedString())"
     }
     
     //MARK: Target Methods
     
     @objc func updateTimerSlider() {
         guard let player = player else { return }
-        player.currentTime = Float64(timerSlider.value)
+//        player.currentTime = Float64(timerSlider.value)
     }
     
     @objc func playButtonTapped() {
