@@ -229,9 +229,8 @@ class TabBarController: SwipeableTabBarController {
 
 //MARK: Spotify Player Protocol
 extension TabBarController: SpotifyPlayerProtocol {
-    func playTrack(track: Track, shouldPlay: Bool) {
-        print("\n\n\(shouldPlay ? "Playing" : "Paused") Track \(track.name!) at \(track.uri!) AND \(track.href!)\n\n")
-        if shouldPlay {
+    func openTrack(track: Track, openUrl: String, shouldOpen: Bool) {
+        if shouldOpen {
             hidePlayerView(false)
             playerView.track = track
         } else {
@@ -239,7 +238,7 @@ extension TabBarController: SpotifyPlayerProtocol {
             playerView.playButton.isSelected = false
         }
         if appRemote?.isConnected == true {
-            if shouldPlay {
+            if shouldOpen {
                 appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
 //                appRemote?.playerAPI?.resume(defaultCallback) //resume same song
             } else {
@@ -255,9 +254,39 @@ extension TabBarController: SpotifyPlayerProtocol {
             }
         }
     }
+    
+    func playTrack(track: Track, shouldPlay: Bool) {
+        print("\n\n\(shouldPlay ? "Playing" : "Paused") Track \(track.name!) at \(track.uri!) AND \(track.href!)\n\n")
+        if shouldPlay {
+            hidePlayerView(false)
+            playerView.track = track
+            playerView.playTrackFrom(urlString: track.uri)
+        } else {
+            hidePlayerView(true)
+            playerView.playButton.isSelected = false
+            playerView.player?.pause()
+        }
+//        if appRemote?.isConnected == true {
+//            if shouldPlay {
+//                appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
+////                appRemote?.playerAPI?.resume(defaultCallback) //resume same song
+//            } else {
+//                appRemote?.playerAPI?.pause(defaultCallback)
+//            }
+//        } else { //if app remote is not connected
+//            if appRemote?.authorizeAndPlayURI(track.uri) == false { //// The Spotify app is not installed, present the user with an App Store page https://spotify.github.io/ios-sdk/html/Classes/SPTAppRemote.html#//api/name/connect
+////                showAppStoreInstall()
+//                print("Spotify App not installed")
+//            } else {
+//                appRemote?.connectionParameters.accessToken = SpotifyAuth.current?.accessToken
+//                appRemote?.connect()
+//            }
+//        }
+    }
 }
 
 extension TabBarController: SpotifyFavoriteTrackProtocol {
+    ///save track or remove it from saved tracks
     func favoriteTrack(track: Track, shouldFavorite: Bool) {
         guard let trackId = track.id as? String else { return }
         if shouldFavorite {
