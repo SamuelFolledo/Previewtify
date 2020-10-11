@@ -43,9 +43,9 @@ class ArtistCell: UITableViewCell {
     }()
     lazy var artistImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.clipsToBounds = false
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 5
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
         return imageView
     }()
     lazy var verticalStackView: UIStackView = { //will contain the nameLabel, detailLabel, and pendingTaskLabel
