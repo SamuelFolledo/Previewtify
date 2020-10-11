@@ -53,19 +53,16 @@ class ArtistTrackController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        fetchTracks()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         appRemote?.connectionParameters.accessToken = SpotifyAuth.current?.accessToken
         appRemote?.connect()
         if appRemote?.isConnected == true {
             print("App remote Connected")
-        } else {
-//            print("We got token \(SpotifyAuth.current?.accessToken)")
         }
+        fetchTracks()
     }
     
     //MARK: Private Methods
