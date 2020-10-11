@@ -11,6 +11,7 @@ import Spartan
 
 protocol SpotifyPlayerProtocol {
     func playTrack(track: Track, shouldPlay: Bool)
+    func openTrack(track: Track, openUrl: String, shouldOpen: Bool)
 }
 
 protocol SpotifyFavoriteTrackProtocol {
@@ -24,6 +25,7 @@ class TrackCell: UITableViewCell {
     var trackId: String!
     var playerDelegate: SpotifyPlayerProtocol?
     var favoriteDelegate: SpotifyFavoriteTrackProtocol?
+    var trackOpenUrl: String?
     
     //MARK: View Properties
     lazy var containerView: UIView = {
@@ -45,9 +47,9 @@ class TrackCell: UITableViewCell {
     }()
     lazy var artistImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.clipsToBounds = false
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 5
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
         return imageView
     }()
     lazy var verticalStackView: UIStackView = { //will contain the nameLabel, detailLabel, and pendingTaskLabel
@@ -189,7 +191,14 @@ class TrackCell: UITableViewCell {
         rankLabel.text = "\(rank)"
         nameLabel.text = track.name
         detailLabel.text = track.album?.name ?? "No album"
-        if track.previewUrl != nil {
+        if track.previewUrl != nil { //if there's a preview url
+            playButton.setImage(Constants.Images.play, for: .normal)
+            playButton.isHidden = false
+        } else if let urlDic = track.externalUrls.first {
+            playButton.setImage(Constants.Images.spotifyIcon, for: .normal)
+            print("GOT URL DIC \(urlDic)")
+            trackOpenUrl = urlDic.value
+        } else {
             playButton.isHidden = true
         }
         guard let urlString = track.album?.images.first?.url,
@@ -212,12 +221,22 @@ class TrackCell: UITableViewCell {
     //MARK: Helpers
     
     @objc func handlePlay() {
-        if playButton.currentImage == Constants.Images.play {
-            playButton.setImage(Constants.Images.pause, for: .normal)
-            playerDelegate?.playTrack(track: track, shouldPlay: true)
+        if let url = trackOpenUrl { //no preview Url, but we have an openUrl
+            if playButton.currentImage == Constants.Images.spotifyIcon {
+                playButton.setImage(Constants.Images.pause, for: .normal)
+                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: true)
+            } else {
+                playButton.setImage(Constants.Images.spotifyIcon, for: .normal)
+                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: false)
+            }
         } else {
-            playButton.setImage(Constants.Images.play, for: .normal)
-            playerDelegate?.playTrack(track: track, shouldPlay: false)
+            if playButton.currentImage == Constants.Images.play {
+                playButton.setImage(Constants.Images.pause, for: .normal)
+                playerDelegate?.playTrack(track: track, shouldPlay: true)
+            } else {
+                playButton.setImage(Constants.Images.play, for: .normal)
+                playerDelegate?.playTrack(track: track, shouldPlay: false)
+            }
         }
     }
     
