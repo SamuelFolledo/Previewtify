@@ -152,5 +152,14 @@ class NetworkManager {
         }
 
     }
+    
+    static func getArtistTopTracks(artistId: String, country: CountryCode = .us, completion: @escaping (Result<[Track], Error>) -> Void) {
+        Spartan.getArtistsTopTracks(artistId: artistId, country: country) { (tracks) in
+            completion(.success(tracks))
+        } failure: { (error) in
+            completion(.failure(error))
+        }
+    }
+    
     //MARK: Helpers
 }
