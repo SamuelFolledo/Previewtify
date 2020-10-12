@@ -194,10 +194,10 @@ class TrackCell: UITableViewCell {
         if track.previewUrl != nil { //if there's a preview url
             playButton.setImage(Constants.Images.play, for: .normal)
             playButton.isHidden = false
-        } else if let urlDic = track.externalUrls.first {
+        } else if let openUrl = track.externalUrls.first?.value { //if there's an openUrl
             playButton.setImage(Constants.Images.spotifyIcon, for: .normal)
-            print("GOT URL DIC \(urlDic)")
-            trackOpenUrl = urlDic.value
+            playButton.isHidden = false
+            trackOpenUrl = openUrl
         } else {
             playButton.isHidden = true
         }
@@ -222,6 +222,7 @@ class TrackCell: UITableViewCell {
     
     @objc func handlePlay() {
         if let url = trackOpenUrl { //no preview Url, but we have an openUrl
+            print("Download URL = \(url)")
             if playButton.currentImage == Constants.Images.spotifyIcon {
                 playButton.setImage(Constants.Images.pause, for: .normal)
                 playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: true)
@@ -230,6 +231,7 @@ class TrackCell: UITableViewCell {
                 playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: false)
             }
         } else {
+            print("Preview URL = \(track.previewUrl!)")
             if playButton.currentImage == Constants.Images.play {
                 playButton.setImage(Constants.Images.pause, for: .normal)
                 playerDelegate?.playTrack(track: track, shouldPlay: true)
