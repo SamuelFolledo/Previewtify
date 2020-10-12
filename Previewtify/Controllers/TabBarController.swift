@@ -204,21 +204,10 @@ class TabBarController: SwipeableTabBarController {
         } else {
             playerView.playButton.isSelected = true
         }
-//        updatePlayPauseButtonState(playerState.isPaused)
-//        updateRepeatModeLabel(playerState.playbackOptions.repeatMode)
-//        updateShuffleLabel(playerState.playbackOptions.isShuffling)
-//        trackNameLabel.text = playerState.track.name + " - " + playerState.track.artist.name
-//        fetchAlbumArtForTrack(playerState.track) { (image) -> Void in
-//            self.updateAlbumArtWithImage(image)
-//        }
-//        updateViewWithRestrictions(playerState.playbackRestrictions)
+        playerView.trackNameLabel.text = playerState.track.name
+        playerView.artistNameLabel.text = playerState.track.artist.name
     }
     
-//    private func updatePlayPauseButtonState(_ paused: Bool) {
-//        let playPauseButtonImage = paused ? PlaybackButtonGraphics.playButtonImage() : PlaybackButtonGraphics.pauseButtonImage()
-//        playPauseButton.setImage(playPauseButtonImage, for: UIControl.State())
-//        playPauseButton.setImage(playPauseButtonImage, for: .highlighted)
-//    }
     
     private func enableInterface(_ enabled: Bool = true) {
         print("⭐️⭐️⭐️⭐️⭐️Enable Interface⭐️⭐️⭐️⭐️⭐️")
@@ -249,25 +238,25 @@ extension TabBarController: SpotifyPlayerProtocol {
     func openTrack(track: Track, openUrl: String, shouldOpen: Bool) {
         playerView.configurePlayerView(hasPreviewUrl: false) //dont show slider
         if appRemote?.isConnected == false { //if app remote is not connected
-            if appRemote?.authorizeAndPlayURI(openUrl) == false { //// The Spotify app is not installed, present the user with an App Store page https://spotify.github.io/ios-sdk/html/Classes/SPTAppRemote.html#//api/name/connect
+            if appRemote?.authorizeAndPlayURI(track.uri) == false { //// The Spotify app is not installed, present the user with an App Store page https://spotify.github.io/ios-sdk/html/Classes/SPTAppRemote.html#//api/name/connect
                 showAppStoreInstall()
+                return
             }
         }// else { //if app remote is connected
-            if shouldOpen { //play
-                hidePlayerView(false)
-                playerView.track = track
-                if playerState?.isPaused == true && playerState?.track.uri == track.uri {
-                    appRemote?.playerAPI?.resume(defaultCallback) //resume same song
-                } else {
-                    appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
-                }
-            } else { //pause
-//                hidePlayerView(true)
-                playerView.playButton.isSelected = false
-                if playerState?.isPaused == true { return }
-                appRemote?.playerAPI?.pause(defaultCallback)
+        if shouldOpen { //play
+            hidePlayerView(false)
+            playerView.track = track
+            if playerState?.isPaused == true && playerState?.track.uri == track.uri {
+                appRemote?.playerAPI?.resume(defaultCallback) //resume same song
+            } else {
+                appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
             }
-        //}
+        } else { //pause
+            //                hidePlayerView(true)
+            playerView.playButton.isSelected = false
+            if playerState?.isPaused == true { return }
+            appRemote?.playerAPI?.pause(defaultCallback)
+        }
     }
     
     ///play track's previewUrl
@@ -290,7 +279,7 @@ extension TabBarController: SpotifyPlayerProtocol {
                 playerView.favoriteButton.isSelected = false
             }
         } else {
-            hidePlayerView(true)
+//            hidePlayerView(true)
             playerView.playButton.isSelected = false
             playerView.player?.pause()
         }
@@ -346,20 +335,20 @@ extension TabBarController {
 //        appRemote.playerAPI?.play(trackIdentifier, callback: defaultCallback)
     }
     
-    func update(playerState: SPTAppRemotePlayerState) {
-        if lastPlayerState?.track.uri != playerState.track.uri {
-//            fetchArtwork(for: playerState.track)
-        }
-        lastPlayerState = playerState
-//        trackLabel.text = playerState.track.name
-        if playerState.isPaused {
-            print("Player should paused")
-//            pauseAndPlayButton.setImage(UIImage(named: "playButton"), for: .normal)
-        } else {
-            print("Player should play")
-//            pauseAndPlayButton.setImage(UIImage(named: "pauseButton"), for: .normal)
-        }
-    }
+//    func update(playerState: SPTAppRemotePlayerState) {
+//        if lastPlayerState?.track.uri != playerState.track.uri {
+////            fetchArtwork(for: playerState.track)
+//        }
+//        lastPlayerState = playerState
+////        trackLabel.text = playerState.track.name
+//        if playerState.isPaused {
+//            print("Player should paused")
+////            pauseAndPlayButton.setImage(UIImage(named: "playButton"), for: .normal)
+//        } else {
+//            print("Player should play")
+////            pauseAndPlayButton.setImage(UIImage(named: "pauseButton"), for: .normal)
+//        }
+//    }
 
     func updateViewBasedOnConnected() {
         if appRemote?.isConnected == true {
@@ -370,41 +359,15 @@ extension TabBarController {
         }
     }
     
-    func fetchPlayerState() {
-        appRemote?.playerAPI?.getPlayerState({ [weak self] (playerState, error) in
-            if let error = error {
-                print("Error getting player state:" + error.localizedDescription)
-            } else if let playerState = playerState as? SPTAppRemotePlayerState {
-                self?.update(playerState: playerState)
-            }
-        })
-    }
-}
-
-// MARK: - SPTAppRemoteDelegate
-extension TabBarController: SPTAppRemoteDelegate {
-    func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
-//        self.appRemote.playerAPI?.pause(nil)
-//        self.appRemote.disconnect()
-        updateViewBasedOnConnected()
-        appRemote.playerAPI?.delegate = self
-        appRemote.playerAPI?.subscribe(toPlayerState: { (success, error) in
-            if let error = error {
-                print("Error subscribing to player state:" + error.localizedDescription)
-            }
-        })
-        fetchPlayerState()
-    }
-
-    func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
-        updateViewBasedOnConnected()
-        lastPlayerState = nil
-    }
-
-    func appRemote(_ appRemote: SPTAppRemote, didFailConnectionAttemptWithError error: Error?) {
-        updateViewBasedOnConnected()
-        lastPlayerState = nil
-    }
+//    func fetchPlayerState() {
+//        appRemote?.playerAPI?.getPlayerState({ [weak self] (playerState, error) in
+//            if let error = error {
+//                print("Error getting player state:" + error.localizedDescription)
+//            } else if let playerState = playerState as? SPTAppRemotePlayerState {
+//                self?.update(playerState: playerState)
+//            }
+//        })
+//    }
 }
 
 //MARK: StoreKit
