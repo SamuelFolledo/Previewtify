@@ -12,8 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     lazy var loginController = LoginController()
-    lazy var artistTrackController = ArtistTrackController()
-    lazy var favoriteSongController = FavoriteSongController()
+    lazy var tabBarController = TabBarController()
     
     //MARK: Spotify Properties
     
@@ -44,6 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             NetworkManager.authorizationCode = code
             loginController.fetchSpotifyAccessToken()
         } else if let accessToken = parameters?[SPTAppRemoteAccessTokenKey] {
+            appRemote.connectionParameters.accessToken = accessToken
             if var spotifyAuth = SpotifyAuth.current {
                 spotifyAuth.accessToken = accessToken
                 SpotifyAuth.setCurrent(spotifyAuth, writeToUserDefaults: true)
@@ -72,12 +72,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 extension SceneDelegate {
     func configureRootViewController() {
         if let _ = User.current { //if we have a user, then go to home
-            window!.rootViewController = TabBarController()
+            window!.rootViewController = tabBarController
             return
         } else {
-        //go to log in
-        let nav = UINavigationController(rootViewController: loginController)
-        window!.rootViewController = nav
+            //go to log in
+            let nav = UINavigationController(rootViewController: loginController)
+            window!.rootViewController = nav
         }
     }
 }
@@ -109,6 +109,7 @@ extension SceneDelegate: SPTAppRemoteDelegate {
 
 extension SceneDelegate: SPTAppRemotePlayerStateDelegate {
     func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
-        print("Player changed! \(playerState.track.name)")
+        tabBarController.playerStateDidChange(playerState)
+        tabBarController.appRemoteConnected()
     }
 }
