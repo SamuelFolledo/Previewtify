@@ -111,6 +111,7 @@ extension FavoriteSongController: UITableViewDataSource {
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 cell.populateViews(track: track.track, rank: indexPath.row + 1)
+                cell.detailLabel.text = track.track.artists.first?.name ?? "No artist"
                 cell.layoutSubviews()
             }
         }
