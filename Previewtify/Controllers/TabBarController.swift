@@ -319,8 +319,7 @@ extension TabBarController {
 extension TabBarController: SPTAppRemotePlayerStateDelegate {
     func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
         self.playerState = playerState
-        print("⭐️⭐️⭐️⭐️⭐️playerStateDidChange \(playerState)")
-//           updateViewWithPlayerState(playerState)
+        updateViewWithPlayerState(playerState)
     }
 }
 
@@ -329,5 +328,112 @@ extension TabBarController: SPTAppRemoteUserAPIDelegate {
     func userAPI(_ userAPI: SPTAppRemoteUserAPI, didReceive capabilities: SPTAppRemoteUserCapabilities) {
         print("⭐️⭐️⭐️⭐️⭐️USER APIII \(capabilities)")
 //        updateViewWithCapabilities(capabilities)
+    }
+}
+
+//MARK: Spotify Methods
+extension TabBarController {
+    private func startPlayback() {
+        appRemote?.playerAPI?.resume(defaultCallback)
+    }
+
+    private func pausePlayback() {
+        appRemote?.playerAPI?.pause(defaultCallback)
+    }
+    
+    private func playTrack() {
+        print("Playing track!!!")
+//        appRemote.playerAPI?.play(trackIdentifier, callback: defaultCallback)
+    }
+    
+    func update(playerState: SPTAppRemotePlayerState) {
+        if lastPlayerState?.track.uri != playerState.track.uri {
+//            fetchArtwork(for: playerState.track)
+        }
+        lastPlayerState = playerState
+//        trackLabel.text = playerState.track.name
+        if playerState.isPaused {
+            print("Player should paused")
+//            pauseAndPlayButton.setImage(UIImage(named: "playButton"), for: .normal)
+        } else {
+            print("Player should play")
+//            pauseAndPlayButton.setImage(UIImage(named: "pauseButton"), for: .normal)
+        }
+    }
+
+    func updateViewBasedOnConnected() {
+        if appRemote?.isConnected == true {
+            print("App remote is connected, Update views")
+        } else { //show login
+            let nav = UINavigationController(rootViewController: LoginController())
+            self.view.window!.rootViewController = nav
+        }
+    }
+    
+    func fetchPlayerState() {
+        appRemote?.playerAPI?.getPlayerState({ [weak self] (playerState, error) in
+            if let error = error {
+                print("Error getting player state:" + error.localizedDescription)
+            } else if let playerState = playerState as? SPTAppRemotePlayerState {
+                self?.update(playerState: playerState)
+            }
+        })
+    }
+}
+
+// MARK: - SPTAppRemoteDelegate
+extension TabBarController: SPTAppRemoteDelegate {
+    func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
+//        self.appRemote.playerAPI?.pause(nil)
+//        self.appRemote.disconnect()
+        updateViewBasedOnConnected()
+        appRemote.playerAPI?.delegate = self
+        appRemote.playerAPI?.subscribe(toPlayerState: { (success, error) in
+            if let error = error {
+                print("Error subscribing to player state:" + error.localizedDescription)
+            }
+        })
+        fetchPlayerState()
+    }
+
+    func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
+        updateViewBasedOnConnected()
+        lastPlayerState = nil
+    }
+
+    func appRemote(_ appRemote: SPTAppRemote, didFailConnectionAttemptWithError error: Error?) {
+        updateViewBasedOnConnected()
+        lastPlayerState = nil
+    }
+}
+
+//MARK: StoreKit
+extension TabBarController: SKStoreProductViewControllerDelegate {
+    ///shows Spotify in the App Store if Spotify has not been downloaded
+    private func showAppStoreInstall() {
+        if TARGET_OS_SIMULATOR != 0 {
+            presentAlert(title: "Simulator In Use", message: "The App Store is not available in the iOS simulator, please test this feature on a physical device.")
+        } else {
+            let loadingView = UIActivityIndicatorView(frame: view.bounds)
+            view.addSubview(loadingView)
+            loadingView.startAnimating()
+            loadingView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+            let storeProductViewController = SKStoreProductViewController()
+            storeProductViewController.delegate = self
+            storeProductViewController.loadProduct(withParameters: [SKStoreProductParameterITunesItemIdentifier: SPTAppRemote.spotifyItunesItemIdentifier()], completionBlock: { (success, error) in
+                loadingView.removeFromSuperview()
+                if let error = error {
+                    self.presentAlert(
+                        title: "Error accessing App Store",
+                        message: error.localizedDescription)
+                } else {
+                    self.present(storeProductViewController, animated: true, completion: nil)
+                }
+            })
+        }
+    }
+
+    public func productViewControllerDidFinish(_ viewController: SKStoreProductViewController) {
+        viewController.dismiss(animated: true, completion: nil)
     }
 }
