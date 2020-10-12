@@ -92,18 +92,16 @@ extension SceneDelegate {
 extension SceneDelegate: SPTAppRemoteDelegate {
     func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
         // Connection was successful, you can begin issuing commands
-        self.appRemote.playerAPI?.delegate = self
-        self.appRemote.playerAPI?.subscribe(toPlayerState: { (result, error) in
-            if let error = error {
-                debugPrint(error.localizedDescription)
-            }
-        })
+        self.appRemote = appRemote
+        tabBarController.appRemoteConnected()
     }
     func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
         print("disconnected")
+        tabBarController.appRemoteDisconnect()
     }
     func appRemote(_ appRemote: SPTAppRemote, didFailConnectionAttemptWithError error: Error?) {
         print("failed")
+        tabBarController.appRemoteDisconnect()
     }
 }
 
