@@ -13,11 +13,12 @@ import AVFoundation
 class PlayerView: UIView {
     
     //MARK: Properties
-    
     var track: Track? {
         didSet { populateViews() }
     }
     var timer: Timer?
+    var favoriteDelegate: SpotifyFavoriteTrackProtocol?
+    var playDelegate: SpotifyPlayerProtocol?
     
     //MARK: Player
     var player: MusicPlayer?
@@ -48,6 +49,10 @@ class PlayerView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        timer?.invalidate()
     }
     
     //MARK: Methods
@@ -95,69 +100,58 @@ class PlayerView: UIView {
         
     }
     
-    func playTrackFrom(urlString: String) {
-        if let player = player { //if we already have a player
-            player.initPlayer(url: urlString)
-            player.play()
-        } else { //create new player
-            let musicPlayer = MusicPlayer()
-            player = musicPlayer
-            player?.initPlayer(url: urlString)
-            player?.play()
-        }
-//        musicPlayer.playAudioBackground()
-//        MusicPlayer.initPlayer(url: urlString)
-//        guard  let url = URL(string: urlString) else { return }
-//        let downloadTask = URLSession.shared.downloadTask(with: url) { (url, response, error) in
-//            if let error = error {
-//                print("Error downloading tasks \(error.localizedDescription)")
-//                return
-//            }
-//            do {
-//                self.player = try AVAudioPlayer(contentsOf: url!)
-//                self.player?.prepareToPlay()
-//                self.player?.volume = 1
-////                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-////                try AVAudioSession.sharedInstance().setActive(true)
-////                player = try AVPlayer(url: url as URL)
-////                guard let player = player else { return }
-//                self.player?.play()
-//            } catch let error {
-//                print(error.localizedDescription)
-//            }
-//        }
-//        downloadTask.resume()
-    }
-    
-    func setupTimerSlider() {
-        guard let player = player else { return }
-        timerSlider.value = 0.0
-//        timerSlider.maximumValue = Float(player.duration)
-//        player.play()
-        timer = Timer.scheduledTimer(timeInterval: 0.0001, target: self, selector: #selector(self.updateTrackTime), userInfo: nil, repeats: true)
-    }
-    
     func populateViews() {
         trackNameLabel.text = "\(track?.name ?? "No Track Name")"
         artistNameLabel.text = "\(track?.artists.first?.name ?? "No Artist")"
     }
     
+    func playTrackFrom(urlString: String) {
+        if let player = player { //if we already have a player
+            player.initPlayer(url: urlString)
+        } else { //create new player
+            let musicPlayer = MusicPlayer()
+            player = musicPlayer
+            player?.initPlayer(url: urlString)
+        }
+        setupTimerViews()
+    }
+    
+    func setupTimerViews() {
+        DispatchQueue.main.async {
+            guard let player = self.player else { return }
+            player.play()
+            self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.updateTrackTime), userInfo: nil, repeats: true)
+        }
+    }
+    
     //MARK: Timer
     
     @objc func updateTrackTime() {
-        guard let player = player else { return }
-//        timerSlider.value = Float(player.currentTime)
-        //Update time labels
-//        timeLabel.text = "\(player.currentTime.asFormattedString())"
-//        let remainingTimeInSeconds = player.duration - player.currentTime
-//        timeLeftLabel.text = "\(remainingTimeInSeconds.asFormattedString())"
+        guard let player = player,
+              let item = player.player.currentItem,
+              item.status == .readyToPlay //make sure item is ready to play
+        else { return }
+        let times = player.currentTime()
+        //update slider
+        timerSlider.maximumValue = Float(times.duration)
+        timerSlider.value = Float(times.current)
+//        Update time labels
+        timeLabel.text = "\(times.current.asFormattedString())"
+        let remainingTimeInSeconds = times.duration - times.current
+        timeLeftLabel.text = "\(remainingTimeInSeconds.asFormattedString())"
     }
     
     //MARK: Target Methods
     
+    ///updates song timer when slider is changed
     @objc func updateTimerSlider() {
         guard let player = player else { return }
-//        player.currentTime = Float64(timerSlider.value)
+        let seconds: Int64 = Int64(timerSlider.value)
+        let targetTime:CMTime = CMTimeMake(value: seconds, timescale: 1)
+        player.player.seek(to: targetTime)
+        if player.player.rate == 0 {
+            player.play()
+        }
     }
     
     @objc func playButtonTapped() {
@@ -172,14 +166,43 @@ class PlayerView: UIView {
     }
     
     @objc func favoriteButtonTapped() {
-        favoriteButton.isSelected = !favoriteButton.isSelected
+        guard let track = track else { return }
+        if favoriteButton.isSelected == true {
+            //unfavorite
+            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: true)
+            favoriteButton.isSelected = true
+        } else {
+            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: false)
+            favoriteButton.isSelected = false
+        }
     }
     
+    ///forward song by 15 seconds max
     @objc func skipForwardButtonTapped() {
-        print("Go Forward 15 seconds")
+        guard let player = player else { return }
+        let seekDuration: Float64 = 15
+        if let duration = player.player.currentItem?.duration {
+            let playerCurrentTime = CMTimeGetSeconds(player.player.currentTime())
+            let newTime = playerCurrentTime + seekDuration
+            if newTime < CMTimeGetSeconds(duration) {
+                let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+                player.player.seek(to: selectedTime)
+            }
+            player.pause()
+            player.play()
+        }
     }
     
+    ///make player go backward
     @objc func skipBackwardButtonTapped() {
-        print("Go back 15 seconds")
+        guard let player = player else { return }
+        let seekDuration: Float64 = 15
+        let playerCurrenTime = CMTimeGetSeconds(player.player.currentTime())
+        var newTime = playerCurrenTime - seekDuration
+        if newTime < 0 { newTime = 0 }
+        player.pause()
+        let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+        player.player.seek(to: selectedTime)
+        player.play()
     }
 }
