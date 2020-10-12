@@ -58,6 +58,15 @@ class TabBarController: SwipeableTabBarController {
         setUpTabBar()
         addViewControllers()
         constraintPlayerView()
+        //refresh access token and fetch favorite songs
+        NetworkManager.refreshAcessToken { (result) in
+            switch result {
+            case .failure(let error):
+                self.presentAlert(title: "Error Refreshing Token", message: error.localizedDescription)
+            case .success(_):
+                self.fetchFavoriteSongs(offset: 0) { }
+            }
+        }
     }
     
     //MARK: Methods
@@ -225,6 +234,17 @@ class TabBarController: SwipeableTabBarController {
 //            updatePlayPauseButtonState(true);
 //        }
     }
+    
+    func fetchFavoriteSongs(offset: Int, completion: @escaping () -> Void) {
+        NetworkManager.fetchSavedTracks(offset: offset) { (result) in
+            switch result {
+            case .success(let savedTracks):
+                self.savedTracks = savedTracks
+            case .failure(let error):
+                self.presentAlert(title: "Error Fetching Saved Tracks", message: error.localizedDescription)
+            }
+        }
+    }
 }
 
 //MARK: Spotify Player Protocol
@@ -256,32 +276,22 @@ extension TabBarController: SpotifyPlayerProtocol {
     }
     
     func playTrack(track: Track, shouldPlay: Bool) {
-        print("\n\n\(shouldPlay ? "Playing" : "Paused") Track \(track.name!) at \(track.uri!) AND \(track.href!)\n\n")
+//        print("\n\n\(shouldPlay ? "Playing" : "Paused") Track \(track.name!) at \(track.uri!) AND \(track.href!)\n\n")
         if shouldPlay {
             hidePlayerView(false)
+            playerView.playDelegate = self
+            playerView.favoriteDelegate = self
             playerView.track = track
-            playerView.playTrackFrom(urlString: track.uri)
+            playerView.playButton.isSelected = true
+            playerView.playTrackFrom(urlString: track.previewUrl)
+            if savedTracks.contains(where: { $0.track.id as! String == track.id as! String }) { //if track is favorited...
+                playerView.favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
+            }
         } else {
             hidePlayerView(true)
             playerView.playButton.isSelected = false
             playerView.player?.pause()
         }
-//        if appRemote?.isConnected == true {
-//            if shouldPlay {
-//                appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
-////                appRemote?.playerAPI?.resume(defaultCallback) //resume same song
-//            } else {
-//                appRemote?.playerAPI?.pause(defaultCallback)
-//            }
-//        } else { //if app remote is not connected
-//            if appRemote?.authorizeAndPlayURI(track.uri) == false { //// The Spotify app is not installed, present the user with an App Store page https://spotify.github.io/ios-sdk/html/Classes/SPTAppRemote.html#//api/name/connect
-////                showAppStoreInstall()
-//                print("Spotify App not installed")
-//            } else {
-//                appRemote?.connectionParameters.accessToken = SpotifyAuth.current?.accessToken
-//                appRemote?.connect()
-//            }
-//        }
     }
 }
 
