@@ -10,6 +10,7 @@ import SnapKit
 import SwipeableTabBarController
 import AVFoundation
 import Spartan
+import StoreKit
 
 class TabBarController: SwipeableTabBarController {
     
@@ -19,12 +20,12 @@ class TabBarController: SwipeableTabBarController {
     private var connectionIndicatorView = ConnectionStatusIndicatorView()
     private var subscribedToPlayerState: Bool = false
     private var subscribedToCapabilities: Bool = false
-    
+    private var lastPlayerState: SPTAppRemotePlayerState?
     var defaultCallback: SPTAppRemoteCallback {
         get {
             return {[weak self] _, error in
                 if let error = error {
-                    self?.displayError(error as NSError)
+                    self?.presentAlert(title: "Error", message: error.localizedDescription)
                 }
             }
         }
@@ -33,7 +34,7 @@ class TabBarController: SwipeableTabBarController {
         get {
             return {[weak self] error in
                 if let error = error {
-                    self?.presentAlert(title: "Error", message: error.localizedDescription)
+                    self?.presentAlert(title: "Spartan Error", message: error.localizedDescription)
                 }
             }
         }
@@ -44,8 +45,10 @@ class TabBarController: SwipeableTabBarController {
     
     //MARK: View Properties
     
-    var playerView: PlayerView = {
+    lazy var playerView: PlayerView = {
         let playerView = PlayerView(track: nil)
+        playerView.playDelegate = self
+        playerView.favoriteDelegate = self
         return playerView
     }()
     
@@ -146,17 +149,6 @@ class TabBarController: SwipeableTabBarController {
     }
 
     // MARK: - Error & Alert
-    func showError(_ errorDescription: String) {
-        let alert = UIAlertController(title: "Error!", message: errorDescription, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-
-    private func displayError(_ error: NSError?) {
-        if let error = error {
-            presentAlert(title: "Error", message: error.description)
-        }
-    }
     
     private func subscribeToPlayerState() {
         guard (!subscribedToPlayerState) else { return }
@@ -207,6 +199,11 @@ class TabBarController: SwipeableTabBarController {
     
     private func updateViewWithPlayerState(_ playerState: SPTAppRemotePlayerState) {
         print("⭐️⭐️⭐️⭐️⭐️implement updateViewWithPlayerState⭐️⭐️⭐️⭐️⭐️")
+        if playerState.isPaused {
+            playerView.playButton.isSelected = false
+        } else {
+            playerView.playButton.isSelected = true
+        }
 //        updatePlayPauseButtonState(playerState.isPaused)
 //        updateRepeatModeLabel(playerState.playbackOptions.repeatMode)
 //        updateShuffleLabel(playerState.playbackOptions.isShuffling)
@@ -215,7 +212,6 @@ class TabBarController: SwipeableTabBarController {
 //            self.updateAlbumArtWithImage(image)
 //        }
 //        updateViewWithRestrictions(playerState.playbackRestrictions)
-//        updateInterfaceForPodcast(playerState: playerState)
     }
     
 //    private func updatePlayPauseButtonState(_ paused: Bool) {
@@ -249,45 +245,49 @@ class TabBarController: SwipeableTabBarController {
 
 //MARK: Spotify Player Protocol
 extension TabBarController: SpotifyPlayerProtocol {
+    ///playButton tapped with no previewUrl
     func openTrack(track: Track, openUrl: String, shouldOpen: Bool) {
-        if shouldOpen {
-            hidePlayerView(false)
-            playerView.track = track
-        } else {
-            hidePlayerView(true)
-            playerView.playButton.isSelected = false
-        }
-        if appRemote?.isConnected == true {
-            if shouldOpen {
-                appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
-//                appRemote?.playerAPI?.resume(defaultCallback) //resume same song
-            } else {
+        playerView.configurePlayerView(hasPreviewUrl: false) //dont show slider
+        if appRemote?.isConnected == false { //if app remote is not connected
+            if appRemote?.authorizeAndPlayURI(openUrl) == false { //// The Spotify app is not installed, present the user with an App Store page https://spotify.github.io/ios-sdk/html/Classes/SPTAppRemote.html#//api/name/connect
+                showAppStoreInstall()
+            }
+        }// else { //if app remote is connected
+            if shouldOpen { //play
+                hidePlayerView(false)
+                playerView.track = track
+                if playerState?.isPaused == true && playerState?.track.uri == track.uri {
+                    appRemote?.playerAPI?.resume(defaultCallback) //resume same song
+                } else {
+                    appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
+                }
+            } else { //pause
+//                hidePlayerView(true)
+                playerView.playButton.isSelected = false
+                if playerState?.isPaused == true { return }
                 appRemote?.playerAPI?.pause(defaultCallback)
             }
-        } else { //if app remote is not connected
-            if appRemote?.authorizeAndPlayURI(track.uri) == false { //// The Spotify app is not installed, present the user with an App Store page https://spotify.github.io/ios-sdk/html/Classes/SPTAppRemote.html#//api/name/connect
-//                showAppStoreInstall()
-                print("Spotify App not installed")
-            } else {
-                appRemote?.connectionParameters.accessToken = SpotifyAuth.current?.accessToken
-                appRemote?.connect()
-            }
-        }
+        //}
     }
     
+    ///play track's previewUrl
     func playTrack(track: Track, shouldPlay: Bool) {
-//        print("\n\n\(shouldPlay ? "Playing" : "Paused") Track \(track.name!) at \(track.uri!) AND \(track.href!)\n\n")
+        playerView.configurePlayerView(hasPreviewUrl: true)
+        if playerState?.isPaused == false {
+            appRemote?.playerAPI?.pause(defaultCallback)
+        }
+        guard let previewUrl = track.previewUrl else { return }
         if shouldPlay {
             hidePlayerView(false)
             playerView.playDelegate = self
             playerView.favoriteDelegate = self
             playerView.track = track
             playerView.playButton.isSelected = true
-            playerView.playTrackFrom(urlString: track.previewUrl)
+            playerView.playTrackFrom(urlString: previewUrl)
             if savedTracks.contains(where: { $0.track.id as! String == track.id as! String }) { //if track is favorited...
-                playerView.favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
+                playerView.favoriteButton.isSelected = true
             } else {
-                playerView.favoriteButton.setImage(Constants.Images.heart, for: .normal)
+                playerView.favoriteButton.isSelected = false
             }
         } else {
             hidePlayerView(true)
