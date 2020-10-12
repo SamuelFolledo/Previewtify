@@ -74,13 +74,10 @@ class FavoriteSongController: UIViewController {
     }
     
     func fetchFavoriteSongs() {
-        Spartan.getSavedTracks(limit: 50, offset: self.offset, market: nil, success: { (pagingObject) in
-            if let tracks = pagingObject.items {
-                self.offset = self.customTabBarController.savedTracks.count - 1
-                self.customTabBarController.savedTracks = tracks
-                self.tableView.reloadData()
-            }
-        }, failure: self.spartanCallbackError)
+        customTabBarController.fetchFavoriteSongs(offset: offset) {
+            self.offset = self.customTabBarController.savedTracks.count - 1
+            self.tableView.reloadData()
+        }
     }
     
     //MARK: Helpers
