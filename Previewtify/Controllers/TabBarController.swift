@@ -286,6 +286,8 @@ extension TabBarController: SpotifyPlayerProtocol {
             playerView.playTrackFrom(urlString: track.previewUrl)
             if savedTracks.contains(where: { $0.track.id as! String == track.id as! String }) { //if track is favorited...
                 playerView.favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
+            } else {
+                playerView.favoriteButton.setImage(Constants.Images.heart, for: .normal)
             }
         } else {
             hidePlayerView(true)
