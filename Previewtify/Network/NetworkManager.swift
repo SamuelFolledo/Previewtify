@@ -161,5 +161,13 @@ class NetworkManager {
         }
     }
     
+    static func fetchSavedTracks(offset: Int, completion: @escaping (Result<[SavedTrack], Error>) -> Void) {
+        Spartan.getSavedTracks(limit: 50, offset: offset, market: .us) { (pagingObject) in
+            completion(.success(pagingObject.items))
+        } failure: { (error) in
+            completion(.failure(error))
+        }
+    }
+    
     //MARK: Helpers
 }
