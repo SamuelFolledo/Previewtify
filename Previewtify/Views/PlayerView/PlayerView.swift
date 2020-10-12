@@ -74,7 +74,7 @@ class PlayerView: UIView {
             $0?.textColor = .systemBackground
         }
         //Buttons
-        let heartImage = Constants.Images.heart.withRenderingMode(.alwaysTemplate)
+        let heartImage = Constants.Images.heart.withRenderingMode(.alwaysTemplate).withTintColor(.systemBackground)
         favoriteButton.setImage(heartImage, for: .normal)
         let heartFilledImage = Constants.Images.heartFilled.withRenderingMode(.alwaysOriginal)
         favoriteButton.setImage(heartFilledImage, for: .selected)
@@ -87,6 +87,7 @@ class PlayerView: UIView {
         playButton.setImage(pauseImage, for: .selected)
         playButton.tintColor = .systemBackground
         playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        playButton.imageView?.contentMode = .scaleAspectFit
         
         let backwardImage = Constants.Images.skipBack15.withRenderingMode(.alwaysTemplate)
         backButton.setImage(backwardImage, for: .normal)
@@ -124,6 +125,18 @@ class PlayerView: UIView {
         }
     }
     
+    func configurePlayerView(hasPreviewUrl: Bool) {
+        if hasPreviewUrl {
+            timerSlider.isHidden = false
+            timeLabel.isHidden = false
+            timeLeftLabel.isHidden = false
+        } else {
+            timerSlider.isHidden = true
+            timeLabel.isHidden = true
+            timeLeftLabel.isHidden = true
+        }
+    }
+    
     //MARK: Timer
     
     @objc func updateTrackTime() {
@@ -155,13 +168,22 @@ class PlayerView: UIView {
     }
     
     @objc func playButtonTapped() {
-        guard let player = player else { return }
         if playButton.isSelected { //if playing
             playButton.isSelected = false
-            player.pause()
+            if let _ = track?.previewUrl { //we have previewUrl
+                playDelegate?.playTrack(track: track!, shouldPlay: false)
+                return
+            } else if let openUrl = track?.externalUrls.first?.value { //we dont have previewUrl
+                playDelegate?.openTrack(track: track!, openUrl: openUrl, shouldOpen: false)
+            }
         } else { //if paused
             playButton.isSelected = true
-            player.play()
+            if let _ = track?.previewUrl { //we have previewUrl
+                playDelegate?.playTrack(track: track!, shouldPlay: true)
+                return
+            } else if let openUrl = track?.externalUrls.first?.value { //we dont have previewUrl
+                playDelegate?.openTrack(track: track!, openUrl: openUrl, shouldOpen: true)
+            }
         }
     }
     
