@@ -116,12 +116,12 @@ class TabBarController: SwipeableTabBarController {
     }
     
     ///hide or show player view
-    fileprivate func hidePlayerView(_ shouldHide: Bool) {
+    fileprivate func showPlayerView(_ shouldShow: Bool) {
         var bottomConstraint: CGFloat
-        if shouldHide { //hide player
-            bottomConstraint = 300
-        } else { //show player
+        if shouldShow { //show player
             bottomConstraint = 0
+        } else { //hide player
+            bottomConstraint = 300
         }
         playerView.snp.updateConstraints {
             $0.bottom.equalTo(tabBar.snp.top).offset(bottomConstraint)
@@ -138,14 +138,14 @@ class TabBarController: SwipeableTabBarController {
         subscribeToPlayerState()
         subscribeToCapabilityChanges()
         getPlayerState()
-        enableInterface(true)
+        showPlayerView(true)
     }
 
     func appRemoteDisconnect() {
         connectionIndicatorView.state = .disconnected
         self.subscribedToPlayerState = false
         self.subscribedToCapabilities = false
-        enableInterface(false)
+        showPlayerView(false)
     }
 
     // MARK: - Error & Alert
@@ -208,18 +208,6 @@ class TabBarController: SwipeableTabBarController {
         playerView.artistNameLabel.text = playerState.track.artist.name
     }
     
-    
-    private func enableInterface(_ enabled: Bool = true) {
-        print("⭐️⭐️⭐️⭐️⭐️Enable Interface⭐️⭐️⭐️⭐️⭐️")
-//        buttons.forEach { (button) -> () in
-//            button.isEnabled = enabled
-//        }
-//        if (!enabled) {
-//            albumArtImageView.image = nil
-//            updatePlayPauseButtonState(true);
-//        }
-    }
-    
     func fetchFavoriteSongs(offset: Int, completion: @escaping () -> Void) {
         NetworkManager.fetchSavedTracks(offset: offset) { (result) in
             switch result {
@@ -234,7 +222,7 @@ class TabBarController: SwipeableTabBarController {
 
 //MARK: Spotify Player Protocol
 extension TabBarController: SpotifyPlayerProtocol {
-    ///playButton tapped with no previewUrl
+    ///Protocol Method to for track with no previewUrl
     func openTrack(track: Track, openUrl: String, shouldOpen: Bool) {
         playerView.configurePlayerView(hasPreviewUrl: false) //dont show slider
         if appRemote?.isConnected == false { //if app remote is not connected
@@ -242,44 +230,53 @@ extension TabBarController: SpotifyPlayerProtocol {
                 showAppStoreInstall()
                 return
             }
-        }// else { //if app remote is connected
+        }
         if shouldOpen { //play
-            hidePlayerView(false)
-            playerView.track = track
-            if playerState?.isPaused == true && playerState?.track.uri == track.uri {
+            playerView.player?.pause()
+            if let previewTrackId = playerView.track?.id as? String, previewTrackId == track.id as! String { //playing the same track... resume
                 appRemote?.playerAPI?.resume(defaultCallback) //resume same song
-            } else {
+            } else { //new track
                 appRemote?.playerAPI?.play(track.uri, callback: defaultCallback)
             }
+            showPlayerView(true)
+            playerView.track = track
+            playerView.playButton.isSelected = true
         } else { //pause
-            //                hidePlayerView(true)
             playerView.playButton.isSelected = false
             if playerState?.isPaused == true { return }
             appRemote?.playerAPI?.pause(defaultCallback)
         }
     }
     
-    ///play track's previewUrl
+    ///Protocol Method to play track's previewUrl
     func playTrack(track: Track, shouldPlay: Bool) {
         playerView.configurePlayerView(hasPreviewUrl: true)
-        if playerState?.isPaused == false {
-            appRemote?.playerAPI?.pause(defaultCallback)
+        //set favorite button's image if it's favorited or not
+        NetworkManager.checkIfFavorite(trackId: track.id as! String) { (isFavorite) in
+            DispatchQueue.main.async {
+                if isFavorite {
+                    self.playerView.favoriteButton.isSelected = true
+                } else {
+                    self.playerView.favoriteButton.isSelected = false
+                }
+            }
         }
-        guard let previewUrl = track.previewUrl else { return }
+        
         if shouldPlay {
-            hidePlayerView(false)
-            playerView.playDelegate = self
-            playerView.favoriteDelegate = self
+            if playerState?.isPaused == false { //if appRemote is playing... pause
+                appRemote?.playerAPI?.pause(defaultCallback)
+            }
+            if let previewTrackId = playerView.track?.id as? String, previewTrackId == track.id as! String { //playing the same track... resume
+                playerView.player?.play()
+            } else { //new track
+                playerView.playTrackFrom(urlString: track.previewUrl)
+            }
+            showPlayerView(true)
             playerView.track = track
             playerView.playButton.isSelected = true
-            playerView.playTrackFrom(urlString: previewUrl)
-            if savedTracks.contains(where: { $0.track.id as! String == track.id as! String }) { //if track is favorited...
-                playerView.favoriteButton.isSelected = true
-            } else {
-                playerView.favoriteButton.isSelected = false
-            }
+            
         } else {
-//            hidePlayerView(true)
+//            showPlayerView(false)
             playerView.playButton.isSelected = false
             playerView.player?.pause()
         }
@@ -299,9 +296,9 @@ extension TabBarController: SpotifyFavoriteTrackProtocol {
 }
 
 extension TabBarController {
-    func playTrack(urlString: String) {
-        playerView.playTrackFrom(urlString: urlString)
-    }
+//    func playTrack(urlString: String) {
+//        playerView.playTrackFrom(urlString: urlString)
+//    }
 }
 
 // MARK: - SPTAppRemotePlayerStateDelegate
