@@ -181,14 +181,15 @@ class PlayerView: UIView {
     @objc func skipForwardButtonTapped() {
         guard let player = player else { return }
         let seekDuration: Float64 = 15
-        if let duration = player.player.currentItem?.duration {
+        if let duration = player.player.currentItem?.duration { //get the current song's duration
             let playerCurrentTime = CMTimeGetSeconds(player.player.currentTime())
             let newTime = playerCurrentTime + seekDuration
-            if newTime < CMTimeGetSeconds(duration) {
+            if newTime < CMTimeGetSeconds(duration) { //dont forward song if if it less than the seekDuration
                 let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
                 player.player.seek(to: selectedTime)
             }
             player.pause()
+            playButton.isSelected = true
             player.play()
         }
     }
@@ -199,10 +200,11 @@ class PlayerView: UIView {
         let seekDuration: Float64 = 15
         let playerCurrenTime = CMTimeGetSeconds(player.player.currentTime())
         var newTime = playerCurrenTime - seekDuration
-        if newTime < 0 { newTime = 0 }
+        if newTime < 0 { newTime = 0 } //set time to 0 if less than 0
         player.pause()
         let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
         player.player.seek(to: selectedTime)
+        playButton.isSelected = true
         player.play()
     }
 }
