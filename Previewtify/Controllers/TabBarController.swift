@@ -251,6 +251,11 @@ extension TabBarController: SpotifyPlayerProtocol {
     ///Protocol Method to play track's previewUrl
     func playTrack(track: Track, shouldPlay: Bool) {
         playerView.configurePlayerView(hasPreviewUrl: true)
+        if !shouldPlay {
+//            showPlayerView(false)
+            self.playerView.playButton.isSelected = false
+            self.playerView.player?.pause()
+        }
         //set favorite button's image if it's favorited or not
         NetworkManager.checkIfFavorite(trackId: track.id as! String) { (isFavorite) in
             DispatchQueue.main.async {
@@ -259,24 +264,20 @@ extension TabBarController: SpotifyPlayerProtocol {
                 } else {
                     self.playerView.favoriteButton.isSelected = false
                 }
+                if shouldPlay {
+                    if self.playerState?.isPaused == false { //if appRemote is playing... pause
+                        self.appRemote?.playerAPI?.pause(self.defaultCallback)
+                    }
+                    if let previewTrackId = self.playerView.track?.id as? String, previewTrackId == track.id as! String { //playing the same track... resume
+                        self.playerView.player?.play()
+                    } else { //new track
+                        self.playerView.playTrackFrom(urlString: track.previewUrl)
+                    }
+                    self.showPlayerView(true)
+                    self.playerView.track = track
+                    self.playerView.playButton.isSelected = true
+                }
             }
-        }
-        if shouldPlay {
-            if playerState?.isPaused == false { //if appRemote is playing... pause
-                appRemote?.playerAPI?.pause(defaultCallback)
-            }
-            if let previewTrackId = playerView.track?.id as? String, previewTrackId == track.id as! String { //playing the same track... resume
-                playerView.player?.play()
-            } else { //new track
-                playerView.playTrackFrom(urlString: track.previewUrl)
-            }
-            showPlayerView(true)
-            playerView.track = track
-            playerView.playButton.isSelected = true
-        } else {
-//            showPlayerView(false)
-            playerView.playButton.isSelected = false
-            playerView.player?.pause()
         }
     }
 }
