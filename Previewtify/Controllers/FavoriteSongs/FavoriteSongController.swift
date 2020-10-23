@@ -12,8 +12,6 @@ import Spartan
 class FavoriteSongController: UIViewController {
     
     //MARK: Properties
-    var artist: Artist!
-    var trackIds: [String] = []
     var offset: Int = 0
     var spartanCallbackError: (Error?) -> () {
         get {
