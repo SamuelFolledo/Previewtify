@@ -191,7 +191,6 @@ class TabBarController: SwipeableTabBarController {
     private func getPlayerState() {
         appRemote?.playerAPI?.getPlayerState { (result, error) -> Void in
             guard error == nil else { return }
-
             let playerState = result as! SPTAppRemotePlayerState
             self.updateViewWithPlayerState(playerState)
         }
@@ -216,6 +215,7 @@ class TabBarController: SwipeableTabBarController {
             case .failure(let error):
                 self.presentAlert(title: "Error Fetching Saved Tracks", message: error.localizedDescription)
             }
+            completion()
         }
     }
 }
