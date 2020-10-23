@@ -261,7 +261,6 @@ extension TabBarController: SpotifyPlayerProtocol {
                 }
             }
         }
-        
         if shouldPlay {
             if playerState?.isPaused == false { //if appRemote is playing... pause
                 appRemote?.playerAPI?.pause(defaultCallback)
@@ -274,7 +273,6 @@ extension TabBarController: SpotifyPlayerProtocol {
             showPlayerView(true)
             playerView.track = track
             playerView.playButton.isSelected = true
-            
         } else {
 //            showPlayerView(false)
             playerView.playButton.isSelected = false

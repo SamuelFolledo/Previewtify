@@ -130,10 +130,14 @@ class PlayerView: UIView {
             timerSlider.isHidden = false
             timeLabel.isHidden = false
             timeLeftLabel.isHidden = false
+            backButton.isHidden = false
+            forwardButton.isHidden = false
         } else {
             timerSlider.isHidden = true
             timeLabel.isHidden = true
             timeLeftLabel.isHidden = true
+            backButton.isHidden = true
+            forwardButton.isHidden = true
         }
     }
     

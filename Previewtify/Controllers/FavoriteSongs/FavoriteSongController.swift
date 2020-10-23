@@ -83,15 +83,7 @@ class FavoriteSongController: UIViewController {
 
 //MARK: Extensions
 
-extension FavoriteSongController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let cell = collectionView.cellForItem(at: indexPath) as! ArtistCell
-//        let track = tracks[indexPath.row]
-//        let vc = ArtistTrackController()
-//        vc.artist = artist
-//        navigationController?.pushViewController(vc, animated: true)
-    }
-}
+extension FavoriteSongController: UITableViewDelegate {}
 
 extension FavoriteSongController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
