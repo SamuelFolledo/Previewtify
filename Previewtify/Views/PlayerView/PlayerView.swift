@@ -16,12 +16,18 @@ class PlayerView: UIView {
     var track: Track? {
         didSet { populateViews() }
     }
+    var spotifyTrack: SPTAppRemoteTrack? {
+        didSet { populateViews() }
+    }
     var timer: Timer?
     var favoriteDelegate: SpotifyFavoriteTrackProtocol?
     var playDelegate: SpotifyPlayerProtocol?
     
     //MARK: Player
     var player: MusicPlayer?
+    var appRemote: SPTAppRemote? {
+        get { return (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.appRemote }
+    }
     
     //MARK: IBOutlet Views
     
@@ -98,12 +104,17 @@ class PlayerView: UIView {
         forwardButton.setImage(forwardImage, for: .normal)
         forwardButton.tintColor = .systemBackground
         forwardButton.addTarget(self, action: #selector(skipForwardButtonTapped), for: .touchUpInside)
-        
     }
     
     func populateViews() {
-        trackNameLabel.text = "\(track?.name ?? "No Track Name")"
-        artistNameLabel.text = "\(track?.artists.first?.name ?? "No Artist")"
+        trackNameLabel.text = "\(track?.name ?? spotifyTrack?.name ?? "No Track Name")"
+        artistNameLabel.text = "\(track?.artists.first?.name ?? spotifyTrack?.artist.name ?? "No Artist")"
+        //show time sliders only if track is available
+        if track == nil {
+            updateTimerViews(shouldHide: true)
+        } else {
+            updateTimerViews(shouldHide: false)
+        }
     }
     
     func playTrackFrom(urlString: String) {
@@ -125,20 +136,12 @@ class PlayerView: UIView {
         }
     }
     
-    func configurePlayerView(hasPreviewUrl: Bool) {
-        if hasPreviewUrl {
-            timerSlider.isHidden = false
-            timeLabel.isHidden = false
-            timeLeftLabel.isHidden = false
-            backButton.isHidden = false
-            forwardButton.isHidden = false
-        } else {
-            timerSlider.isHidden = true
-            timeLabel.isHidden = true
-            timeLeftLabel.isHidden = true
-            backButton.isHidden = true
-            forwardButton.isHidden = true
-        }
+    func updateTimerViews(shouldHide: Bool) {
+        timerSlider.isHidden = shouldHide
+        timeLabel.isHidden = shouldHide
+        timeLeftLabel.isHidden = shouldHide
+        forwardButton.isHidden = shouldHide
+        backButton.isHidden = shouldHide
     }
     
     //MARK: Timer
@@ -176,61 +179,85 @@ class PlayerView: UIView {
             playButton.isSelected = false
             if let _ = track?.previewUrl { //we have previewUrl
                 playDelegate?.playTrack(track: track!, shouldPlay: false)
-                return
-            } else if let openUrl = track?.externalUrls.first?.value { //we dont have previewUrl
-                playDelegate?.openTrack(track: track!, openUrl: openUrl, shouldOpen: false)
+            } else if let uri = spotifyTrack?.uri {
+                print("Playing Spotify Track named \(spotifyTrack!.name) URI \(uri)")
+                playDelegate?.openTrack(uri: uri, shouldOpen: false)
             }
         } else { //if paused
             playButton.isSelected = true
             if let _ = track?.previewUrl { //we have previewUrl
                 playDelegate?.playTrack(track: track!, shouldPlay: true)
                 return
-            } else if let openUrl = track?.externalUrls.first?.value { //we dont have previewUrl
-                playDelegate?.openTrack(track: track!, openUrl: openUrl, shouldOpen: true)
+            } else if let uri = spotifyTrack?.uri {
+                print("Pausing Spotify Track named \(spotifyTrack!.name) URI \(uri)")
+                playDelegate?.openTrack(uri: uri, shouldOpen: true) //pass empty uri to resume
             }
         }
     }
     
     @objc func favoriteButtonTapped() {
-        guard let track = track else { return }
         if favoriteButton.isSelected == true {
             //unfavorite
-            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: true)
-            favoriteButton.isSelected = true
+            if track != nil {
+                favoriteDelegate?.favoriteTrack(trackId: track!.id as! String, shouldFavorite: true)
+                favoriteButton.isSelected = true
+            } else if spotifyTrack != nil {
+                
+            }
         } else {
-            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: false)
-            favoriteButton.isSelected = false
+            if track != nil {
+                favoriteDelegate?.favoriteTrack(trackId: track!.id as! String, shouldFavorite: false)
+                favoriteButton.isSelected = false
+            } else if spotifyTrack != nil {
+                
+            }
         }
     }
     
     ///forward song by 15 seconds max
     @objc func skipForwardButtonTapped() {
-        guard let player = player else { return }
-        let seekDuration: Float64 = 15
-        if let duration = player.player.currentItem?.duration { //get the current song's duration
-            let playerCurrentTime = CMTimeGetSeconds(player.player.currentTime())
-            let newTime = playerCurrentTime + seekDuration
-            if newTime < CMTimeGetSeconds(duration) { //dont forward song if if it less than the seekDuration
-                let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
-                player.player.seek(to: selectedTime)
+        if let _ = spotifyTrack { //if spotify track, use app remote
+            appRemote?.playerAPI?.seek(toPosition: 15, callback: { (_, error) in
+                if let error = error {
+                    print("Error forwarding 15 seconds \(error.localizedDescription)")
+                }
+            })
+        } else if let _ = track { //preview Url
+            guard let player = player else { return }
+            let seekDuration: Float64 = 15
+            if let duration = player.player.currentItem?.duration { //get the current song's duration
+                let playerCurrentTime = CMTimeGetSeconds(player.player.currentTime())
+                let newTime = playerCurrentTime + seekDuration
+                if newTime < CMTimeGetSeconds(duration) { //dont forward song if if it less than the seekDuration
+                    let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+                    player.player.seek(to: selectedTime)
+                }
+                player.pause()
+                playButton.isSelected = true
+                player.play()
             }
-            player.pause()
-            playButton.isSelected = true
-            player.play()
         }
     }
     
     ///make player go backward
     @objc func skipBackwardButtonTapped() {
-        guard let player = player else { return }
-        let seekDuration: Float64 = 15
-        let playerCurrenTime = CMTimeGetSeconds(player.player.currentTime())
-        var newTime = playerCurrenTime - seekDuration
-        if newTime < 0 { newTime = 0 } //set time to 0 if less than 0
-        player.pause()
-        let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
-        player.player.seek(to: selectedTime)
-        playButton.isSelected = true
-        player.play()
+        if let _ = spotifyTrack { //if spotify track, use app remote
+            appRemote?.playerAPI?.seek(toPosition: -15, callback: { (_, error) in
+                if let error = error {
+                    print("Error backwarding 15 seconds \(error.localizedDescription)")
+                }
+            })
+        } else if let _ = track { //preview Url
+            guard let player = player else { return }
+            let seekDuration: Float64 = 15
+            let playerCurrenTime = CMTimeGetSeconds(player.player.currentTime())
+            var newTime = playerCurrenTime - seekDuration
+            if newTime < 0 { newTime = 0 } //set time to 0 if less than 0
+            player.pause()
+            let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+            player.player.seek(to: selectedTime)
+            playButton.isSelected = true
+            player.play()
+        }
     }
 }

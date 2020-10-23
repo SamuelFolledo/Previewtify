@@ -110,8 +110,7 @@ extension FavoriteSongController: UITableViewDataSource {
 }
 
 extension FavoriteSongController: SpotifyFavoriteTrackProtocol {
-    func favoriteTrack(track: Track, shouldFavorite: Bool) {
-        guard let trackId = track.id as? String else { return }
+    func favoriteTrack(trackId: String, shouldFavorite: Bool) {
         if shouldFavorite {
             Spartan.saveTracks(trackIds: [trackId], success: nil, failure: spartanCallbackError)
         } else {

@@ -11,11 +11,11 @@ import Spartan
 
 protocol SpotifyPlayerProtocol {
     func playTrack(track: Track, shouldPlay: Bool)
-    func openTrack(track: Track, openUrl: String, shouldOpen: Bool)
+    func openTrack(uri: String, shouldOpen: Bool)
 }
 
 protocol SpotifyFavoriteTrackProtocol {
-    func favoriteTrack(track: Track, shouldFavorite: Bool)
+    func favoriteTrack(trackId: String, shouldFavorite: Bool)
 }
 
 class TrackCell: UITableViewCell {
@@ -221,16 +221,17 @@ class TrackCell: UITableViewCell {
     //MARK: Helpers
     
     @objc func handlePlay() {
-        if let url = trackOpenUrl { //no preview Url, but we have an openUrl
-            print("Download URL = \(url)")
+        if track.previewUrl == nil {
             if playButton.currentImage == Constants.Images.spotifyIcon {
                 playButton.setImage(Constants.Images.pause, for: .normal)
-                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: true)
+//                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: true)
+                playerDelegate?.openTrack(uri: track.uri, shouldOpen: true)
             } else {
                 playButton.setImage(Constants.Images.spotifyIcon, for: .normal)
-                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: false)
+//                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: false)
+                playerDelegate?.openTrack(uri: track.uri, shouldOpen: false)
             }
-        } else {
+        } else { //if there is a previewUrl
             print("Preview URL = \(track.previewUrl!)")
             if playButton.currentImage == Constants.Images.play {
                 playButton.setImage(Constants.Images.pause, for: .normal)
@@ -240,15 +241,25 @@ class TrackCell: UITableViewCell {
                 playerDelegate?.playTrack(track: track, shouldPlay: false)
             }
         }
+//        if let url = trackOpenUrl { //no preview Url, but we have an openUrl
+//            print("Download URL = \(url)")
+//            if playButton.currentImage == Constants.Images.spotifyIcon {
+//                playButton.setImage(Constants.Images.pause, for: .normal)
+//                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: true)
+//            } else {
+//                playButton.setImage(Constants.Images.spotifyIcon, for: .normal)
+//                playerDelegate?.openTrack(track: track, openUrl: url, shouldOpen: false)
+//            }
+//        }
     }
     
     @objc func handleFavorite() {
         if favoriteButton.currentImage == Constants.Images.heart {
             favoriteButton.setImage(Constants.Images.heartFilled, for: .normal)
-            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: true)
+            favoriteDelegate?.favoriteTrack(trackId: track.id as! String, shouldFavorite: true)
         } else {
             favoriteButton.setImage(Constants.Images.heart, for: .normal)
-            favoriteDelegate?.favoriteTrack(track: track, shouldFavorite: false)
+            favoriteDelegate?.favoriteTrack(trackId: track.id as! String, shouldFavorite: false)
         }
     }
 }
