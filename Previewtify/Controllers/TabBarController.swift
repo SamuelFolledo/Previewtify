@@ -197,12 +197,8 @@ class TabBarController: SwipeableTabBarController {
     }
     
     private func updateViewWithPlayerState(_ playerState: SPTAppRemotePlayerState) {
-        print("⭐️⭐️⭐️⭐️⭐️implement updateViewWithPlayerState⭐️⭐️⭐️⭐️⭐️")
-        if playerState.isPaused {
-            playerView.playButton.isSelected = false
-        } else {
-            playerView.playButton.isSelected = true
-        }
+        playerView.playButton.isSelected = !playerState.isPaused
+        playerView.favoriteButton.isSelected = playerState.track.isSaved
         playerView.trackNameLabel.text = playerState.track.name
         playerView.artistNameLabel.text = playerState.track.artist.name
     }
